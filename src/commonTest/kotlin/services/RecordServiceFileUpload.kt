@@ -38,7 +38,7 @@ class RecordServiceFileUpload : TestingUtils() {
                 type = Collection.CollectionType.BASE,
                 collectionId = "123456789123478",
                 schema = listOf(
-                    SchemaField("text", required = true, unique = true, type = SchemaField.SchemaFieldType.TEXT),
+                    SchemaField("text", required = true, type = SchemaField.SchemaFieldType.TEXT),
                     SchemaField("file",type = SchemaField.SchemaFieldType.FILE, options = SchemaField.SchemaOptions(maxSelect = 1, maxSize = 5242880))
                 )
             )))

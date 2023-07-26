@@ -10,7 +10,6 @@ import kotlinx.serialization.json.JsonPrimitive
  *
  * @property [name] the name given to the schema by the creator
  * @property [type] the [SchemaFieldType] assigned to the schema on creation
- * @property [unique] weather or not the schema allows non-unique values.
  * @property [required] weather or not the schema is required to have a value. If this is false the [Serializable] class should have an optional(?) type
  * @property [options] all of the possible options data for the schema. These all depend on the [SchemaFieldType], see our [documentation]() for a full explanation.
  * @property [system] weather or not the schema change be modified
@@ -20,7 +19,6 @@ import kotlinx.serialization.json.JsonPrimitive
 public class SchemaField(
     public val name: String? = null,
     public val type: SchemaFieldType? = null,
-    public val unique: Boolean? = null,
     public val required: Boolean? = null,
     public val options: SchemaOptions? = SchemaOptions(),
     public val system: Boolean? = null,

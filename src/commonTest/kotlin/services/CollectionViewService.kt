@@ -94,7 +94,6 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                 "type": "text",
                 "system": false,
                 "required": false,
-                "unique": false,
                 "options": {
                     "min": null,
                     "max": null,
@@ -140,8 +139,12 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
             if (delete) {
                 val usersCollectionId = service.getOne<Collection>("users").id
                 val collections = service.getFullList<Collection>(10)
-                val ids = collections.map { it.id }
-                ids.forEach { if (it != usersCollectionId) service.delete(it!!) }
+                val ids = collections
+                    .map { it.id }
+                    .filter { (it != usersCollectionId && it != "yc356em40o3y8u1") }
+                ids.forEach { service.delete(it!!) }
+                //Removes test_collection last to prevent existing dependency errors
+                service.delete("yc356em40o3y8u1")
             }
         }
         println()
@@ -185,7 +188,6 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                 "type": "text",
                 "system": false,
                 "required": false,
-                "unique": false,
                 "options": {
                     "min": null,
                     "max": null,
@@ -198,6 +200,7 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
         "createRule": null,
         "updateRule": null,
         "deleteRule": null,
+        "indexes": [],
         "options": {
             "query": "SELECT id,username FROM test_auth"
         }
@@ -328,8 +331,13 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                 delete = false
                 val usersCollectionId = service.getOne<Collection>("users").id
                 val collections = service.getFullList<Collection>(10)
-                val ids = collections.map { it.id }
-                ids.forEach { if (it != usersCollectionId) service.delete(it!!) }
+                val ids = collections
+                    .map { it.id }
+                    .filter { (it != usersCollectionId && it != "yc356em40o3y8u1") }
+                ids.forEach { service.delete(it!!) }
+                //Removes test_collection last to prevent existing dependency errors
+                service.delete("yc356em40o3y8u1")
+
                 val isClean = service.getFullList<Collection>(10).size == 1
                 assertTrue(isClean, "Collections should only contain the user's collection!")
             }

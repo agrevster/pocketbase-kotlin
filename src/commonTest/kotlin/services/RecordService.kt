@@ -32,7 +32,7 @@ class RecordService : TestingUtils() {
                 type = Collection.CollectionType.BASE,
                 collectionId = "123456789123478",
                 schema = listOf(
-                    SchemaField("name", required = true, unique = true, type = SchemaField.SchemaFieldType.TEXT),
+                    SchemaField("name", required = true, type = SchemaField.SchemaFieldType.TEXT),
                     SchemaField("age", required = true, type = SchemaField.SchemaFieldType.NUMBER),
                     SchemaField("happy",type = SchemaField.SchemaFieldType.BOOL)
                 )

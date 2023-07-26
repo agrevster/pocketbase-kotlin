@@ -24,7 +24,6 @@ open class CrudServiceTestSuite<T : BaseModel>(service: CrudService<T>, expected
         assertEquals(expected.type,actual.type,"Schema types do not match!")
         assertEquals(expected.name,actual.name,"Schema names do not match!")
         assertEqualNullOrFalse(expected.required,actual.required,"Schema required flags do not match!")
-        assertEqualNullOrFalse(expected.unique,actual.unique,"Schema unique flags do not match!")
 
         assertEqualNullOrFalse(expected.options?.min,actual.options?.min)
         assertEqualNullOrFalse(expected.options?.max,actual.options?.max)
@@ -86,6 +85,13 @@ open class TestingUtils {
     }
 
     inline fun <reified T> assertMatchesCreation(key: String, expected: String?, actual: String?) =
+        assertEquals(
+            expected,
+            actual,
+            "${key.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} should match the ${key.uppercase()} used to create the ${className<T>()}"
+        )
+
+    inline fun <reified T,F> assertMatchesCreation(key: String, expected: List<F>?, actual: List<F>?) =
         assertEquals(
             expected,
             actual,

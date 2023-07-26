@@ -49,7 +49,6 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 "type": "text",
                 "system": false,
                 "required": false,
-                "unique": false,
                 "options": {
                     "min": null,
                     "max": null,
@@ -125,7 +124,6 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
           "name": "url",
           "type": "url",
           "required": true,
-          "unique": true,
           "options": {
             "exceptDomains": [
               "google.com"
@@ -139,6 +137,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
       "createRule": null,
       "updateRule": null,
       "deleteRule": null,
+      "indexes": []
       "options": {}
     }
     ]
@@ -150,7 +149,6 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 assertSchemaMatches(SchemaField(
                     name = "url",
                     required = true,
-                    unique = true,
                     type = SchemaField.SchemaFieldType.URL,
                     options = SchemaField.SchemaOptions(exceptDomains = listOf("google.com"))
                 ),collection.schema!![0])
@@ -164,12 +162,14 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val usersId = client.collections.getOne<Collection>("users").id
-                val collection = service.create<Collection>(Json.encodeToString(Collection(collectionId ="123456789123478", name = "test_collection", type = Collection.CollectionType.BASE, schema = listOf(
+                val collection = service.create<Collection>(Json.encodeToString(Collection(collectionId ="123456789123478", name = "test_collection", type = Collection.CollectionType.BASE,
+                    indexes = listOf("CREATE UNIQUE INDEX `idx_TMnwjg8` ON `test_collection` (`string`,`email`)"),
+                    schema = listOf(
                     SchemaField("string",type = SchemaField.SchemaFieldType.TEXT, required = true, options = SchemaField.SchemaOptions(min=4.toJsonPrimitive())),
                     SchemaField("int",type = SchemaField.SchemaFieldType.NUMBER, required = true),
                     SchemaField("bool",type = SchemaField.SchemaFieldType.BOOL),
-                    SchemaField("email",type = SchemaField.SchemaFieldType.EMAIL, unique = true, options = SchemaField.SchemaOptions(onlyDomains = listOf("test.com"))),
-                    SchemaField("url",type = SchemaField.SchemaFieldType.URL, unique = true, options = SchemaField.SchemaOptions(onlyDomains = listOf("facebook.com"))),
+                    SchemaField("email",type = SchemaField.SchemaFieldType.EMAIL, options = SchemaField.SchemaOptions(onlyDomains = listOf("test.com"))),
+                    SchemaField("url",type = SchemaField.SchemaFieldType.URL, options = SchemaField.SchemaOptions(onlyDomains = listOf("facebook.com"))),
                     SchemaField("date",type = SchemaField.SchemaFieldType.DATE, required = true, options = SchemaField.SchemaOptions(
                         min="2022-08-19T02:22:00.00Z".toInstant().toJsonPrimitive(),
                         max="2023-08-19T02:22:00.00Z".toInstant().toJsonPrimitive()
@@ -191,8 +191,8 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 assertSchemaMatches(SchemaField("string",type = SchemaField.SchemaFieldType.TEXT, required = true, options = SchemaField.SchemaOptions(min=4.toJsonPrimitive(), pattern = "")),schema!![0])
                 assertSchemaMatches(SchemaField("int",type = SchemaField.SchemaFieldType.NUMBER, required = true),schema[1])
                 assertSchemaMatches(SchemaField("bool",type = SchemaField.SchemaFieldType.BOOL),schema[2])
-                assertSchemaMatches(SchemaField("email",type = SchemaField.SchemaFieldType.EMAIL, unique = true, options = SchemaField.SchemaOptions(onlyDomains = listOf("test.com"))),schema[3])
-                assertSchemaMatches(SchemaField("url",type = SchemaField.SchemaFieldType.URL, unique = true, options = SchemaField.SchemaOptions(onlyDomains = listOf("facebook.com"))),schema[4])
+                assertSchemaMatches(SchemaField("email",type = SchemaField.SchemaFieldType.EMAIL, options = SchemaField.SchemaOptions(onlyDomains = listOf("test.com"))),schema[3])
+                assertSchemaMatches(SchemaField("url",type = SchemaField.SchemaFieldType.URL, options = SchemaField.SchemaOptions(onlyDomains = listOf("facebook.com"))),schema[4])
                 assertSchemaMatches(SchemaField("date",type = SchemaField.SchemaFieldType.DATE, required = true, options = SchemaField.SchemaOptions(
                     min="2022-08-19 02:22:00.000Z".toJsonPrimitive(),
                     max="2023-08-19 02:22:00.000Z".toJsonPrimitive()
@@ -211,6 +211,11 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 assertMatchesCreation<Collection>("id", "123456789123478", collection.id)
                 assertMatchesCreation<Collection>("type", "BASE", collection.type?.name)
                 assertMatchesCreation<Collection>("createRule", "@request.auth.verified = true", collection.createRule)
+
+                assertEquals("CREATE UNIQUE INDEX `idx_TMnwjg8` ON `test_collection` (\n" +
+                        "  `string`,\n" +
+                        "  `email`\n" +
+                        ")",collection.indexes?.first(),"Indexes do not match")
 
             }
             println()

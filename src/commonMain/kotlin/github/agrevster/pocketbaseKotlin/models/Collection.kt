@@ -20,6 +20,7 @@ import kotlinx.serialization.Transient
  * @property [createRule] the pocketbase API rules which determines who can create a [Record] in the collection
  * @property [updateRule] the pocketbase API rules which determines who can update a [Record] in the collection
  * @property [deleteRule] the pocketbase API rules which determines who can delete a [Record] in the collection
+ * @property [indexes] the collections indexes which are used to determine which fields are unique.
  * @property [options] this collection's options (This only applicable for collections with the type of [CollectionType.AUTH])
  * */
 public open class Collection(
@@ -32,8 +33,9 @@ public open class Collection(
     public val createRule: String? = null,
     public val updateRule: String? = null,
     public val deleteRule: String? = null,
+    public val indexes: List<String>? = null,
     public val options: CollectionOptions? = CollectionOptions(),
-    @Transient public val collectionId: String? = null
+    @Transient private val collectionId: String? = null
 ) : BaseModel(collectionId) {
     @Serializable
     /**
@@ -69,7 +71,7 @@ public open class Collection(
     }
 
     override fun toString(): String {
-        return "Collection(name=$name, type=$type, system=$system, schema=$schema, listRule=$listRule, viewRule=$viewRule, createRule=$createRule, updateRule=$updateRule, deleteRule=$deleteRule, options=$options)"
+        return "Collection(name=$name, type=$type, system=$system, schema=$schema, listRule=$listRule, viewRule=$viewRule, createRule=$createRule, updateRule=$updateRule, deleteRule=$deleteRule, indexes=$indexes, options=$options, collectionId=$collectionId)"
     }
 
 }

@@ -1,6 +1,7 @@
 package github.agrevster.pocketbaseKotlin.models
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 
 @Serializable
@@ -16,7 +17,8 @@ public open class User(
     public open val username: String? = null,
     public val email: String? = null,
     public val emailVisibility: Boolean? = null,
-) : Record() {
+    @Transient private val userId: String? = null
+) : Record(userId) {
     override fun toString(): String {
         return "User(verified=$verified, username=$username, email=$email, emailVisibility=$emailVisibility)"
     }
