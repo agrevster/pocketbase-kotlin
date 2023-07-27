@@ -17,11 +17,11 @@ import kotlinx.serialization.json.Json
 import kotlin.test.*
 import PocketbaseClient as TestClient
 
-class RecordServiceFileUpload : TestingUtils() {
+class RecordServiceProtectedFileUpload : TestingUtils() {
 
     private var modifyRecordId: String? = null
     private var imageId: String? = null
-    private val testCollection = "fileupload_test"
+    private val testCollection = "protected_fileupload_test"
 
     private val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
 
@@ -39,7 +39,7 @@ class RecordServiceFileUpload : TestingUtils() {
                 collectionId = "123456789123478",
                 schema = listOf(
                     SchemaField("text", required = true, type = SchemaField.SchemaFieldType.TEXT),
-                    SchemaField("file",type = SchemaField.SchemaFieldType.FILE, options = SchemaField.SchemaOptions(maxSelect = 1, maxSize = 5242880))
+                    SchemaField("file",type = SchemaField.SchemaFieldType.FILE, options = SchemaField.SchemaOptions(maxSelect = 1, maxSize = 5242880, protected = true))
                 )
             )))
             val record = records.create<TestRecord>(
@@ -120,7 +120,9 @@ class RecordServiceFileUpload : TestingUtils() {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = records.getOne<TestRecord>(testCollection, modifyRecordId!!)
-                val image = client.httpClient.get(service.getFileURL(record, imageId!!))
+                val token = service.generateProtectedFileToken()
+                val image = client.httpClient.get(service.getFileURL(record, imageId!!, token = token))
+                println(image.call.request.url)
                 PocketbaseException.handle(image)
             }
             println()

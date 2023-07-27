@@ -22,54 +22,10 @@ public class RecordsService(client: PocketbaseClient) : SubCrudService<Record>(c
     public fun basePath(collectionId: String): String = "api/collections/$collectionId"
     override fun baseCrudPath(collectionId: String): String = "${basePath(collectionId)}/records"
 
-    /**
-     * The currently supported Pocketbase thumb formats
-     */
-    public enum class ThumbFormat {
-        /**
-         * (eg. 100x300) - crop to WxH viewbox (from center)
-         */
-        WxH,
-
-        /**
-         * (eg. 100x300t) - crop to WxH viewbox (from top)
-         */
-        WxHt,
-
-        /**
-         *  (eg. 100x300b) - crop to WxH viewbox (from bottom)
-         */
-        WxHb,
-
-        /**
-         *  (eg. 100x300f) - fit inside a WxH viewbox (without cropping)
-         */
-        WxHf,
-
-        /**
-         * (eg. 0x300) - resize to H height preserving the aspect ratio
-         */
-        `0xH`,
-
-        /**
-         * (eg. 100x0) - resize to W width preserving the aspect ratio
-         */
-        Wx0;
-    }
-
-    /**
-     * Gets the url to a file in Pocketbase
-     * @param [record] the record where the file is present
-     * @param [filename] the file's name
-     */
-    public fun getFileURL(record: Record, filename: String, thumbFormat: ThumbFormat? = null): String {
-        val url = URLBuilder()
-        this.client.baseUrl(url)
-        return if (thumbFormat != null) {
-            "$url/api/files/${record.collectionId}/${record.id}/$filename?thumb=$thumbFormat"
-        } else {
-            "$url/api/files/${record.collectionId}/${record.id}/$filename"
-        }
+    @Deprecated("Please use the newly created files service for file related tasks",
+        ReplaceWith("client.files.getFileURL"),DeprecationLevel.ERROR)
+    public fun getFileURL(record: Record, filename: String, thumbFormat: FilesService.ThumbFormat? = null): String {
+        return client.files.getFileURL(record,filename,thumbFormat)
     }
 
     /**

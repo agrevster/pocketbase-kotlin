@@ -46,7 +46,8 @@ public class SchemaField(
         val mimeTypes: List<String>? = null,
         val thumbs: List<String>? = null,
         val minSelect: Int? = null,
-        val displayFields: List<String>? = null
+        val displayFields: List<String>? = null,
+        val protected: Boolean? = null
     )
 
     @Serializable

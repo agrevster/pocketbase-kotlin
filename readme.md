@@ -1,6 +1,6 @@
 # Pocketbase Kotlin
 > Pocketbase Kotlin is a multi-platform Kotlin SDK for [Pocketbase](https://pocketbase.io).
-> Current supported Pocketbase Version *0.14* 
+> Current supported Pocketbase Version *0.15* 
 ---
 
 > NOTE: While the library is stable, [our docs](/docs) are still in need of work. For

@@ -66,6 +66,11 @@ public class PocketbaseClient(baseUrl: URLBuilder.() -> Unit, lang: String = "en
     public val health: HealthService = HealthService(this)
 
     /**
+     * The API for Pocketbase [files](https://pocketbase.io/docs/api-files/)
+     */
+    public val files: FilesService = FilesService(this)
+
+    /**
      * The API for Pocketbase [realtime](https://pocketbase.io/docs/api-realtime/)
      *
      * Adapted for [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)

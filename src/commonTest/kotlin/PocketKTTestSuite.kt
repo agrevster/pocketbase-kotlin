@@ -39,6 +39,8 @@ open class CrudServiceTestSuite<T : BaseModel>(service: CrudService<T>, expected
         assertEqualNullOrFalse(expected.options?.thumbs,actual.options?.thumbs)
         assertEqualNullOrFalse(expected.options?.minSelect,actual.options?.minSelect)
         assertEqualNullOrFalse(expected.options?.displayFields,actual.options?.displayFields)
+        assertEqualNullOrFalse(expected.options?.protected,actual.options?.protected)
+
     }
 
     open fun assertCrudPathValid() {

@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "github.agrevster"
-version = "2.1"
+version = "2.2"
 archivesName.set("Pocketbase-Kotlin")
 
 
