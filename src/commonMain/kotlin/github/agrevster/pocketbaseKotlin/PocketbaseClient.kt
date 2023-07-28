@@ -77,6 +77,11 @@ public class PocketbaseClient(baseUrl: URLBuilder.() -> Unit, lang: String = "en
      */
     public val realtime: RealtimeService = RealtimeService(this)
 
+    /**
+     * The API for Pocketbase [backups](https://pocketbase.io/docs/api-backups/)
+     */
+    public val backups: BackupsService = BackupsService(this)
+
     private val json: Json = Json {
         prettyPrint = true
         ignoreUnknownKeys = true
