@@ -8,6 +8,7 @@ import github.agrevster.pocketbaseKotlin.services.utils.BaseService
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -80,5 +81,41 @@ public class SettingsService(client: PocketbaseClient) : BaseService(client) {
         }
         PocketbaseException.handle(response)
         return true
+    }
+
+    @Untested("Requires Apple OAuth2")
+    /**
+     * Generates a new Apple OAuth2 client secret key.
+     * @param [clientId] the apple service id.
+     * @param [teamId] 10-character string associated with your developer account (usually could be found next to your name in the Apple Developer site)
+     * @param [keyId] 10-character key identifier generated for the "Sign in with Apple" private key associated with your developer account
+     * @param [privateKey] the private key associated to your app
+     * @param [duration] how long the generated JWT token should be considered valid. The specified value must be in seconds and max 15777000 (~6months).
+     */
+    public suspend fun generateAppleClientSecret(
+        clientId: String,
+        teamId: String,
+        keyId: String,
+        privateKey: String,
+        duration: Long
+        ): String {
+        @Serializable
+        data class AppleSecret(val secret: String)
+
+        val body = mapOf(
+            "clientId" to clientId,
+            "teamId" to teamId,
+            "keyId" to keyId,
+            "privateKey" to privateKey,
+            "duration" to duration.toString()
+        )
+        val response = client.httpClient.post {
+            url {
+                path("/api/settings/apple/generate-client-secret")
+                setBody(Json.encodeToString(body))
+            }
+        }
+        PocketbaseException.handle(response)
+        return response.body<AppleSecret>().secret
     }
 }
