@@ -2,6 +2,7 @@ package github.agrevster.pocketbaseKotlin.dsl
 
 import github.agrevster.pocketbaseKotlin.PocketKtDSL
 import github.agrevster.pocketbaseKotlin.PocketbaseException
+import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import github.agrevster.pocketbaseKotlin.models.Admin
 import github.agrevster.pocketbaseKotlin.services.AdminAuthService
 import kotlinx.serialization.Serializable
@@ -54,7 +55,10 @@ public class NewAdminBuilder : BaseAdminBuilder() {
 /**
  * Creates a new [Admin] with the [AdminAuthService].
  */
-public suspend inline fun AdminAuthService.create(setup: NewAdminBuilder.() -> Unit): Admin {
+public suspend inline fun AdminAuthService.create(
+    showFields: ShowFields = ShowFields(),
+    setup: NewAdminBuilder.() -> Unit
+): Admin {
     val builder = NewAdminBuilder()
     builder.setup()
     if (builder.password == null || builder.passwordConfirm == null || builder.email == null) throw PocketbaseException(
@@ -62,7 +66,7 @@ public suspend inline fun AdminAuthService.create(setup: NewAdminBuilder.() -> U
     )
     if (builder.password != builder.passwordConfirm) throw PocketbaseException("The password and password confirmation do not match")
     val json = Json.encodeToString(builder)
-    return this.create(json)
+    return this.create(json, showFields = showFields)
 }
 
 @PocketKtDSL
@@ -70,10 +74,13 @@ public suspend inline fun AdminAuthService.create(setup: NewAdminBuilder.() -> U
  * Updates an existing [Admin] with the given [id] with the [AdminAuthService].
  * @param [id] The admin's id that you wish to update.
  */
-public suspend inline fun AdminAuthService.update(id: String, setup: BaseAdminBuilder.() -> Unit): Admin {
+public suspend inline fun AdminAuthService.update(
+    id: String,
+    showFields: ShowFields = ShowFields(),
+    setup: BaseAdminBuilder.() -> Unit): Admin {
     val builder = BaseAdminBuilder()
     builder.setup()
     if (builder.password != builder.passwordConfirm) throw PocketbaseException("The password and password confirmation do not match")
     val json = Json.encodeToString(builder)
-    return this.update(id, json)
+    return this.update(id, json, showFields = showFields)
 }

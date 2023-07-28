@@ -6,12 +6,14 @@ import github.agrevster.pocketbaseKotlin.PocketbaseClient
 import github.agrevster.pocketbaseKotlin.PocketbaseException
 import github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
 import github.agrevster.pocketbaseKotlin.dsl.query.Filter
+import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import github.agrevster.pocketbaseKotlin.dsl.query.SortFields
 import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import github.agrevster.pocketbaseKotlin.models.utils.ListResult
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 
 public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) : BaseService(client) {
@@ -21,12 +23,13 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
         batch: Int,
         sortBy: SortFields = SortFields(),
         filterBy: Filter = Filter(),
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): List<T> {
         val result = mutableListOf<T>()
         var page = 1
         while (true) {
-            val list = _getList<T>(path, page, batch, sortBy, filterBy, expandRelations)
+            val list = _getList<T>(path, page, batch, sortBy, filterBy, expandRelations,showFields)
             val items = list.items.toMutableList()
             result.addAll(items)
             if (items.isNotEmpty() && list.totalItems <= result.size) return result
@@ -41,7 +44,8 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
         perPage: Int,
         sortBy: SortFields = SortFields(),
         filterBy: Filter = Filter(),
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): ListResult<T> {
         val response = client.httpClient.get {
             url {
@@ -49,6 +53,7 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
                 sortBy.addTo(parameters)
                 filterBy.addTo(parameters)
                 expandRelations.addTo(parameters)
+                showFields.addTo(parameters)
                 parameters.append("page", page.toString())
                 parameters.append("perPage", perPage.toString())
             }
@@ -59,13 +64,17 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
 
     @PocketKtInternal
     public suspend inline fun <reified T : BaseModel> _getOne(
-        path: String, id: String, expandRelations: ExpandRelations = ExpandRelations()
+        path: String,
+        id: String,
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): T {
         val response = client.httpClient.get {
             url {
                 path(path, id)
                 contentType(ContentType.Application.Json)
                 expandRelations.addTo(parameters)
+                showFields.addTo(parameters)
             }
         }
         PocketbaseException.handle(response)
@@ -76,13 +85,15 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
     public suspend inline fun <reified T : BaseModel> _create(
         path: String,
         body: String,
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): T {
         val response = client.httpClient.post {
             url {
                 path(path)
                 contentType(ContentType.Application.Json)
                 expandRelations.addTo(parameters)
+                showFields.addTo(parameters)
             }
             setBody(body)
         }
@@ -95,13 +106,15 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
         path: String,
         id: String,
         body: String,
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): T {
         val response = client.httpClient.patch {
             url {
                 path(path, id)
                 contentType(ContentType.Application.Json)
                 expandRelations.addTo(parameters)
+                showFields.addTo(parameters)
             }
             setBody(body)
         }
@@ -125,12 +138,14 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
         path: String,
         body: Map<String, Any>,
         files: List<FileUpload>,
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): T {
         val response = client.httpClient.post {
             url {
                 path(path)
                 expandRelations.addTo(parameters)
+                showFields.addTo(parameters)
             }
 
             setBody(MultiPartFormDataContent(
@@ -161,12 +176,14 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
         id: String,
         body: Map<String, Any>,
         files: List<FileUpload>,
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): T {
         val response = client.httpClient.patch {
             url {
                 path(path, id)
                 expandRelations.addTo(parameters)
+                showFields.addTo(parameters)
             }
 
             setBody(MultiPartFormDataContent(

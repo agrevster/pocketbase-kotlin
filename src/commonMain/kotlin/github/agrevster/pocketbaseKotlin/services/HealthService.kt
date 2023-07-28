@@ -3,6 +3,7 @@ package github.agrevster.pocketbaseKotlin.services
 
 import github.agrevster.pocketbaseKotlin.PocketbaseClient
 import github.agrevster.pocketbaseKotlin.PocketbaseException
+import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import github.agrevster.pocketbaseKotlin.services.utils.BaseService
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -17,10 +18,11 @@ public class HealthService(client: PocketbaseClient) : BaseService(client) {
     /**
      * Returns the health status of the server.
      */
-    public suspend fun healthCheck(): HealthResponses {
+    public suspend fun healthCheck(fields: ShowFields = ShowFields()): HealthResponses {
         val response = client.httpClient.get {
             url {
                 path("api", "health")
+                fields.addTo(parameters)
             }
         }
         PocketbaseException.handle(response)

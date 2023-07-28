@@ -3,6 +3,7 @@ package github.agrevster.pocketbaseKotlin.services
 import github.agrevster.pocketbaseKotlin.PocketbaseClient
 import github.agrevster.pocketbaseKotlin.PocketbaseException
 import github.agrevster.pocketbaseKotlin.Untested
+import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import github.agrevster.pocketbaseKotlin.services.utils.BaseService
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -16,10 +17,11 @@ public class SettingsService(client: PocketbaseClient) : BaseService(client) {
      *
      * Secret/password fields are automatically redacted with ****** characters.
      */
-    public suspend inline fun <reified T> getAll(): T {
+    public suspend inline fun <reified T> getAll(fields: ShowFields = ShowFields()): T {
         val response = client.httpClient.get {
             url {
                 path("/api/settings")
+                fields.addTo(parameters)
             }
         }
         PocketbaseException.handle(response)
@@ -30,11 +32,13 @@ public class SettingsService(client: PocketbaseClient) : BaseService(client) {
      * Bulk updates application settings and returns the updated settings list.
      * @param [body] the JSON body of the settings you want to tweak.
      */
-    public suspend inline fun <reified T> update(body: String): T {
+    public suspend inline fun <reified T> update(body: String,fields: ShowFields = ShowFields()): T {
         val response = client.httpClient.patch {
             url {
                 path("/api/settings")
                 contentType(ContentType.Application.Json)
+                fields.addTo(parameters)
+
             }
             setBody(body)
         }

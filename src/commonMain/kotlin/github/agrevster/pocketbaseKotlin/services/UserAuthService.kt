@@ -5,6 +5,7 @@ import github.agrevster.pocketbaseKotlin.PocketbaseClient
 import github.agrevster.pocketbaseKotlin.PocketbaseException
 import github.agrevster.pocketbaseKotlin.Untested
 import github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
+import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import github.agrevster.pocketbaseKotlin.models.User
 import github.agrevster.pocketbaseKotlin.services.utils.AuthService
 import github.agrevster.pocketbaseKotlin.services.utils.CrudService
@@ -27,7 +28,10 @@ public class UserAuthService(client: PocketbaseClient) : CrudService<User>(clien
      * @param [password] the auth record password
      */
     public suspend fun authWithPassword(
-        email: String, password: String, expandRelations: ExpandRelations = ExpandRelations()
+        email: String,
+        password: String,
+        expandRelations: ExpandRelations = ExpandRelations(),
+        fields: ShowFields = ShowFields()
     ): AuthResponse<User> {
         val params = mapOf(
             "identity" to JsonPrimitive(email),
@@ -37,6 +41,7 @@ public class UserAuthService(client: PocketbaseClient) : CrudService<User>(clien
             url {
                 path(basePath, "auth-with-password")
                 expandRelations.addTo(parameters)
+                fields.addTo(parameters)
             }
             header("Authorization", "")
             contentType(ContentType.Application.Json)
@@ -54,9 +59,10 @@ public class UserAuthService(client: PocketbaseClient) : CrudService<User>(clien
     public suspend fun authWithUsername(
         username: String,
         password: String,
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        fields: ShowFields = ShowFields()
     ): AuthResponse<User> {
-        return authWithPassword(username, password, expandRelations)
+        return authWithPassword(username, password, expandRelations,fields)
     }
 
     @Untested("Requires oauth2")
@@ -65,7 +71,7 @@ public class UserAuthService(client: PocketbaseClient) : CrudService<User>(clien
      * Authenticate with an OAuth2 provider and returns a new auth token and record data.
      * This action usually should be called right after the provider login page redirect.
      * You could also check the [OAuth2 web integration example](https://pocketbase.io/docs/authentication#web-oauth2-integration).
-     * @param [provider] The name of the OAuth2 client provider (eg. "google")
+     * @param [provider] The name of the OAuth2 client provider (e.g. "google")
      * @param [code] The authorization code returned from the initial request.
      * @param [codeVerifier] The code verifier sent with the initial request as part of the code_challenge.
      * @param [redirectUrl] The redirect url sent with the initial request.
@@ -75,7 +81,8 @@ public class UserAuthService(client: PocketbaseClient) : CrudService<User>(clien
         code: String,
         codeVerifier: String,
         redirectUrl: String,
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        fields: ShowFields = ShowFields()
     ): AuthResponse<User> {
         val params = mapOf(
             "provider" to JsonPrimitive(provider),
@@ -89,6 +96,7 @@ public class UserAuthService(client: PocketbaseClient) : CrudService<User>(clien
                 contentType(ContentType.Application.Json)
                 header("Authorization", "")
                 expandRelations.addTo(parameters)
+                fields.addTo(parameters)
             }
             setBody(Json.encodeToString(params))
         }
@@ -100,12 +108,16 @@ public class UserAuthService(client: PocketbaseClient) : CrudService<User>(clien
      * Returns a new auth response (token and user data) for already authenticated auth record.
      * This method is usually called by users on page/screen reload to ensure that the previously stored data in pb.authStore is still valid and up-to-date.
      */
-    public suspend fun refresh(expandRelations: ExpandRelations = ExpandRelations()): AuthResponse<User> {
+    public suspend fun refresh(
+        expandRelations: ExpandRelations = ExpandRelations(),
+        fields: ShowFields = ShowFields()
+    ): AuthResponse<User> {
         val response = client.httpClient.post {
             url {
                 path(basePath, "auth-refresh")
                 contentType(ContentType.Application.Json)
                 expandRelations.addTo(parameters)
+                fields.addTo(parameters)
             }
         }
         PocketbaseException.handle(response)

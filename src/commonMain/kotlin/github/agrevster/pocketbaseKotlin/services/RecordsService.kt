@@ -5,6 +5,7 @@ import github.agrevster.pocketbaseKotlin.PocketbaseClient
 import github.agrevster.pocketbaseKotlin.PocketbaseException
 import github.agrevster.pocketbaseKotlin.Untested
 import github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
+import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import github.agrevster.pocketbaseKotlin.models.Record
 import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import github.agrevster.pocketbaseKotlin.services.utils.AuthService
@@ -35,7 +36,11 @@ public class RecordsService(client: PocketbaseClient) : SubCrudService<Record>(c
      * @param [password] the auth record password
      */
     public suspend inline fun <reified T : BaseModel> authWithPassword(
-        collection: String, email: String, password: String, expandRelations: ExpandRelations = ExpandRelations()
+        collection: String,
+        email: String,
+        password: String,
+        expandRelations: ExpandRelations = ExpandRelations(),
+        fields: ShowFields = ShowFields()
     ): AuthResponse<T> {
         val params = mapOf(
             "identity" to JsonPrimitive(email),
@@ -45,6 +50,7 @@ public class RecordsService(client: PocketbaseClient) : SubCrudService<Record>(c
             url {
                 path(basePath(collection), "auth-with-password")
                 expandRelations.addTo(parameters)
+                fields.addTo(parameters)
             }
             header("Authorization", "")
             contentType(ContentType.Application.Json)
@@ -64,8 +70,9 @@ public class RecordsService(client: PocketbaseClient) : SubCrudService<Record>(c
         collection: String,
         username: String,
         password: String,
-        expandRelations: ExpandRelations = ExpandRelations()
-    ): AuthResponse<T> = authWithPassword(collection, username, password, expandRelations)
+        expandRelations: ExpandRelations = ExpandRelations(),
+        fields: ShowFields = ShowFields()
+    ): AuthResponse<T> = authWithPassword(collection, username, password, expandRelations,fields)
 
 
     @Untested("Requires oauth2")
@@ -86,7 +93,8 @@ public class RecordsService(client: PocketbaseClient) : SubCrudService<Record>(c
         code: String,
         codeVerifier: String,
         redirectUrl: String,
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        fields: ShowFields = ShowFields()
     ): AuthResponse<T> {
         val params = mapOf(
             "provider" to JsonPrimitive(provider),
@@ -100,6 +108,7 @@ public class RecordsService(client: PocketbaseClient) : SubCrudService<Record>(c
                 contentType(ContentType.Application.Json)
                 header("Authorization", "")
                 expandRelations.addTo(parameters)
+                fields.addTo(parameters)
             }
             setBody(Json.encodeToString(params))
         }
@@ -115,12 +124,14 @@ public class RecordsService(client: PocketbaseClient) : SubCrudService<Record>(c
      */
     public suspend inline fun <reified T : BaseModel> refresh(
         collection: String,
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        fields: ShowFields = ShowFields()
     ): AuthResponse<T> {
         val response = client.httpClient.post {
             url {
                 path(basePath(collection), "auth-refresh")
                 expandRelations.addTo(parameters)
+                fields.addTo(parameters)
             }
         }
         PocketbaseException.handle(response)

@@ -3,6 +3,7 @@ package github.agrevster.pocketbaseKotlin.services
 import github.agrevster.pocketbaseKotlin.PocketbaseClient
 import github.agrevster.pocketbaseKotlin.PocketbaseException
 import github.agrevster.pocketbaseKotlin.dsl.query.Filter
+import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import github.agrevster.pocketbaseKotlin.dsl.query.SortFields
 import github.agrevster.pocketbaseKotlin.models.LogRequest
 import github.agrevster.pocketbaseKotlin.models.utils.ListResult
@@ -32,7 +33,8 @@ public class LogService(client: PocketbaseClient) : BaseService(client) {
         page: Int = 1,
         perPage: Int = 30,
         sortBy: SortFields = SortFields(),
-        filterBy: Filter = Filter()
+        filterBy: Filter = Filter(),
+        fields: ShowFields = ShowFields()
     ): ListResult<LogRequest> {
         val params = mapOf(
             "page" to page.toString(),
@@ -44,6 +46,7 @@ public class LogService(client: PocketbaseClient) : BaseService(client) {
                 params.forEach { parameters.append(it.key, it.value) }
                 filterBy.addTo(parameters)
                 sortBy.addTo(parameters)
+                fields.addTo(parameters)
             }
         }
         PocketbaseException.handle(response)
@@ -54,10 +57,12 @@ public class LogService(client: PocketbaseClient) : BaseService(client) {
      * Returns a single request log by its ID.
      * @param [id]
      */
-    public suspend fun getRequest(id: String): LogRequest {
+    public suspend fun getRequest(id: String,fields: ShowFields = ShowFields()): LogRequest {
         val response = client.httpClient.get {
             url {
                 path("api", "logs", "requests", id)
+                fields.addTo(parameters)
+
             }
         }
         PocketbaseException.handle(response)
@@ -67,11 +72,12 @@ public class LogService(client: PocketbaseClient) : BaseService(client) {
     /**
      * Returns hourly aggregated request logs statistics.
      */
-    public suspend fun getRequestsStats(filterBy: Filter = Filter()): List<HourlyStats> {
+    public suspend fun getRequestsStats(filterBy: Filter = Filter(),fields: ShowFields = ShowFields()): List<HourlyStats> {
         val response = client.httpClient.get {
             url {
                 path("api", "logs", "requests", "stats")
                 filterBy.addTo(parameters)
+                fields.addTo(parameters)
             }
         }
         PocketbaseException.handle(response)

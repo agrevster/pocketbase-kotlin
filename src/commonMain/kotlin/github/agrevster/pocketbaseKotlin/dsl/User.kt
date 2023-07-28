@@ -4,6 +4,7 @@ package github.agrevster.pocketbaseKotlin.dsl
 import github.agrevster.pocketbaseKotlin.PocketKtDSL
 import github.agrevster.pocketbaseKotlin.PocketbaseException
 import github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
+import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import github.agrevster.pocketbaseKotlin.models.User
 import github.agrevster.pocketbaseKotlin.services.UserAuthService
 import kotlinx.serialization.Serializable
@@ -79,6 +80,7 @@ public class EditUserBuilder : BaseUserParams() {
  */
 public suspend inline fun UserAuthService.create(
     expandRelations: ExpandRelations = ExpandRelations(),
+    showFields: ShowFields = ShowFields(),
     setup: NewUserBuilder.() -> Unit
 ): User {
     val builder = NewUserBuilder()
@@ -86,7 +88,7 @@ public suspend inline fun UserAuthService.create(
     if (builder.password == null || builder.passwordConfirm == null) throw PocketbaseException("A User's password or password confirmation cannot be null")
     if (builder.password != builder.passwordConfirm) throw PocketbaseException("The password and password confirmation do not match")
     val body = Json.encodeToString(builder)
-    return this.create(body, expandRelations)
+    return this.create(body, expandRelations,showFields)
 }
 
 @PocketKtDSL
@@ -97,11 +99,12 @@ public suspend inline fun UserAuthService.create(
 public suspend inline fun UserAuthService.update(
     id: String,
     expandRelations: ExpandRelations = ExpandRelations(),
+    showFields: ShowFields = ShowFields(),
     setup: EditUserBuilder.() -> Unit
 ): User {
     val builder = EditUserBuilder()
     builder.setup()
     if (builder.password != builder.passwordConfirm) throw PocketbaseException("The password and password confirmation do not match")
     val body = Json.encodeToString(builder)
-    return this.update(id, body, expandRelations)
+    return this.update(id, body, expandRelations,showFields)
 }

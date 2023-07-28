@@ -4,6 +4,7 @@ package github.agrevster.pocketbaseKotlin.services
 import github.agrevster.pocketbaseKotlin.PocketbaseClient
 import github.agrevster.pocketbaseKotlin.PocketbaseException
 import github.agrevster.pocketbaseKotlin.Untested
+import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import github.agrevster.pocketbaseKotlin.models.Admin
 import github.agrevster.pocketbaseKotlin.services.utils.CrudService
 import io.ktor.client.call.*
@@ -29,7 +30,9 @@ public class AdminAuthService(client: PocketbaseClient) : CrudService<Admin>(cli
      * @param [password] Auth record password.
      */
     public suspend fun authWithPassword(
-        email: String, password: String
+        email: String,
+        password: String,
+        fields: ShowFields = ShowFields()
     ): AdminAuthResponse {
         val params = mapOf(
             "identity" to JsonPrimitive(email),
@@ -40,6 +43,7 @@ public class AdminAuthService(client: PocketbaseClient) : CrudService<Admin>(cli
                 path(baseCrudPath, "auth-with-password")
                 contentType(ContentType.Application.Json)
                 header("Authorization", "")
+                fields.addTo(parameters)
             }
             setBody(Json.encodeToString(params))
         }
@@ -50,10 +54,11 @@ public class AdminAuthService(client: PocketbaseClient) : CrudService<Admin>(cli
     /**
      * Returns a new auth response (token and user data) for already authenticated auth record.
      */
-    public suspend fun authRefresh(): AdminAuthResponse {
+    public suspend fun authRefresh(fields: ShowFields = ShowFields()): AdminAuthResponse {
         val response = client.httpClient.post {
             url {
                 path(baseCrudPath, "auth-refresh")
+                fields.addTo(parameters)
             }
         }
         PocketbaseException.handle(response)
@@ -93,6 +98,7 @@ public class AdminAuthService(client: PocketbaseClient) : CrudService<Admin>(cli
         passwordResetToken: String,
         password: String,
         passwordConfirm: String,
+        fields: ShowFields = ShowFields()
     ): AdminAuthResponse {
         val params = mapOf(
             "token" to JsonPrimitive(passwordResetToken),
@@ -103,6 +109,7 @@ public class AdminAuthService(client: PocketbaseClient) : CrudService<Admin>(cli
             url {
                 path(baseCrudPath, "confirm-password-reset")
                 contentType(ContentType.Application.Json)
+                fields.addTo(parameters)
             }
             setBody(Json.encodeToString(params))
         }

@@ -7,6 +7,7 @@ import github.agrevster.pocketbaseKotlin.PocketKtInternal
 import github.agrevster.pocketbaseKotlin.PocketbaseClient
 import github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
 import github.agrevster.pocketbaseKotlin.dsl.query.Filter
+import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import github.agrevster.pocketbaseKotlin.dsl.query.SortFields
 import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import github.agrevster.pocketbaseKotlin.models.utils.ListResult
@@ -26,9 +27,10 @@ public abstract class CrudService<T : BaseModel>(client: PocketbaseClient) : Bas
         batch: Int,
         sortBy: SortFields = SortFields(),
         filterBy: Filter = Filter(),
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): List<T> {
-        return _getFullList(baseCrudPath, batch, sortBy, filterBy, expandRelations)
+        return _getFullList(baseCrudPath, batch, sortBy, filterBy, expandRelations,showFields)
     }
 
     /**
@@ -41,9 +43,10 @@ public abstract class CrudService<T : BaseModel>(client: PocketbaseClient) : Bas
         perPage: Int,
         sortBy: SortFields = SortFields(),
         filterBy: Filter = Filter(),
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): ListResult<T> {
-        return _getList(baseCrudPath, page, perPage, sortBy, filterBy, expandRelations)
+        return _getList(baseCrudPath, page, perPage, sortBy, filterBy, expandRelations,showFields)
     }
 
     /**
@@ -51,9 +54,11 @@ public abstract class CrudService<T : BaseModel>(client: PocketbaseClient) : Bas
      * @param [id] ID of the record you wish to view.
      */
     public suspend inline fun <reified T : BaseModel> getOne(
-        id: String, expandRelations: ExpandRelations = ExpandRelations()
+        id: String,
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): T {
-        return _getOne(baseCrudPath, id, expandRelations)
+        return _getOne(baseCrudPath, id, expandRelations,showFields)
     }
 
     /**
@@ -61,9 +66,11 @@ public abstract class CrudService<T : BaseModel>(client: PocketbaseClient) : Bas
      * @param [body] JSON data used to create the record in the form of a string
      */
     public suspend inline fun <reified T : BaseModel> create(
-        body: String, expandRelations: ExpandRelations = ExpandRelations()
+        body: String,
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): T {
-        return _create(baseCrudPath, body, expandRelations)
+        return _create(baseCrudPath, body, expandRelations,showFields)
     }
 
     /**
@@ -72,9 +79,11 @@ public abstract class CrudService<T : BaseModel>(client: PocketbaseClient) : Bas
      * @param [body] JSON data used to update the record in the form of a string
      */
     public suspend inline fun <reified T : BaseModel> update(
-        id: String, body: String, expandRelations: ExpandRelations = ExpandRelations()
+        id: String, body: String,
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): T {
-        return _update(baseCrudPath, id, body, expandRelations)
+        return _update(baseCrudPath, id, body, expandRelations,showFields)
     }
 
     /**
@@ -83,9 +92,12 @@ public abstract class CrudService<T : BaseModel>(client: PocketbaseClient) : Bas
      * @param [files] the files you wish to upload
      */
     public suspend inline fun <reified T : BaseModel> create(
-        body: Map<String, Any>, files: List<FileUpload>, expandRelations: ExpandRelations = ExpandRelations()
+        body: Map<String, Any>,
+        files: List<FileUpload>,
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): T {
-        return _create(baseCrudPath, body, files, expandRelations)
+        return _create(baseCrudPath, body, files, expandRelations,showFields)
     }
 
     /**
@@ -98,9 +110,10 @@ public abstract class CrudService<T : BaseModel>(client: PocketbaseClient) : Bas
         id: String,
         body: Map<String, Any>,
         files: List<FileUpload>,
-        expandRelations: ExpandRelations = ExpandRelations()
+        expandRelations: ExpandRelations = ExpandRelations(),
+        showFields: ShowFields = ShowFields()
     ): T {
-        return _update(baseCrudPath, id, body, files, expandRelations)
+        return _update(baseCrudPath, id, body, files, expandRelations,showFields)
     }
 
     /***
