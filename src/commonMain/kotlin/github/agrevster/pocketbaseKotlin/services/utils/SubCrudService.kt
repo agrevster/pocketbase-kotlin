@@ -1,5 +1,3 @@
-@file:OptIn(PocketKtInternal::class)
-
 package github.agrevster.pocketbaseKotlin.services.utils
 
 import github.agrevster.pocketbaseKotlin.FileUpload
@@ -13,6 +11,7 @@ import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import github.agrevster.pocketbaseKotlin.models.utils.ListResult
 import kotlinx.serialization.json.JsonElement
 
+@OptIn(PocketKtInternal::class)
 public abstract class SubCrudService<T : BaseModel>(client: PocketbaseClient) : BaseCrudService<T>(client) {
 
     /**

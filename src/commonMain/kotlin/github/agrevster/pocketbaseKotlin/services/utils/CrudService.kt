@@ -1,5 +1,6 @@
 @file:OptIn(PocketKtInternal::class)
 
+
 package github.agrevster.pocketbaseKotlin.services.utils
 
 import github.agrevster.pocketbaseKotlin.FileUpload
@@ -12,6 +13,7 @@ import github.agrevster.pocketbaseKotlin.dsl.query.SortFields
 import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import github.agrevster.pocketbaseKotlin.models.utils.ListResult
 
+@OptIn(PocketKtInternal::class)
 public abstract class CrudService<T : BaseModel>(client: PocketbaseClient) : BaseCrudService<T>(client) {
 
     /**
