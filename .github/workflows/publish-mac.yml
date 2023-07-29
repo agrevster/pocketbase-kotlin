@@ -1,0 +1,20 @@
+name: publish-mac
+on: workflow_dispatch
+jobs:
+  snapshot:
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Configure JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Publish
+        run: ./gradlew publishMac
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SIGNING_KEYID: ${{ secrets.SIGNING_KEYID }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
