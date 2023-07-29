@@ -6,17 +6,15 @@ import github.agrevster.pocketbaseKotlin.dsl.create
 import github.agrevster.pocketbaseKotlin.dsl.login
 import github.agrevster.pocketbaseKotlin.dsl.update
 import github.agrevster.pocketbaseKotlin.models.User
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.test.*
-import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 
 class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collections/users/records") {
     companion object {
-        private val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
+        private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
     }
 
     private val service = client.users

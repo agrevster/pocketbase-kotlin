@@ -1,7 +1,6 @@
 package services
 
 import TestingUtils
-import github.agrevster.pocketbaseKotlin.PocketbaseClient
 import github.agrevster.pocketbaseKotlin.PocketbaseException
 import github.agrevster.pocketbaseKotlin.dsl.create
 import github.agrevster.pocketbaseKotlin.dsl.login
@@ -13,6 +12,7 @@ import kotlinx.coroutines.runBlocking
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
+
 @Ignore
 class BackupsService: TestingUtils() {
 
@@ -27,7 +27,7 @@ class BackupsService: TestingUtils() {
 
 
     companion object {
-        private val client = PocketbaseClient(TestClient.url)
+        private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
     }
 
     private val service = client.backups

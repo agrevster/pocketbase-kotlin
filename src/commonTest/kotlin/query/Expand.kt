@@ -5,22 +5,21 @@ import github.agrevster.pocketbaseKotlin.dsl.login
 import github.agrevster.pocketbaseKotlin.dsl.query.ExpandRecord
 import github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
 import github.agrevster.pocketbaseKotlin.models.Record
+import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import github.agrevster.pocketbaseKotlin.models.Collection
-import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-import kotlinx.serialization.json.Json
 import PocketbaseClient as TestClient
 
 class Expand : TestingUtils() {
 
-    private val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
+    private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
 
     private val dataCollection = "expand_testing_data"
     private val testCollection = "expand_testing"

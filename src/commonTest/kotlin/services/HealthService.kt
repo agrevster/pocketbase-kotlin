@@ -9,7 +9,7 @@ import PocketbaseClient as TestClient
 class HealthService : TestingUtils() {
 
     companion object {
-        private val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
+        private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
     }
 
     @Test

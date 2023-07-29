@@ -2,20 +2,20 @@ package services
 
 import CrudServiceTestSuite
 import PocketbaseClient.Companion.adminId
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlin.test.*
 import github.agrevster.pocketbaseKotlin.*
 import github.agrevster.pocketbaseKotlin.dsl.create
 import github.agrevster.pocketbaseKotlin.dsl.login
 import github.agrevster.pocketbaseKotlin.dsl.update
 import github.agrevster.pocketbaseKotlin.models.Admin
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.test.*
 import PocketbaseClient as TestClient
 
 class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins") {
 
     companion object {
-        private val client = PocketbaseClient(TestClient.url)
+        private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
     }
 
     private val service = client.admins

@@ -4,6 +4,7 @@ import TestingUtils
 import github.agrevster.pocketbaseKotlin.*
 import github.agrevster.pocketbaseKotlin.dsl.login
 import github.agrevster.pocketbaseKotlin.models.Record
+import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -13,14 +14,12 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.random.Random
 import kotlin.test.*
-import github.agrevster.pocketbaseKotlin.models.Collection
-import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import PocketbaseClient as TestClient
 
 class RealtimeService : TestingUtils() {
 
     private val testCollection = "realtime_test"
-    private val client = PocketbaseClient(TestClient.url)
+    private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
 
     private val testRecords = mutableMapOf<String, Boolean>()
 

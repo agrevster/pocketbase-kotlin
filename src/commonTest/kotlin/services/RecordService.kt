@@ -3,14 +3,13 @@ package services
 import TestingUtils
 import github.agrevster.pocketbaseKotlin.dsl.login
 import github.agrevster.pocketbaseKotlin.models.Record
+import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.*
-import github.agrevster.pocketbaseKotlin.models.Collection
-import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import PocketbaseClient as TestClient
 
 class RecordService : TestingUtils() {
@@ -18,7 +17,7 @@ class RecordService : TestingUtils() {
     private var modifyRecordId: String? = null
 
     private val testCollection = "records_test"
-    private val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
+    private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
 
     @BeforeTest
     fun before() = runBlocking {

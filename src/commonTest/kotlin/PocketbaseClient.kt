@@ -9,7 +9,7 @@ class PocketbaseClient {
 
     @Test
     fun loginUser() = runBlocking {
-        val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(url)
+        val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(url)
         launch {
             client.login {
                 val login = client.users.authWithPassword(userLogin.first.first, userLogin.second)
@@ -23,7 +23,7 @@ class PocketbaseClient {
 
     @Test
     fun loginAdmin() = runBlocking {
-        val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(url)
+        val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(url)
         launch {
             client.login {
                 val login = client.admins.authWithPassword(adminLogin.first, adminLogin.second)

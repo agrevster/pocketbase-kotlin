@@ -6,12 +6,16 @@ plugins {
     val kotlinVersion = "1.8.22"
     kotlin("multiplatform") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
+
+    id("org.jetbrains.dokka") version "1.8.20"
     id("maven-publish")
+    id("signing")
+
 }
 
-group = "github.agrevster"
+group = "io.github.agrevster"
 version = "2.3"
-archivesName.set("Pocketbase-Kotlin")
+archivesName.set("pocketbase-kotlin")
 
 
 val ktorVersion = "2.2.4"
@@ -161,3 +165,5 @@ fun isPublicationAllowed(name: String): Boolean {
     }
 }
 enum class Host { WINDOWS, MAC_OS, LINUX }
+
+apply(from = "publish.gradle")

@@ -2,24 +2,20 @@ package query
 
 import TestingUtils
 import github.agrevster.pocketbaseKotlin.dsl.login
-import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
-import github.agrevster.pocketbaseKotlin.dsl.query.Filter
-import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
+import github.agrevster.pocketbaseKotlin.models.Record
+import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import github.agrevster.pocketbaseKotlin.models.Collection
-import github.agrevster.pocketbaseKotlin.models.Record
-import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import kotlin.random.Random
 import kotlin.test.*
 import PocketbaseClient as TestClient
 
 class ShowFields : TestingUtils() {
 
-    private val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
+    private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
     private val testCollection = "showfields_testing"
 
     private var collectionId: String? = null

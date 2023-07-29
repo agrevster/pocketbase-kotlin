@@ -9,7 +9,7 @@ import PocketbaseClient as TestClient
 
 class LogService : TestingUtils() {
 
-    private val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
+    private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
     private val service = client.logs
 
     @BeforeTest

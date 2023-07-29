@@ -3,7 +3,6 @@ package query
 import TestingUtils
 import github.agrevster.pocketbaseKotlin.dsl.login
 import github.agrevster.pocketbaseKotlin.dsl.query.SortFields
-import github.agrevster.pocketbaseKotlin.models.Collection
 import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import kotlinx.coroutines.launch
@@ -20,7 +19,7 @@ import PocketbaseClient as TestClient
 
 class Sort : TestingUtils() {
 
-    private val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
+    private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
     private val testCollection = "sort_testing"
     private var collectionId: String? = null
 

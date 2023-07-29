@@ -2,22 +2,20 @@ package services
 
 import CrudServiceTestSuite
 import github.agrevster.pocketbaseKotlin.dsl.login
+import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
+import github.agrevster.pocketbaseKotlin.toJsonPrimitive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.toInstant
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import github.agrevster.pocketbaseKotlin.models.Collection
-import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-import github.agrevster.pocketbaseKotlin.toJsonPrimitive
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import kotlin.test.*
 import PocketbaseClient as TestClient
 
 class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "api/collections") {
 
     companion object {
-        private val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
+        private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
     }
 
     var delete = true

@@ -72,7 +72,7 @@ open class TestingUtils {
     }
 
     protected suspend fun getTestFile(number: Int): ByteArray {
-        val http = github.agrevster.pocketbaseKotlin.httpClient()
+        val http = io.github.agrevster.pocketbaseKotlin.httpClient()
         return when (number) {
             1 -> http.get("http://www.asanet.org/wp-content/uploads/savvy/images/press/docs/pdf/asa_race_statement.pdf")
                 .body()

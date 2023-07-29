@@ -1,0 +1,107 @@
+group GROUP
+version VERSION
+
+def isReleaseBuild() {
+    return VERSION.contains('SNAPSHOT') == false
+}
+
+def getReleaseRepositoryUrl() {
+    return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL :
+            'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+}
+
+def getRepositoryUsername() {
+    return System.getenv('SONATYPE_USERNAME') ?: ''
+}
+
+def getRepositoryPassword() {
+    return System.getenv('SONATYPE_PASSWORD') ?: ''
+}
+
+task javadocsJar(type: Jar, dependsOn: dokkaHtml) {
+    archiveClassifier = 'javadoc'
+    from dokkaHtml.outputDirectory
+}
+
+publishing {
+    publications.all {
+        artifact javadocsJar
+
+        pom.withXml {
+            def root = asNode()
+
+            root.children().last() + {
+                resolveStrategy = Closure.DELEGATE_FIRST
+
+                description POM_DESCRIPTION
+                name POM_NAME
+                url POM_URL
+                licenses {
+                    license {
+                        name POM_LICENCE_NAME
+                        url POM_LICENCE_URL
+                        distribution POM_LICENCE_DIST
+                    }
+                }
+                scm {
+                    url POM_SCM_URL
+                    connection POM_SCM_CONNECTION
+                    developerConnection POM_SCM_DEV_CONNECTION
+                }
+                developers {
+                    developer {
+                        id POM_DEVELOPER_ID
+                        name POM_DEVELOPER_NAME
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url isReleaseBuild() ? getReleaseRepositoryUrl() : getSnapshotRepositoryUrl()
+            credentials {
+                username getRepositoryUsername()
+                password getRepositoryPassword()
+            }
+        }
+    }
+}
+
+signing {
+    required { isReleaseBuild() }
+    def signingKeyId = System.getenv("SIGNING_KEYID")
+    def signingKey = System.getenv("SIGNING_KEY")
+    def signingPassword = System.getenv("SIGNING_PASSWORD")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    sign(publishing.publications)
+}
+
+tasks.withType(Sign) {
+    onlyIf { isReleaseBuild() && (System.getenv("SIGNING_KEYID") != null) }
+}
+
+tasks.withType(AbstractPublishToMaven) {
+    dependsOn(tasks.withType(Sign))
+}
+
+tasks.register('publishMac') {
+    dependsOn 'publishIosArm64PublicationToMavenRepository'
+    dependsOn 'publishIosSimulatorArm64PublicationToMavenRepository'
+    dependsOn 'publishIosX64PublicationToMavenRepository'
+
+    dependsOn 'publishMacosX64PublicationToMavenRepository'
+    dependsOn 'publishMacosArm64PublicationToMavenRepository'
+
+    dependsOn 'publishJvmPublicationToMavenRepository'
+    dependsOn 'publishKotlinMultiplatformPublicationToMavenRepository'
+}
+
+tasks.register('publishWindows') {
+    dependsOn 'publishMingwX64PublicationToMavenRepository'
+}
+
+tasks.register('publishLinux') {
+    dependsOn 'publishLinuxX64PublicationToMavenRepository'
+}

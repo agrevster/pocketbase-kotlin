@@ -3,10 +3,7 @@ package services
 import TestingUtils
 import github.agrevster.pocketbaseKotlin.dsl.login
 import github.agrevster.pocketbaseKotlin.models.Record
-import github.agrevster.pocketbaseKotlin.toJsonPrimitive
-import github.agrevster.pocketbaseKotlin.models.Collection
 import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -22,7 +19,7 @@ class RecordAuthService : TestingUtils() {
 
     private var mainRecordId: String? = null
 
-    private val client = github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
+    private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
     private val testCollection = "auth_test"
     private val service = client.records
 
