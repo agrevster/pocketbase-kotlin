@@ -1,9 +1,10 @@
 package services
 
 import CrudServiceTestSuite
-import github.agrevster.pocketbaseKotlin.dsl.login
-import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-import github.agrevster.pocketbaseKotlin.toJsonPrimitive
+import io.github.agrevster.pocketbaseKotlin.dsl.login
+import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
+import io.github.agrevster.pocketbaseKotlin.models.Collection
+import io.github.agrevster.pocketbaseKotlin.toJsonPrimitive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.toInstant

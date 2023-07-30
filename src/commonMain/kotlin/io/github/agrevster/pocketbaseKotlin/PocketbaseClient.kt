@@ -1,8 +1,8 @@
 package io.github.agrevster.pocketbaseKotlin
 
 
-import github.agrevster.pocketbaseKotlin.services.*
-import github.agrevster.pocketbaseKotlin.stores.BaseAuthStore
+import io.github.agrevster.pocketbaseKotlin.services.*
+import io.github.agrevster.pocketbaseKotlin.stores.BaseAuthStore
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*

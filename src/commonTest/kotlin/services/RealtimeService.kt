@@ -1,10 +1,11 @@
 package services
 
 import TestingUtils
-import github.agrevster.pocketbaseKotlin.*
-import github.agrevster.pocketbaseKotlin.dsl.login
-import github.agrevster.pocketbaseKotlin.models.Record
-import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
+import io.github.agrevster.pocketbaseKotlin.*
+import io.github.agrevster.pocketbaseKotlin.dsl.login
+import io.github.agrevster.pocketbaseKotlin.models.Record
+import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
+import io.github.agrevster.pocketbaseKotlin.models.Collection
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

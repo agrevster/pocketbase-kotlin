@@ -1,14 +1,14 @@
 package io.github.agrevster.pocketbaseKotlin.services
 
-import github.agrevster.pocketbaseKotlin.AuthResponse
-import github.agrevster.pocketbaseKotlin.PocketbaseException
-import github.agrevster.pocketbaseKotlin.Untested
-import github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
-import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
-import github.agrevster.pocketbaseKotlin.models.Record
-import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
-import github.agrevster.pocketbaseKotlin.services.utils.AuthService
-import github.agrevster.pocketbaseKotlin.services.utils.SubCrudService
+import io.github.agrevster.pocketbaseKotlin.AuthResponse
+import io.github.agrevster.pocketbaseKotlin.PocketbaseException
+import io.github.agrevster.pocketbaseKotlin.Untested
+import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
+import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
+import io.github.agrevster.pocketbaseKotlin.models.Record
+import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
+import io.github.agrevster.pocketbaseKotlin.services.utils.AuthService
+import io.github.agrevster.pocketbaseKotlin.services.utils.SubCrudService
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*

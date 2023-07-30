@@ -1,12 +1,13 @@
 package services
 
 import TestingUtils
-import github.agrevster.pocketbaseKotlin.FileUpload
-import github.agrevster.pocketbaseKotlin.PocketbaseException
-import github.agrevster.pocketbaseKotlin.dsl.login
-import github.agrevster.pocketbaseKotlin.models.Record
-import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-import github.agrevster.pocketbaseKotlin.toJsonPrimitive
+import io.github.agrevster.pocketbaseKotlin.FileUpload
+import io.github.agrevster.pocketbaseKotlin.models.Collection
+import io.github.agrevster.pocketbaseKotlin.PocketbaseException
+import io.github.agrevster.pocketbaseKotlin.dsl.login
+import io.github.agrevster.pocketbaseKotlin.models.Record
+import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
+import io.github.agrevster.pocketbaseKotlin.toJsonPrimitive
 import io.ktor.client.request.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

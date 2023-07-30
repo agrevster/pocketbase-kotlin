@@ -1,11 +1,11 @@
 package io.github.agrevster.pocketbaseKotlin.services
 
 
-import github.agrevster.pocketbaseKotlin.PocketbaseException
-import github.agrevster.pocketbaseKotlin.Untested
-import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
-import github.agrevster.pocketbaseKotlin.models.Admin
-import github.agrevster.pocketbaseKotlin.services.utils.CrudService
+import io.github.agrevster.pocketbaseKotlin.PocketbaseException
+import io.github.agrevster.pocketbaseKotlin.Untested
+import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
+import io.github.agrevster.pocketbaseKotlin.models.Admin
+import io.github.agrevster.pocketbaseKotlin.services.utils.CrudService
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*

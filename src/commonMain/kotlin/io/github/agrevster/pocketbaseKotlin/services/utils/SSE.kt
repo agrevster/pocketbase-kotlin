@@ -1,6 +1,6 @@
 package io.github.agrevster.pocketbaseKotlin.services.utils
 
-import github.agrevster.pocketbaseKotlin.PocketbaseException
+import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*

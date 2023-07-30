@@ -1,10 +1,10 @@
 package io.github.agrevster.pocketbaseKotlin.dsl
 
-import github.agrevster.pocketbaseKotlin.PocketKtDSL
-import github.agrevster.pocketbaseKotlin.PocketbaseException
-import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
-import github.agrevster.pocketbaseKotlin.models.Admin
-import github.agrevster.pocketbaseKotlin.services.AdminAuthService
+import io.github.agrevster.pocketbaseKotlin.PocketKtDSL
+import io.github.agrevster.pocketbaseKotlin.PocketbaseException
+import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
+import io.github.agrevster.pocketbaseKotlin.models.Admin
+import io.github.agrevster.pocketbaseKotlin.services.AdminAuthService
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

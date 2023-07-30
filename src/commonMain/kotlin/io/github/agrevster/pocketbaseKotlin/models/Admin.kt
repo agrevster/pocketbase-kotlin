@@ -1,7 +1,7 @@
 package io.github.agrevster.pocketbaseKotlin.models
 
 
-import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
+import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,10 +1,10 @@
 package io.github.agrevster.pocketbaseKotlin.services.utils
 
 
-import github.agrevster.pocketbaseKotlin.PocketbaseException
-import github.agrevster.pocketbaseKotlin.Untested
-import github.agrevster.pocketbaseKotlin.models.ExternalAuth
-import github.agrevster.pocketbaseKotlin.recordAuthFrom
+import io.github.agrevster.pocketbaseKotlin.PocketbaseException
+import io.github.agrevster.pocketbaseKotlin.Untested
+import io.github.agrevster.pocketbaseKotlin.models.ExternalAuth
+import io.github.agrevster.pocketbaseKotlin.recordAuthFrom
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*

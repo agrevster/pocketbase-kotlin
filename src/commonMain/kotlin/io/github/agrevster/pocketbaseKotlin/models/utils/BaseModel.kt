@@ -1,6 +1,6 @@
 package io.github.agrevster.pocketbaseKotlin.models.utils
 
-import github.agrevster.pocketbaseKotlin.PocketKtInternal
+import io.github.agrevster.pocketbaseKotlin.PocketKtInternal
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.*

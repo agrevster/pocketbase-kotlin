@@ -1,7 +1,7 @@
-import github.agrevster.pocketbaseKotlin.PocketbaseException
-import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
-import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-import github.agrevster.pocketbaseKotlin.services.utils.CrudService
+import io.github.agrevster.pocketbaseKotlin.PocketbaseException
+import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
+import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
+import io.github.agrevster.pocketbaseKotlin.services.utils.CrudService
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.serialization.encodeToString

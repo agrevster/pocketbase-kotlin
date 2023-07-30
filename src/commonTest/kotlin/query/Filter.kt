@@ -1,9 +1,11 @@
 package query
 
 import TestingUtils
-import github.agrevster.pocketbaseKotlin.dsl.login
-import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
-import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
+import io.github.agrevster.pocketbaseKotlin.dsl.login
+import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
+import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
+import io.github.agrevster.pocketbaseKotlin.models.Collection
+import io.github.agrevster.pocketbaseKotlin.dsl.query.Filter
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable

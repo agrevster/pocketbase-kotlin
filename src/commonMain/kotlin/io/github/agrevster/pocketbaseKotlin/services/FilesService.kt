@@ -1,9 +1,9 @@
 package io.github.agrevster.pocketbaseKotlin.services
 
 
-import github.agrevster.pocketbaseKotlin.PocketbaseException
-import github.agrevster.pocketbaseKotlin.models.Record
-import github.agrevster.pocketbaseKotlin.services.utils.BaseService
+import io.github.agrevster.pocketbaseKotlin.PocketbaseException
+import io.github.agrevster.pocketbaseKotlin.models.Record
+import io.github.agrevster.pocketbaseKotlin.services.utils.BaseService
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*

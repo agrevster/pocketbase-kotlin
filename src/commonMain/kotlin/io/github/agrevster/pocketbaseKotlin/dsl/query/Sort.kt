@@ -1,6 +1,6 @@
 package io.github.agrevster.pocketbaseKotlin.dsl.query
 
-import github.agrevster.pocketbaseKotlin.toFieldList
+import io.github.agrevster.pocketbaseKotlin.toFieldList
 import io.ktor.http.*
 
 /**

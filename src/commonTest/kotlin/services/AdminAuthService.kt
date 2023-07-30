@@ -2,11 +2,11 @@ package services
 
 import CrudServiceTestSuite
 import PocketbaseClient.Companion.adminId
-import github.agrevster.pocketbaseKotlin.*
-import github.agrevster.pocketbaseKotlin.dsl.create
-import github.agrevster.pocketbaseKotlin.dsl.login
-import github.agrevster.pocketbaseKotlin.dsl.update
-import github.agrevster.pocketbaseKotlin.models.Admin
+import io.github.agrevster.pocketbaseKotlin.*
+import io.github.agrevster.pocketbaseKotlin.dsl.create
+import io.github.agrevster.pocketbaseKotlin.dsl.login
+import io.github.agrevster.pocketbaseKotlin.dsl.update
+import io.github.agrevster.pocketbaseKotlin.models.Admin
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.test.*

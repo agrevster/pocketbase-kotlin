@@ -1,7 +1,7 @@
 package io.github.agrevster.pocketbaseKotlin.models
 
-import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
-import github.agrevster.pocketbaseKotlin.models.utils.SchemaField
+import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
+import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import io.github.agrevster.pocketbaseKotlin.models.Collection.CollectionType
 import io.github.agrevster.pocketbaseKotlin.models.Collection.CollectionType.*
 import kotlinx.serialization.SerialName

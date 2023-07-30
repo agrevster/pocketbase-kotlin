@@ -1,10 +1,10 @@
 package services
 
 import TestingUtils
-import github.agrevster.pocketbaseKotlin.PocketbaseException
-import github.agrevster.pocketbaseKotlin.dsl.create
-import github.agrevster.pocketbaseKotlin.dsl.login
-import github.agrevster.pocketbaseKotlin.models.User
+import io.github.agrevster.pocketbaseKotlin.PocketbaseException
+import io.github.agrevster.pocketbaseKotlin.dsl.create
+import io.github.agrevster.pocketbaseKotlin.dsl.login
+import io.github.agrevster.pocketbaseKotlin.models.User
 import io.ktor.client.request.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

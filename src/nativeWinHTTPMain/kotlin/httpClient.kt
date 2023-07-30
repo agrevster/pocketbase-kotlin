@@ -1,4 +1,4 @@
-package github.agrevster.pocketbaseKotlin
+package io.github.agrevster.pocketbaseKotlin
 
 import io.ktor.client.*
 import io.ktor.client.engine.winhttp.*

@@ -1,6 +1,6 @@
 package io.github.agrevster.pocketbaseKotlin
 
-import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
+import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import io.ktor.client.call.*
 import io.ktor.client.statement.*
 import io.ktor.http.*

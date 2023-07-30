@@ -1,7 +1,7 @@
 package io.github.agrevster.pocketbaseKotlin.dsl
 
-import github.agrevster.pocketbaseKotlin.PocketKtDSL
-import github.agrevster.pocketbaseKotlin.PocketbaseException
+import io.github.agrevster.pocketbaseKotlin.PocketKtDSL
+import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 
 
 @PocketKtDSL

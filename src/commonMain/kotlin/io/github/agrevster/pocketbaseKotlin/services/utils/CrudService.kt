@@ -3,14 +3,14 @@
 
 package io.github.agrevster.pocketbaseKotlin.services.utils
 
-import github.agrevster.pocketbaseKotlin.FileUpload
-import github.agrevster.pocketbaseKotlin.PocketKtInternal
-import github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
-import github.agrevster.pocketbaseKotlin.dsl.query.Filter
-import github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
-import github.agrevster.pocketbaseKotlin.dsl.query.SortFields
-import github.agrevster.pocketbaseKotlin.models.utils.BaseModel
-import github.agrevster.pocketbaseKotlin.models.utils.ListResult
+import io.github.agrevster.pocketbaseKotlin.FileUpload
+import io.github.agrevster.pocketbaseKotlin.PocketKtInternal
+import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
+import io.github.agrevster.pocketbaseKotlin.dsl.query.Filter
+import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
+import io.github.agrevster.pocketbaseKotlin.dsl.query.SortFields
+import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
+import io.github.agrevster.pocketbaseKotlin.models.utils.ListResult
 
 @OptIn(PocketKtInternal::class)
 public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) :

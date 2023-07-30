@@ -1,6 +1,6 @@
 package io.github.agrevster.pocketbaseKotlin.dsl.query
 
-import github.agrevster.pocketbaseKotlin.models.Record
+import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
