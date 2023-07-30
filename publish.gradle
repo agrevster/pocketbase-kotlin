@@ -2,7 +2,7 @@ group GROUP
 version VERSION
 
 def isReleaseBuild() {
-    return VERSION.contains('SNAPSHOT') == false
+    return !VERSION.contains('SNAPSHOT')
 }
 
 def getReleaseRepositoryUrl() {
