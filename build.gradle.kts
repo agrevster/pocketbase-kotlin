@@ -12,12 +12,6 @@ plugins {
     id("signing")
 
 }
-
-group = "io.github.agrevster"
-version = "2.3"
-archivesName.set("pocketbase-kotlin")
-
-
 val ktorVersion = "2.2.4"
 val kotlinSerializationVersion = "1.5.1"
 val kotlinCoroutinesVersion = "1.6.4"
