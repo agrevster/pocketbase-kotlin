@@ -36,6 +36,7 @@ jobs:
           SIGNING_KEYID: ${{ secrets.SIGNING_KEYID }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          PUBLISHING: "true"
 
       - name: Publish Linux Artifacts
         if: matrix.os == 'ubuntu-latest'
@@ -46,6 +47,7 @@ jobs:
           SIGNING_KEYID: ${{ secrets.SIGNING_KEYID }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          PUBLISHING: "true"
 
       - name: Publish Windows Artifacts
         if: matrix.os == 'windows-latest'
@@ -56,6 +58,7 @@ jobs:
           SIGNING_KEYID: ${{ secrets.SIGNING_KEYID }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          PUBLISHING: "true"
 
 
 env:
