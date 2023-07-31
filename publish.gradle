@@ -7,7 +7,7 @@ def isReleaseBuild() {
 
 def getReleaseRepositoryUrl() {
     return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL :
-            'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            'https://s01.oss.sonatype.org/service/local/staging/deploy'
 }
 
 def getRepositoryUsername() {
