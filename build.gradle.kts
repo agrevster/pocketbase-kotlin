@@ -30,6 +30,8 @@ repositories {
 
 
 kotlin {
+    fun isPublishedBuild(): Boolean = System.getenv("PUBLISHING") == "true"
+
     fun addNativeTarget(preset: KotlinTargetPreset<*>, desiredHost: Host) {
         val target = targetFromPreset(preset)
         if (desiredHost == Host.WINDOWS) {
@@ -41,7 +43,7 @@ kotlin {
         }
         if (host != desiredHost) {
             target.compilations.configureEach {
-                compileKotlinTask.enabled = false
+                compileKotlinTask.enabled = isPublishedBuild()
             }
         }
     }
