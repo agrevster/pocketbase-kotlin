@@ -3,9 +3,9 @@ package query
 import TestingUtils
 import io.github.agrevster.pocketbaseKotlin.dsl.login
 import io.github.agrevster.pocketbaseKotlin.dsl.query.SortFields
+import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-import io.github.agrevster.pocketbaseKotlin.models.Collection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -17,7 +17,6 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 class Sort : TestingUtils() {
@@ -43,22 +42,24 @@ class Sort : TestingUtils() {
     fun before() = runBlocking {
         launch {
             client.login {
-                val login =
-                    client.admins.authWithPassword(TestClient.adminLogin.first, TestClient.adminLogin.second)
+                val login = client.admins.authWithPassword(TestClient.adminLogin.first, TestClient.adminLogin.second)
                 token = login.token
             }
 
-            collectionId = client.collections.create<Collection>(Json.encodeToString(
-                Collection(name = testCollection, type = Collection.CollectionType.BASE, schema = listOf(
-                SchemaField("field1", required = true, type = SchemaField.SchemaFieldType.TEXT),
-                SchemaField("field2", type = SchemaField.SchemaFieldType.BOOL)
-                ))
-            )).id
+            collectionId = client.collections.create<Collection>(
+                Json.encodeToString(
+                    Collection(
+                        name = testCollection, type = Collection.CollectionType.BASE, schema = listOf(
+                            SchemaField("field1", required = true, type = SchemaField.SchemaFieldType.TEXT),
+                            SchemaField("field2", type = SchemaField.SchemaFieldType.BOOL)
+                        )
+                    )
+                )
+            ).id
 
             for (i in 1..5) {
                 client.records.create<TestRecord>(
-                    testCollection,
-                    Json.encodeToString(TestRecord(randomName(), Random.nextBoolean()))
+                    testCollection, Json.encodeToString(TestRecord(randomName(), Random.nextBoolean()))
                 )
             }
         }
@@ -68,7 +69,7 @@ class Sort : TestingUtils() {
     @AfterTest
     fun after() = runBlocking {
         launch {
-            client.collections.delete(collectionId!!);
+            client.collections.delete(collectionId!!)
             delay(delayAmount)
         }
         println()

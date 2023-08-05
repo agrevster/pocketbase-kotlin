@@ -6,7 +6,6 @@ import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import io.github.agrevster.pocketbaseKotlin.services.utils.BaseService
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonPrimitive
@@ -44,7 +43,7 @@ public class BackupsService(client: io.github.agrevster.pocketbaseKotlin.Pocketb
             url {
                 path("api", "backups")
             }
-            contentType(ContentType.Application.Json);
+            contentType(ContentType.Application.Json)
             if (name != null) setBody(body)
         }
         PocketbaseException.handle(response)
@@ -59,7 +58,7 @@ public class BackupsService(client: io.github.agrevster.pocketbaseKotlin.Pocketb
     public suspend fun delete(key: String): Boolean {
         val response = client.httpClient.delete {
             url {
-                path("api", "backups",key)
+                path("api", "backups", key)
             }
         }
         PocketbaseException.handle(response)
@@ -74,7 +73,7 @@ public class BackupsService(client: io.github.agrevster.pocketbaseKotlin.Pocketb
     public suspend fun restore(key: String): Boolean {
         val response = client.httpClient.post {
             url {
-                path("api","backups",key,"restore")
+                path("api", "backups", key, "restore")
             }
         }
         PocketbaseException.handle(response)
@@ -91,4 +90,5 @@ public class BackupsService(client: io.github.agrevster.pocketbaseKotlin.Pocketb
         val url = URLBuilder()
         this.client.baseUrl(url)
         return "$url/api/backups/${key}?token=${token}"
-    }}
+    }
+}

@@ -56,7 +56,7 @@ public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseC
      * Returns a single request log by its ID.
      * @param [id]
      */
-    public suspend fun getRequest(id: String,fields: ShowFields = ShowFields()): LogRequest {
+    public suspend fun getRequest(id: String, fields: ShowFields = ShowFields()): LogRequest {
         val response = client.httpClient.get {
             url {
                 path("api", "logs", "requests", id)
@@ -71,7 +71,10 @@ public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseC
     /**
      * Returns hourly aggregated request logs statistics.
      */
-    public suspend fun getRequestsStats(filterBy: Filter = Filter(),fields: ShowFields = ShowFields()): List<HourlyStats> {
+    public suspend fun getRequestsStats(
+        filterBy: Filter = Filter(),
+        fields: ShowFields = ShowFields()
+    ): List<HourlyStats> {
         val response = client.httpClient.get {
             url {
                 path("api", "logs", "requests", "stats")

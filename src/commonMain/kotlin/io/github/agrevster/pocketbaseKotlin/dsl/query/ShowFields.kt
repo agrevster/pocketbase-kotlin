@@ -10,6 +10,7 @@ import io.ktor.http.*
  */
 public class ShowFields(vararg fields: String) {
     private lateinit var fieldsToShow: String
+
     init {
         fieldsToShow = fields.joinToString(separator = ",")
         println(fieldsToShow)

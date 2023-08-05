@@ -3,7 +3,9 @@ package io.github.agrevster.pocketbaseKotlin.models.utils
 import io.github.agrevster.pocketbaseKotlin.PocketKtInternal
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toInstant
-import kotlinx.serialization.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 /**
@@ -16,7 +18,7 @@ import kotlinx.serialization.*
  * Use [updated] to access the type of [Instant]
  *
  */
-public open class BaseModel (public open val id: String? = null) {
+public open class BaseModel(public open val id: String? = null) {
 
 
     @SerialName("created")

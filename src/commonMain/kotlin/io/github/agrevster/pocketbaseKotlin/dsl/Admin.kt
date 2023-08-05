@@ -77,7 +77,8 @@ public suspend inline fun AdminAuthService.create(
 public suspend inline fun AdminAuthService.update(
     id: String,
     showFields: ShowFields = ShowFields(),
-    setup: BaseAdminBuilder.() -> Unit): Admin {
+    setup: BaseAdminBuilder.() -> Unit
+): Admin {
     val builder = BaseAdminBuilder()
     builder.setup()
     if (builder.password != builder.passwordConfirm) throw PocketbaseException("The password and password confirmation do not match")

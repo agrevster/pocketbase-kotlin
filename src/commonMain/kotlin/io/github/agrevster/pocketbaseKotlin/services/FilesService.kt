@@ -54,11 +54,16 @@ public class FilesService(client: io.github.agrevster.pocketbaseKotlin.Pocketbas
      * @param [thumbFormat] the thumb variant of the requested file
      * @param [token] the file token used to access protected files
      */
-    public fun getFileURL(record: Record, filename: String, thumbFormat: ThumbFormat? = null, token: String? = null): String {
+    public fun getFileURL(
+        record: Record,
+        filename: String,
+        thumbFormat: ThumbFormat? = null,
+        token: String? = null
+    ): String {
         val url = URLBuilder()
         this.client.baseUrl(url)
-        val authTokenIfValid: () -> String =  {if (token == null) "" else "?token=$token"}
-        val thumbFormatIfValid: () -> String =  {if (thumbFormat == null) "" else "?thumb=$thumbFormat"}
+        val authTokenIfValid: () -> String = { if (token == null) "" else "?token=$token" }
+        val thumbFormatIfValid: () -> String = { if (thumbFormat == null) "" else "?thumb=$thumbFormat" }
 
         return "$url/api/files/${record.collectionId}/${record.id}/$filename${thumbFormatIfValid()}${authTokenIfValid()}"
     }
@@ -67,19 +72,18 @@ public class FilesService(client: io.github.agrevster.pocketbaseKotlin.Pocketbas
      * Generates a temporary token for accessing protected files
      * The client must be authenticated to use this function
      */
-    public suspend fun generateProtectedFileToken(): String{
+    public suspend fun generateProtectedFileToken(): String {
         @Serializable
         data class TokenResponse(val token: String?)
+
         val response = client.httpClient.post {
             url {
-                path("api", "files","token")
+                path("api", "files", "token")
             }
         }
         PocketbaseException.handle(response)
         return response.body<TokenResponse>().token!!
     }
-
-
 
 
 }

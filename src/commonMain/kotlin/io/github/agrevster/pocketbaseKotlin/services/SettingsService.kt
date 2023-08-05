@@ -32,7 +32,7 @@ public class SettingsService(client: io.github.agrevster.pocketbaseKotlin.Pocket
      * Bulk updates application settings and returns the updated settings list.
      * @param [body] the JSON body of the settings you want to tweak.
      */
-    public suspend inline fun <reified T> update(body: String,fields: ShowFields = ShowFields()): T {
+    public suspend inline fun <reified T> update(body: String, fields: ShowFields = ShowFields()): T {
         val response = client.httpClient.patch {
             url {
                 path("/api/settings")
@@ -97,7 +97,7 @@ public class SettingsService(client: io.github.agrevster.pocketbaseKotlin.Pocket
         keyId: String,
         privateKey: String,
         duration: Long
-        ): String {
+    ): String {
         @Serializable
         data class AppleSecret(val secret: String)
 

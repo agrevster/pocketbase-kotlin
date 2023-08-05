@@ -4,7 +4,6 @@ import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import io.ktor.client.call.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.utils.io.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.datetime.Instant

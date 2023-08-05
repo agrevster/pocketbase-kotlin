@@ -10,9 +10,7 @@ import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import io.github.agrevster.pocketbaseKotlin.services.utils.AuthService
 import io.github.agrevster.pocketbaseKotlin.services.utils.SubCrudService
 import io.ktor.client.call.*
-import io.ktor.client.plugins.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -23,10 +21,12 @@ public class RecordsService(client: io.github.agrevster.pocketbaseKotlin.Pocketb
     public fun basePath(collectionId: String): String = "api/collections/$collectionId"
     override fun baseCrudPath(collectionId: String): String = "${basePath(collectionId)}/records"
 
-    @Deprecated("Please use the newly created files service for file related tasks",
-        ReplaceWith("client.files.getFileURL"),DeprecationLevel.ERROR)
+    @Deprecated(
+        "Please use the newly created files service for file related tasks",
+        ReplaceWith("client.files.getFileURL"), DeprecationLevel.ERROR
+    )
     public fun getFileURL(record: Record, filename: String, thumbFormat: FilesService.ThumbFormat? = null): String {
-        return client.files.getFileURL(record,filename,thumbFormat)
+        return client.files.getFileURL(record, filename, thumbFormat)
     }
 
     /**
@@ -72,7 +72,7 @@ public class RecordsService(client: io.github.agrevster.pocketbaseKotlin.Pocketb
         password: String,
         expandRelations: ExpandRelations = ExpandRelations(),
         fields: ShowFields = ShowFields()
-    ): AuthResponse<T> = authWithPassword(collection, username, password, expandRelations,fields)
+    ): AuthResponse<T> = authWithPassword(collection, username, password, expandRelations, fields)
 
 
     @Untested("Requires oauth2")

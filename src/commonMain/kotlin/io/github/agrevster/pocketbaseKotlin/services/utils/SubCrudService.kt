@@ -32,7 +32,7 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): List<T> {
-        return _getFullList(baseCrudPath(sub), batch, sortBy, filterBy, expandRelations,showFields)
+        return _getFullList(baseCrudPath(sub), batch, sortBy, filterBy, expandRelations, showFields)
     }
 
     /**
@@ -50,7 +50,7 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): ListResult<T> {
-        return _getList(baseCrudPath(sub), page, perPage, sortBy, filterBy, expandRelations,showFields)
+        return _getList(baseCrudPath(sub), page, perPage, sortBy, filterBy, expandRelations, showFields)
     }
 
     /**
@@ -63,7 +63,7 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): T {
-        return _getOne(baseCrudPath(sub), id, expandRelations,showFields)
+        return _getOne(baseCrudPath(sub), id, expandRelations, showFields)
     }
 
     /**
@@ -77,7 +77,7 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): T {
-        return _create(baseCrudPath(sub), body, expandRelations,showFields)
+        return _create(baseCrudPath(sub), body, expandRelations, showFields)
     }
 
     /**
@@ -93,7 +93,7 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): T {
-        return _update(baseCrudPath(sub), id, body, expandRelations,showFields)
+        return _update(baseCrudPath(sub), id, body, expandRelations, showFields)
     }
 
     /**
@@ -109,7 +109,7 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): T {
-        return _create(baseCrudPath(sub), body, files, expandRelations,showFields)
+        return _create(baseCrudPath(sub), body, files, expandRelations, showFields)
     }
 
     /**
@@ -127,7 +127,7 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): T {
-        return _update(baseCrudPath(sub), id, body, files, expandRelations,showFields)
+        return _update(baseCrudPath(sub), id, body, files, expandRelations, showFields)
     }
 
     /***

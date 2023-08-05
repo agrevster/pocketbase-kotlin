@@ -32,7 +32,7 @@ public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.poc
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): List<T> {
-        return _getFullList(baseCrudPath, batch, sortBy, filterBy, expandRelations,showFields)
+        return _getFullList(baseCrudPath, batch, sortBy, filterBy, expandRelations, showFields)
     }
 
     /**
@@ -48,7 +48,7 @@ public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.poc
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): ListResult<T> {
-        return _getList(baseCrudPath, page, perPage, sortBy, filterBy, expandRelations,showFields)
+        return _getList(baseCrudPath, page, perPage, sortBy, filterBy, expandRelations, showFields)
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.poc
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): T {
-        return _getOne(baseCrudPath, id, expandRelations,showFields)
+        return _getOne(baseCrudPath, id, expandRelations, showFields)
     }
 
     /**
@@ -72,7 +72,7 @@ public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.poc
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): T {
-        return _create(baseCrudPath, body, expandRelations,showFields)
+        return _create(baseCrudPath, body, expandRelations, showFields)
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.poc
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): T {
-        return _update(baseCrudPath, id, body, expandRelations,showFields)
+        return _update(baseCrudPath, id, body, expandRelations, showFields)
     }
 
     /**
@@ -99,7 +99,7 @@ public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.poc
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): T {
-        return _create(baseCrudPath, body, files, expandRelations,showFields)
+        return _create(baseCrudPath, body, files, expandRelations, showFields)
     }
 
     /**
@@ -115,7 +115,7 @@ public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.poc
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): T {
-        return _update(baseCrudPath, id, body, files, expandRelations,showFields)
+        return _update(baseCrudPath, id, body, files, expandRelations, showFields)
     }
 
     /***

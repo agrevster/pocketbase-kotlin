@@ -10,10 +10,10 @@ import io.github.agrevster.pocketbaseKotlin.services.utils.AuthService
 import io.github.agrevster.pocketbaseKotlin.services.utils.CrudService
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonPrimitive
 
 public class UserAuthService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) : CrudService<User>(client),
     AuthService {
@@ -62,7 +62,7 @@ public class UserAuthService(client: io.github.agrevster.pocketbaseKotlin.Pocket
         expandRelations: ExpandRelations = ExpandRelations(),
         fields: ShowFields = ShowFields()
     ): AuthResponse<User> {
-        return authWithPassword(username, password, expandRelations,fields)
+        return authWithPassword(username, password, expandRelations, fields)
     }
 
     @Untested("Requires oauth2")

@@ -27,7 +27,6 @@ public class SchemaField(
 ) {
 
 
-
     @Serializable
     /**
      * All the possible options data for the schema. These all depend on the [SchemaFieldType], see our [documentation]() for a full explanation.

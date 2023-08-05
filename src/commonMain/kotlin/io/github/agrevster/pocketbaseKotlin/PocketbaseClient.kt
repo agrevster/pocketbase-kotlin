@@ -91,7 +91,7 @@ public class PocketbaseClient(baseUrl: URLBuilder.() -> Unit, lang: String = "en
      *
      * This automatically adds the current authorization token from the client's [authStore].
      */
-    public val httpClient: HttpClient = io.github.agrevster.pocketbaseKotlin.httpClient {
+    public val httpClient: HttpClient = httpClient {
         install(ContentNegotiation) {
             json(json)
         }

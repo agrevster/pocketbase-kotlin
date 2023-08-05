@@ -12,7 +12,6 @@ import io.github.agrevster.pocketbaseKotlin.models.utils.ListResult
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 
 public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) :
@@ -29,7 +28,7 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
         val result = mutableListOf<T>()
         var page = 1
         while (true) {
-            val list = _getList<T>(path, page, batch, sortBy, filterBy, expandRelations,showFields)
+            val list = _getList<T>(path, page, batch, sortBy, filterBy, expandRelations, showFields)
             val items = list.items.toMutableList()
             result.addAll(items)
             if (items.isNotEmpty() && list.totalItems <= result.size) return result
