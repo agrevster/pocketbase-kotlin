@@ -1,8 +1,9 @@
-name: Deploy
+name: deploy-docs
 on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   deploy:
