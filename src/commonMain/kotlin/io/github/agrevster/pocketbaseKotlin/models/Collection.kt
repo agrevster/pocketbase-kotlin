@@ -22,7 +22,7 @@ import kotlinx.serialization.Transient
  * @property [updateRule] the pocketbase API rules which determines who can update a [Record] in the collection
  * @property [deleteRule] the pocketbase API rules which determines who can delete a [Record] in the collection
  * @property [indexes] the collections indexes which are used to determine which fields are unique.
- * @property [options] this collection's options (This only applicable for collections with the type of [CollectionType.AUTH])
+ * @property [options] this collection's options (This only applicable for collections with the type of [CollectionType.AUTH] and [CollectionType.VIEW])
  * */
 public open class Collection(
     public val name: String? = null,

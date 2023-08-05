@@ -12,9 +12,8 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 /**
- * A multiplatform idiomatic SDK for [Pocketbase](https://pocketbase.io)
+ * A multiplatform Kotlin SDK for [Pocketbase](https://pocketbase.io)
  * @param [baseUrl] the URL of the Pocketbase server
- * Example: localhost:8090
  * @param [lang] the language of the Pocketbase server
  * @param [store] the authentication store used to store Pocketbase authentication data
  *

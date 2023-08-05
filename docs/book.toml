@@ -1,0 +1,10 @@
+[book]
+authors = ["agrevster"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Pocketbase Kotlin"
+description = "A multi-platform Kotlin SDK for Pocketbase"
+
+[output.html.code.hidelines]
+kotlin = "//!"
