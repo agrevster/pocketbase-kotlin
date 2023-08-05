@@ -30,9 +30,10 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
         sortBy: SortFields = SortFields(),
         filterBy: Filter = Filter(),
         expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields()
+        showFields: ShowFields = ShowFields(),
+        skipTotal: Boolean = true
     ): List<T> {
-        return _getFullList(baseCrudPath(sub), batch, sortBy, filterBy, expandRelations, showFields)
+        return _getFullList(baseCrudPath(sub), batch, sortBy, filterBy, expandRelations, showFields, skipTotal)
     }
 
     /**
@@ -48,9 +49,10 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
         sortBy: SortFields = SortFields(),
         filterBy: Filter = Filter(),
         expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields()
+        showFields: ShowFields = ShowFields(),
+        skipTotal: Boolean = false
     ): ListResult<T> {
-        return _getList(baseCrudPath(sub), page, perPage, sortBy, filterBy, expandRelations, showFields)
+        return _getList(baseCrudPath(sub), page, perPage, sortBy, filterBy, expandRelations, showFields, skipTotal)
     }
 
     /**
@@ -59,7 +61,8 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
      * @param [id] ID of the record you wish to view.
      */
     public suspend inline fun <reified T : BaseModel> getOne(
-        sub: String, id: String,
+        sub: String,
+        id: String,
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
     ): T {

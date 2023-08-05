@@ -105,6 +105,10 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
         super.assertCrudPathValid()
     }
 
+    @Test
+    fun assertSkipsTotal() {
+        super.checkSkippedTotal<Collection>()
+    }
 
     @Test
     fun import() = runBlocking {

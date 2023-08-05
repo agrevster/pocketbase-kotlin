@@ -4,6 +4,8 @@ import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import io.github.agrevster.pocketbaseKotlin.services.utils.CrudService
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.assertEquals
@@ -21,34 +23,43 @@ open class CrudServiceTestSuite<T : BaseModel>(service: CrudService<T>, expected
         this.expectedBasePath = expectedBasePath
     }
 
-    fun assertSchemaMatches(expected: SchemaField, actual: SchemaField){
-        assertEquals(expected.type,actual.type,"Schema types do not match!")
-        assertEquals(expected.name,actual.name,"Schema names do not match!")
-        assertEqualNullOrFalse(expected.required,actual.required,"Schema required flags do not match!")
+    fun assertSchemaMatches(expected: SchemaField, actual: SchemaField) {
+        assertEquals(expected.type, actual.type, "Schema types do not match!")
+        assertEquals(expected.name, actual.name, "Schema names do not match!")
+        assertEqualNullOrFalse(expected.required, actual.required, "Schema required flags do not match!")
 
-        assertEqualNullOrFalse(expected.options?.min,actual.options?.min)
-        assertEqualNullOrFalse(expected.options?.max,actual.options?.max)
-        assertEqualNullOrFalse(expected.options?.pattern,actual.options?.pattern)
-        assertEqualNullOrFalse(expected.options?.exceptDomains,actual.options?.exceptDomains)
-        assertEqualNullOrFalse(expected.options?.onlyDomains,actual.options?.onlyDomains)
-        assertEqualNullOrFalse(expected.options?.values,actual.options?.values)
-        assertEqualNullOrFalse(expected.options?.maxSelect,actual.options?.maxSelect)
-        assertEqualNullOrFalse(expected.options?.collectionId,actual.options?.collectionId)
-        assertEqualNullOrFalse(expected.options?.cascadeDelete,actual.options?.cascadeDelete)
-        assertEqualNullOrFalse(expected.options?.maxSize,actual.options?.maxSize)
-        assertEqualNullOrFalse(expected.options?.mimeTypes,actual.options?.mimeTypes)
-        assertEqualNullOrFalse(expected.options?.thumbs,actual.options?.thumbs)
-        assertEqualNullOrFalse(expected.options?.minSelect,actual.options?.minSelect)
-        assertEqualNullOrFalse(expected.options?.displayFields,actual.options?.displayFields)
-        assertEqualNullOrFalse(expected.options?.protected,actual.options?.protected)
+        assertEqualNullOrFalse(expected.options?.min, actual.options?.min)
+        assertEqualNullOrFalse(expected.options?.max, actual.options?.max)
+        assertEqualNullOrFalse(expected.options?.pattern, actual.options?.pattern)
+        assertEqualNullOrFalse(expected.options?.exceptDomains, actual.options?.exceptDomains)
+        assertEqualNullOrFalse(expected.options?.onlyDomains, actual.options?.onlyDomains)
+        assertEqualNullOrFalse(expected.options?.values, actual.options?.values)
+        assertEqualNullOrFalse(expected.options?.maxSelect, actual.options?.maxSelect)
+        assertEqualNullOrFalse(expected.options?.collectionId, actual.options?.collectionId)
+        assertEqualNullOrFalse(expected.options?.cascadeDelete, actual.options?.cascadeDelete)
+        assertEqualNullOrFalse(expected.options?.maxSize, actual.options?.maxSize)
+        assertEqualNullOrFalse(expected.options?.mimeTypes, actual.options?.mimeTypes)
+        assertEqualNullOrFalse(expected.options?.thumbs, actual.options?.thumbs)
+        assertEqualNullOrFalse(expected.options?.minSelect, actual.options?.minSelect)
+        assertEqualNullOrFalse(expected.options?.displayFields, actual.options?.displayFields)
+        assertEqualNullOrFalse(expected.options?.protected, actual.options?.protected)
 
     }
 
+    inline fun <reified T : BaseModel> checkSkippedTotal(): Unit = runBlocking {
+        assertDoesNotFail {
+            launch {
+                val request = crudService.getList<T>(1, 1, skipTotal = true)
+                assertEquals(-1, request.totalItems)
+                assertEquals(-1, request.totalPages)
+            }
+        }
+    }
+
+
     open fun assertCrudPathValid() {
         assertEquals(
-            "/$expectedBasePath",
-            crudService.baseCrudPath,
-            "Should correctly return the service's base crud path."
+            "/$expectedBasePath", crudService.baseCrudPath, "Should correctly return the service's base crud path."
         )
     }
 }
@@ -60,7 +71,7 @@ open class TestingUtils {
 
     private class SuccessException : Exception()
 
-    internal fun assertDoesNotFail(block: () -> Unit) {
+    fun assertDoesNotFail(block: () -> Unit) {
         assertFailsWith<SuccessException> {
             block()
             throw SuccessException()
@@ -80,8 +91,7 @@ open class TestingUtils {
             1 -> http.get("http://www.asanet.org/wp-content/uploads/savvy/images/press/docs/pdf/asa_race_statement.pdf")
                 .body()
 
-            2 -> http.get("http://www.clariontheater.com/volunteers.html")
-                .body()
+            2 -> http.get("http://www.clariontheater.com/volunteers.html").body()
 
             else -> {
                 throw PocketbaseException("Invalid number")
@@ -89,33 +99,29 @@ open class TestingUtils {
         }
     }
 
-    inline fun <reified T> assertMatchesCreation(key: String, expected: String?, actual: String?) =
-        assertEquals(
-            expected,
-            actual,
-            "${key.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} should match the ${key.uppercase()} used to create the ${className<T>()}"
-        )
+    inline fun <reified T> assertMatchesCreation(key: String, expected: String?, actual: String?) = assertEquals(
+        expected,
+        actual,
+        "${key.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} should match the ${key.uppercase()} used to create the ${className<T>()}"
+    )
 
-    inline fun <reified T,F> assertMatchesCreation(key: String, expected: List<F>?, actual: List<F>?) =
-        assertEquals(
-            expected,
-            actual,
-            "${key.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} should match the ${key.uppercase()} used to create the ${className<T>()}"
-        )
+    inline fun <reified T, F> assertMatchesCreation(key: String, expected: List<F>?, actual: List<F>?) = assertEquals(
+        expected,
+        actual,
+        "${key.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} should match the ${key.uppercase()} used to create the ${className<T>()}"
+    )
 
-    inline fun <reified T> assertMatchesCreation(key: String, expected: Boolean, actual: Boolean?) =
-        assertEquals(
-            expected,
-            actual,
-            "${key.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} should match the ${key.uppercase()} used to create the ${className<T>()}"
-        )
+    inline fun <reified T> assertMatchesCreation(key: String, expected: Boolean, actual: Boolean?) = assertEquals(
+        expected,
+        actual,
+        "${key.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} should match the ${key.uppercase()} used to create the ${className<T>()}"
+    )
 
-    inline fun <reified T> assertMatchesCreation(key: String, expected: Int?, actual: Int?) =
-        assertEquals(
-            expected,
-            actual,
-            "${key.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} should match the ${key.uppercase()} used to create the ${className<T>()}"
-        )
+    inline fun <reified T> assertMatchesCreation(key: String, expected: Int?, actual: Int?) = assertEquals(
+        expected,
+        actual,
+        "${key.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} should match the ${key.uppercase()} used to create the ${className<T>()}"
+    )
 
     fun assertEqualNullOrFalse(actual: Any?, expected: Any?, msg: String? = null) {
         if (expected == false && actual == null) return

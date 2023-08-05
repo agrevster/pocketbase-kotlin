@@ -30,9 +30,10 @@ public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.poc
         sortBy: SortFields = SortFields(),
         filterBy: Filter = Filter(),
         expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields()
+        showFields: ShowFields = ShowFields(),
+        skipTotal: Boolean = true
     ): List<T> {
-        return _getFullList(baseCrudPath, batch, sortBy, filterBy, expandRelations, showFields)
+        return _getFullList(baseCrudPath, batch, sortBy, filterBy, expandRelations, showFields, skipTotal)
     }
 
     /**
@@ -46,9 +47,9 @@ public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.poc
         sortBy: SortFields = SortFields(),
         filterBy: Filter = Filter(),
         expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields()
+        showFields: ShowFields = ShowFields(), skipTotal: Boolean = false
     ): ListResult<T> {
-        return _getList(baseCrudPath, page, perPage, sortBy, filterBy, expandRelations, showFields)
+        return _getList(baseCrudPath, page, perPage, sortBy, filterBy, expandRelations, showFields, skipTotal)
     }
 
     /**

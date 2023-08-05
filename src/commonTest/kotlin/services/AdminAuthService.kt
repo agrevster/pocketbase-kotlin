@@ -7,6 +7,7 @@ import io.github.agrevster.pocketbaseKotlin.dsl.create
 import io.github.agrevster.pocketbaseKotlin.dsl.login
 import io.github.agrevster.pocketbaseKotlin.dsl.update
 import io.github.agrevster.pocketbaseKotlin.models.Admin
+import io.github.agrevster.pocketbaseKotlin.models.Collection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -75,6 +76,11 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
     @Test
     override fun assertCrudPathValid() {
         super.assertCrudPathValid()
+    }
+
+    @Test
+    fun assertSkipsTotal() {
+        super.checkSkippedTotal<Admin>()
     }
 
     @Test

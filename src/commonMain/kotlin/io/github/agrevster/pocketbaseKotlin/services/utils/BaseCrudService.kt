@@ -23,12 +23,12 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
         sortBy: SortFields = SortFields(),
         filterBy: Filter = Filter(),
         expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields()
+        showFields: ShowFields = ShowFields(), skipTotal: Boolean = true
     ): List<T> {
         val result = mutableListOf<T>()
         var page = 1
         while (true) {
-            val list = _getList<T>(path, page, batch, sortBy, filterBy, expandRelations, showFields)
+            val list = _getList<T>(path, page, batch, sortBy, filterBy, expandRelations, showFields, skipTotal)
             val items = list.items.toMutableList()
             result.addAll(items)
             if (items.isNotEmpty() && list.totalItems <= result.size) return result
@@ -44,7 +44,8 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
         sortBy: SortFields = SortFields(),
         filterBy: Filter = Filter(),
         expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields()
+        showFields: ShowFields = ShowFields(),
+        skipTotal: Boolean = false
     ): ListResult<T> {
         val response = client.httpClient.get {
             url {
@@ -55,6 +56,7 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
                 showFields.addTo(parameters)
                 parameters.append("page", page.toString())
                 parameters.append("perPage", perPage.toString())
+                if (skipTotal) parameters.append("skipTotal", "1")
             }
         }
         PocketbaseException.handle(response)

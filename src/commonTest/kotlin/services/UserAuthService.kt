@@ -5,6 +5,7 @@ import PocketbaseClient.Companion.testUserID
 import io.github.agrevster.pocketbaseKotlin.dsl.create
 import io.github.agrevster.pocketbaseKotlin.dsl.login
 import io.github.agrevster.pocketbaseKotlin.dsl.update
+import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.User
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -79,6 +80,11 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
     @Test
     override fun assertCrudPathValid() {
         super.assertCrudPathValid()
+    }
+
+    @Test
+    fun assertSkipsTotal() {
+        super.checkSkippedTotal<User>()
     }
 
     @Test
