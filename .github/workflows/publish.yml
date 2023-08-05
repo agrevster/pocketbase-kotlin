@@ -1,4 +1,4 @@
-name: deploy
+name: publish-to-maven-central
 on: workflow_dispatch
 
 jobs:
