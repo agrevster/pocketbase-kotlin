@@ -53,19 +53,35 @@ public class FilesService(client: io.github.agrevster.pocketbaseKotlin.Pocketbas
      * @param [filename] the file's name
      * @param [thumbFormat] the thumb variant of the requested file
      * @param [token] the file token used to access protected files
+     * @param [download] weather or not pocketbase should force the browser to download the file rather than showing a preview
      */
     public fun getFileURL(
         record: Record,
         filename: String,
         thumbFormat: ThumbFormat? = null,
-        token: String? = null
+        token: String? = null,
+        download: Boolean = false
     ): String {
-        val url = URLBuilder()
-        this.client.baseUrl(url)
-        val authTokenIfValid: () -> String = { if (token == null) "" else "?token=$token" }
-        val thumbFormatIfValid: () -> String = { if (thumbFormat == null) "" else "?thumb=$thumbFormat" }
+        val pocketbaseUrl = URLBuilder()
+        this.client.baseUrl(pocketbaseUrl)
+        val url: URLBuilder.() -> Unit = {
+            host = pocketbaseUrl.host
+            port = pocketbaseUrl.port
+            protocol = pocketbaseUrl.protocol
 
-        return "$url/api/files/${record.collectionId}/${record.id}/$filename${thumbFormatIfValid()}${authTokenIfValid()}"
+            path(
+                *pocketbaseUrl.pathSegments.toTypedArray(),
+                "api", "files", record.collectionId ?: "", record.id ?: "", filename
+            )
+
+            thumbFormat?.let { parameters.append("thumb", thumbFormat.toString()) }
+            token?.let { parameters.append("token", token) }
+            if (download) parameters.append("download", "1")
+
+        }
+        val ret = URLBuilder()
+        url(ret)
+        return ret.buildString()
     }
 
     /**

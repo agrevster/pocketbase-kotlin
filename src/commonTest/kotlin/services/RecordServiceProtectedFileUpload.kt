@@ -2,13 +2,15 @@ package services
 
 import TestingUtils
 import io.github.agrevster.pocketbaseKotlin.FileUpload
-import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 import io.github.agrevster.pocketbaseKotlin.dsl.login
+import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
+import io.github.agrevster.pocketbaseKotlin.services.FilesService
 import io.github.agrevster.pocketbaseKotlin.toJsonPrimitive
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -16,7 +18,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.*
-import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 class RecordServiceProtectedFileUpload : TestingUtils() {
@@ -31,21 +32,29 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
     fun before() = runBlocking {
         launch {
             client.login {
-                val login =
-                    client.admins.authWithPassword(TestClient.adminLogin.first, TestClient.adminLogin.second)
+                val login = client.admins.authWithPassword(TestClient.adminLogin.first, TestClient.adminLogin.second)
                 token = login.token
             }
-            client.collections.create<Collection>(Json.encodeToString(Collection(
-                name = testCollection,
-                type = Collection.CollectionType.BASE,
-                collectionId = "123456789123478",
-                schema = listOf(
-                    SchemaField("text", required = true, type = SchemaField.SchemaFieldType.TEXT),
-                    SchemaField("file",type = SchemaField.SchemaFieldType.FILE, options = SchemaField.SchemaOptions(maxSelect = 1, maxSize = 5242880, protected = true))
+            client.collections.create<Collection>(
+                Json.encodeToString(
+                    Collection(
+                        name = testCollection,
+                        type = Collection.CollectionType.BASE,
+                        collectionId = "123456789123478",
+                        schema = listOf(
+                            SchemaField("text", required = true, type = SchemaField.SchemaFieldType.TEXT),
+                            SchemaField(
+                                "file",
+                                type = SchemaField.SchemaFieldType.FILE,
+                                options = SchemaField.SchemaOptions(maxSelect = 1, maxSize = 5242880, protected = true)
+                            )
+                        )
+                    )
                 )
-            )))
+            )
             val record = records.create<TestRecord>(
-                testCollection, mapOf("text" to "HI".toJsonPrimitive()),
+                testCollection,
+                mapOf("text" to "HI".toJsonPrimitive()),
                 listOf(FileUpload("file", getTestFile(1), "monkey.jpg"))
             )
             modifyRecordId = record.id
@@ -90,7 +99,8 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = records.create<TestRecord>(
-                    testCollection, mapOf("text" to "HELLO".toJsonPrimitive()),
+                    testCollection,
+                    mapOf("text" to "HELLO".toJsonPrimitive()),
                     listOf(FileUpload("file", getTestFile(1), "monkey.jpg"))
                 )
                 assertRecordValid(record)
@@ -106,7 +116,9 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = records.update<TestRecord>(
-                    testCollection, modifyRecordId!!, mapOf("text" to "BYE".toJsonPrimitive()),
+                    testCollection,
+                    modifyRecordId!!,
+                    mapOf("text" to "BYE".toJsonPrimitive()),
                     listOf(FileUpload("file", getTestFile(2), "ape.jpg"))
                 )
                 assertRecordValid(record)
@@ -132,13 +144,69 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
         }
     }
 
+    @Test
+    fun getFileWithDownloadUrl() = runBlocking {
+        assertDoesNotFail("No exceptions should be thrown") {
+            launch {
+                val token = service.generateProtectedFileToken()
+                val record = records.getOne<RecordServiceFileUpload.TestRecord>(testCollection, modifyRecordId!!)
+                val image = client.httpClient.get(service.getFileURL(record, imageId!!, download = true, token = token))
+                println(image.request.url)
+                assertTrue { image.call.request.url.parameters.contains("download") }
+                PocketbaseException.handle(image)
+            }
+            println()
+        }
+    }
+
+    @Test
+    fun getFileWithThumbs() = runBlocking {
+        assertDoesNotFail("No exceptions should be thrown") {
+            launch {
+                val token = service.generateProtectedFileToken()
+                val record = records.getOne<RecordServiceFileUpload.TestRecord>(testCollection, modifyRecordId!!)
+                val image = client.httpClient.get(
+                    service.getFileURL(
+                        record, imageId!!, token = token, thumbFormat = FilesService.ThumbFormat.WxH
+                    )
+                )
+                println(image.request.url)
+                assertTrue { image.call.request.url.parameters.contains("thumb") }
+                PocketbaseException.handle(image)
+            }
+            println()
+        }
+    }
+
+    @Test
+    fun getFileWithThumbsAndDownload() = runBlocking {
+        assertDoesNotFail("No exceptions should be thrown") {
+            launch {
+                val token = service.generateProtectedFileToken()
+                val record = records.getOne<RecordServiceFileUpload.TestRecord>(testCollection, modifyRecordId!!)
+                val image = client.httpClient.get(
+                    service.getFileURL(
+                        record, imageId!!, download = true, token = token, thumbFormat = FilesService.ThumbFormat.WxH
+                    )
+                )
+                println(image.request.url)
+                assertTrue { image.call.request.url.parameters.contains("download") }
+                assertTrue { image.call.request.url.parameters.contains("thumb") }
+                PocketbaseException.handle(image)
+            }
+            println()
+        }
+    }
+
 
     @Test
     fun removeFile() = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = records.update<TestRecord>(
-                    testCollection, modifyRecordId!!, mapOf("text" to "BYE".toJsonPrimitive()),
+                    testCollection,
+                    modifyRecordId!!,
+                    mapOf("text" to "BYE".toJsonPrimitive()),
                     listOf(FileUpload("file", null, ""))
                 )
                 assertRecordValid(record)
