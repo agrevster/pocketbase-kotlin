@@ -11,8 +11,10 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
+import kotlinx.coroutines.delay
 import kotlin.random.Random
 import kotlin.test.*
+import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 class ShowFields : TestingUtils() {
@@ -52,7 +54,10 @@ class ShowFields : TestingUtils() {
 
     @AfterTest
     fun after() = runBlocking {
-        launch { client.collections.delete(collectionId!!) }
+        launch {
+            client.collections.delete(collectionId!!)
+            delay(delayAmount)
+        }
         println()
     }
 

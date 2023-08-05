@@ -5,12 +5,14 @@ import io.github.agrevster.pocketbaseKotlin.dsl.login
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.toJsonPrimitive
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.*
+import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "api/collections") {
@@ -66,6 +68,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 """.trimIndent()
             )
             client.collections.import(json)
+            delay(delayAmount)
         }
         println()
     }
@@ -74,6 +77,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
     fun after() = runBlocking {
         launch {
             if (delete) {
+                delay(delayAmount)
                 val usersCollectionId = service.getOne<Collection>("users").id
                 val collections = service.getFullList<Collection>(10)
                 val ids = collections.map { it.id }

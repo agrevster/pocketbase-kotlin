@@ -8,6 +8,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.time.Duration.Companion.seconds
 
 //@TODO Clean up tests and try share more code between tests
 open class CrudServiceTestSuite<T : BaseModel>(service: CrudService<T>, expectedBasePath: String) : TestingUtils() {
@@ -54,6 +55,8 @@ open class CrudServiceTestSuite<T : BaseModel>(service: CrudService<T>, expected
 
 open class TestingUtils {
     inline fun <reified T> className() = T::class.simpleName
+
+    val delayAmount = (1.5).seconds
 
     private class SuccessException : Exception()
 

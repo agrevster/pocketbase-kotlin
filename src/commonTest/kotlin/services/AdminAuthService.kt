@@ -7,9 +7,11 @@ import io.github.agrevster.pocketbaseKotlin.dsl.create
 import io.github.agrevster.pocketbaseKotlin.dsl.login
 import io.github.agrevster.pocketbaseKotlin.dsl.update
 import io.github.agrevster.pocketbaseKotlin.models.Admin
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.test.*
+import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins") {
@@ -47,6 +49,7 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
     @AfterTest
     fun after() = runBlocking {
         launch {
+            delay(delayAmount)
             if (delete) {
                 val admins = service.getFullList<Admin>(10)
                 val ids = admins.map { it.id }

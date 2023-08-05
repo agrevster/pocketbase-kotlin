@@ -13,6 +13,7 @@ import kotlinx.serialization.Transient
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.*
+import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 
@@ -97,6 +98,7 @@ class RecordAuthService : TestingUtils() {
     @AfterTest
     fun after(): Unit = runBlocking {
         launch {
+            delay(delayAmount)
             client.login {
                 val login = client.admins.authWithPassword(
                     TestClient.adminLogin.first,

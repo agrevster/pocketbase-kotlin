@@ -6,9 +6,11 @@ import io.github.agrevster.pocketbaseKotlin.dsl.create
 import io.github.agrevster.pocketbaseKotlin.dsl.login
 import io.github.agrevster.pocketbaseKotlin.dsl.update
 import io.github.agrevster.pocketbaseKotlin.models.User
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.test.*
+import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 
@@ -47,6 +49,7 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
     @AfterTest
     fun after() = runBlocking {
         launch {
+            delay(delayAmount)
             if (delete) {
                 val users = service.getFullList<User>(10)
                 val ids = users.map { it.id }

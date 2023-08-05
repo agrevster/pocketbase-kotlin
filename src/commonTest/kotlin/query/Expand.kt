@@ -7,6 +7,7 @@ import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
 import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
@@ -16,6 +17,7 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 class Expand : TestingUtils() {
@@ -75,6 +77,7 @@ class Expand : TestingUtils() {
     @AfterTest
     fun after() = runBlocking {
         launch {
+            delay(delayAmount)
             client.collections.delete(testingCollectionId!!)
             client.collections.delete(dataCollectionId!!)
         }
