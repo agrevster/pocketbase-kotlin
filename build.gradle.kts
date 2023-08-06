@@ -75,13 +75,13 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinTimeVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
+                api("io.ktor:ktor-client-core:$ktorVersion")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
+                api("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinTimeVersion")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
 
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                api("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                api("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
             }
         }
 
