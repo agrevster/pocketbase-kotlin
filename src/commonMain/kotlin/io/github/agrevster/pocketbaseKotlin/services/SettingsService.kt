@@ -4,6 +4,7 @@ import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 import io.github.agrevster.pocketbaseKotlin.Untested
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import io.github.agrevster.pocketbaseKotlin.services.utils.BaseService
+import io.github.agrevster.pocketbaseKotlin.toJsonPrimitive
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -69,8 +70,8 @@ public class SettingsService(client: io.github.agrevster.pocketbaseKotlin.Pocket
      */
     public suspend fun testEmail(toEmail: String, emailTemplate: String): Boolean {
         val body = mapOf(
-            "email" to toEmail,
-            "template" to emailTemplate
+            "email" to toEmail.toJsonPrimitive(),
+            "template" to emailTemplate.toJsonPrimitive()
         )
         val response = client.httpClient.post {
             url {
@@ -102,11 +103,11 @@ public class SettingsService(client: io.github.agrevster.pocketbaseKotlin.Pocket
         data class AppleSecret(val secret: String)
 
         val body = mapOf(
-            "clientId" to clientId,
-            "teamId" to teamId,
-            "keyId" to keyId,
-            "privateKey" to privateKey,
-            "duration" to duration.toString()
+            "clientId" to clientId.toJsonPrimitive(),
+            "teamId" to teamId.toJsonPrimitive(),
+            "keyId" to keyId.toJsonPrimitive(),
+            "privateKey" to privateKey.toJsonPrimitive(),
+            "duration" to duration.toJsonPrimitive()
         )
         val response = client.httpClient.post {
             url {

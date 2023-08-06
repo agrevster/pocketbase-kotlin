@@ -21,7 +21,7 @@ import kotlin.test.Test
 //This class is intended to alert developers when changes need to be made to the docs
 class DocsTests : TestingUtils() {
     @Test
-    fun `creating a client`() = runBlocking {
+    fun `creating a client`(): Unit = runBlocking {
         launch {
             //Creates a new pocketbase client with the given url
             //The client is used to access everything in the Pocketbase API
@@ -42,7 +42,7 @@ class DocsTests : TestingUtils() {
 
 
     @Test
-    fun `getting a token`() = runBlocking {
+    fun `getting a token`(): Unit = runBlocking {
         launch {
             val client = PocketbaseClient({
                 protocol = URLProtocol.HTTP
@@ -80,7 +80,7 @@ class DocsTests : TestingUtils() {
     }
 
     @Test
-    fun `calling the pocketbase api`() = runBlocking {
+    fun `calling the pocketbase api`(): Unit = runBlocking {
         launch {
             val client = PocketbaseClient({
                 protocol = URLProtocol.HTTP
@@ -113,7 +113,7 @@ class DocsTests : TestingUtils() {
     }
 
     @Test
-    fun `creating a collection`() = runBlocking {
+    fun `creating a collection`(): Unit = runBlocking {
         launch {
             val client = PocketbaseClient({
                 protocol = URLProtocol.HTTP
@@ -163,7 +163,7 @@ class DocsTests : TestingUtils() {
     }
 
     @Test
-    fun `file uploads`() = runBlocking {
+    fun `file uploads`(): Unit = runBlocking {
         launch {
             val client = PocketbaseClient({
                 protocol = URLProtocol.HTTP
