@@ -23,8 +23,10 @@ best to add it.*
 
 ### Installing
 
-Just add the following into your buildscript:
+**Using this library requires the
+** [KotlinX Serialization plugin](https://github.com/Kotlin/kotlinx.serialization#using-the-plugins-block)
 
+To use Pocketbase Kotlin just add the following into your buildscript:
 ```kotlin
 repositories {
     mavenCentral()
