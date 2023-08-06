@@ -7,7 +7,7 @@ plugins {
     kotlin("multiplatform") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
 
-    id("org.jetbrains.dokka") version "1.8.20"
+    id("org.jetbrains.dokka") version kotlinVersion
     id("maven-publish")
     id("signing")
 
