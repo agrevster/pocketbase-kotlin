@@ -1,13 +1,12 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.plugin.KotlinTargetPreset
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
     val kotlinVersion = "1.8.22"
+    val dokkaVersion = "1.8.20"
     kotlin("multiplatform") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
-
-    id("org.jetbrains.dokka") version kotlinVersion
+    id("org.jetbrains.dokka") version dokkaVersion
     id("maven-publish")
     id("signing")
 
