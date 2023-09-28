@@ -1,11 +1,10 @@
 package services
 
 import TestingUtils
-import io.github.agrevster.pocketbaseKotlin.*
 import io.github.agrevster.pocketbaseKotlin.dsl.login
+import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-import io.github.agrevster.pocketbaseKotlin.models.Collection
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,33 +27,35 @@ class RealtimeService : TestingUtils() {
     private data class TestRecord(val text: String, val bool: Boolean) : Record()
 
     @BeforeTest
-    fun before() = runBlocking {
+    fun before(): Unit = runBlocking {
         launch {
             client.login {
                 val login = client.admins.authWithPassword(TestClient.adminLogin.first, TestClient.adminLogin.second)
                 token = login.token
             }
 
-            client.collections.create<Collection>(Json.encodeToString(Collection(
-                name = testCollection,
-                type = Collection.CollectionType.BASE,
-                collectionId = "123456789123478",
-                schema = listOf(
-                    SchemaField("text",type = SchemaField.SchemaFieldType.TEXT),
-                    SchemaField(name = "bool",type= SchemaField.SchemaFieldType.BOOL)
+            client.collections.create<Collection>(
+                Json.encodeToString(
+                    Collection(
+                        name = testCollection,
+                        type = Collection.CollectionType.BASE,
+                        collectionId = "123456789123478",
+                        schema = listOf(
+                            SchemaField("text", type = SchemaField.SchemaFieldType.TEXT),
+                            SchemaField(name = "bool", type = SchemaField.SchemaFieldType.BOOL)
+                        )
+                    )
                 )
-            )))
+            )
         }
-        println()
     }
 
     @AfterTest
-    fun after() = runBlocking {
+    fun after(): Unit = runBlocking {
         launch {
             delay(2000)
             client.collections.delete("123456789123478")
         }
-        println()
     }
 
 
@@ -91,7 +92,7 @@ class RealtimeService : TestingUtils() {
     }
 
     @Test
-    fun handleCreate() = runBlocking {
+    fun handleCreate(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             val receivedRecords = mutableMapOf<String, Boolean>()
 
@@ -130,13 +131,12 @@ class RealtimeService : TestingUtils() {
                 assertEquals(receivedRecords, testRecords, "Test records are missing from recived records")
                 testRecords.clear()
             }
-            println()
         }
     }
 
 
     @Test
-    fun handleUpdate() = runBlocking {
+    fun handleUpdate(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             val receivedRecords = mutableMapOf<String, Boolean>()
 
@@ -187,12 +187,11 @@ class RealtimeService : TestingUtils() {
                 assertEquals(receivedRecords, testRecords, "Test records are missing from recived records")
                 testRecords.clear()
             }
-            println()
         }
     }
 
     @Test
-    fun handleDelete() = runBlocking {
+    fun handleDelete(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             val ids = mutableSetOf<String>()
             val removedIds = mutableSetOf<String>()
@@ -234,7 +233,6 @@ class RealtimeService : TestingUtils() {
                 assertEquals(removedIds, ids, "Test records are missing from recived records")
                 testRecords.clear()
             }
-            println()
         }
     }
 }

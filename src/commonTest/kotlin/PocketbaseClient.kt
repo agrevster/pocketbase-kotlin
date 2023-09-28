@@ -8,7 +8,7 @@ import kotlin.test.assertNotNull
 class PocketbaseClient {
 
     @Test
-    fun loginUser() = runBlocking {
+    fun loginUser(): Unit = runBlocking {
         val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(url)
         launch {
             client.login {
@@ -18,11 +18,10 @@ class PocketbaseClient {
             }
             assertNotNull(client.authStore.token, "Auth store token should not be null")
         }
-        println()
     }
 
     @Test
-    fun loginAdmin() = runBlocking {
+    fun loginAdmin(): Unit = runBlocking {
         val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(url)
         launch {
             client.login {
@@ -32,7 +31,6 @@ class PocketbaseClient {
             }
             assertNotNull(client.authStore.token, "Auth store token should not be null")
         }
-        println()
     }
 
     companion object {

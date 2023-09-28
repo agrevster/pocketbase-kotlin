@@ -2,9 +2,9 @@ package services
 
 import CrudServiceTestSuite
 import io.github.agrevster.pocketbaseKotlin.dsl.login
+import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-import io.github.agrevster.pocketbaseKotlin.models.Collection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -12,7 +12,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.*
-import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 class CollectionViewService : CrudServiceTestSuite<Collection>(client.collections, "api/collections") {
@@ -44,7 +43,7 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
     private val service = client.collections
 
     @BeforeTest
-    fun before() = runBlocking {
+    fun before(): Unit = runBlocking {
         launch {
             client.login {
                 val login = client.admins.authWithPassword(
@@ -131,11 +130,10 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                 if (it == 3) recordId = record.id
             }
         }
-        println()
     }
 
     @AfterTest
-    fun after() = runBlocking {
+    fun after(): Unit = runBlocking {
         launch {
             delay(delayAmount)
             if (delete) {
@@ -149,7 +147,6 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                 service.delete("yc356em40o3y8u1")
             }
         }
-        println()
     }
 
 
@@ -176,7 +173,7 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
     }
 
     @Test
-    fun import() = runBlocking {
+    fun import(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val json = Json.decodeFromString<List<Collection>>(
@@ -217,25 +214,32 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                 service.import(json, false)
                 val collection = service.getOne<Collection>("yzz7lwv6sqqyxbt")
                 assertCollectionValid(collection)
-                assertSchemaMatches(SchemaField("username",type = SchemaField.SchemaFieldType.TEXT),collection.schema!![0])
+                assertSchemaMatches(
+                    SchemaField("username", type = SchemaField.SchemaFieldType.TEXT),
+                    collection.schema!![0]
+                )
             }
-            println()
+
         }
     }
 
     @Test
-    fun create() = runBlocking {
+    fun create(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
-                val collection = service.create<Collection>(Json.encodeToString(Collection(
-                    collectionId = "123456789123478",
-                    name = "test_collection",
-                    type = Collection.CollectionType.VIEW,
-                    options = Collection.CollectionOptions(query = "SELECT id,created,email from test_auth")
-                )))
+                val collection = service.create<Collection>(
+                    Json.encodeToString(
+                        Collection(
+                            collectionId = "123456789123478",
+                            name = "test_collection",
+                            type = Collection.CollectionType.VIEW,
+                            options = Collection.CollectionOptions(query = "SELECT id,created,email from test_auth")
+                        )
+                    )
+                )
                 val schema = collection.schema
                 assertCollectionValid(collection)
-                assertSchemaMatches(SchemaField("email", type = SchemaField.SchemaFieldType.EMAIL),schema!![0])
+                assertSchemaMatches(SchemaField("email", type = SchemaField.SchemaFieldType.EMAIL), schema!![0])
                 assertMatchesCreation<Collection>("name", "test_collection", collection.name)
                 assertMatchesCreation<Collection>("id", "123456789123478", collection.id)
                 assertMatchesCreation<Collection>("type", "VIEW", collection.type?.name)
@@ -246,22 +250,25 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                 )
 
             }
-            println()
         }
     }
 
     @Test
-    fun update() = runBlocking {
+    fun update(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
-                val collection = service.update<Collection>("view_test",Json.encodeToString(Collection(
-                    name = "query_test_2",
-                    options = Collection.CollectionOptions(query = "SELECT id,username,email FROM test_auth")
-                )))
+                val collection = service.update<Collection>(
+                    "view_test", Json.encodeToString(
+                        Collection(
+                            name = "query_test_2",
+                            options = Collection.CollectionOptions(query = "SELECT id,username,email FROM test_auth")
+                        )
+                    )
+                )
 
                 val schema = collection.schema
                 assertCollectionValid(collection)
-                assertSchemaMatches(SchemaField("username", type = SchemaField.SchemaFieldType.TEXT),schema!![0])
+                assertSchemaMatches(SchemaField("username", type = SchemaField.SchemaFieldType.TEXT), schema!![0])
                 assertMatchesCreation<Collection>("name", "query_test_2", collection.name)
                 assertMatchesCreation<Collection>("id", "yzz7lwv6sqqyxbe", collection.id)
                 assertMatchesCreation<Collection>("type", "VIEW", collection.type?.name)
@@ -271,12 +278,11 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                     collection.options?.query
                 )
             }
-            println()
         }
     }
 
     @Test
-    fun getOne() = runBlocking {
+    fun getOne(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val collection = service.getOne<Collection>("view_test")
@@ -288,50 +294,58 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                     "SELECT id,username FROM test_auth",
                     collection.options?.query
                 )
-                assertSchemaMatches(SchemaField("username", type = SchemaField.SchemaFieldType.TEXT),collection.schema!![0])
+                assertSchemaMatches(
+                    SchemaField("username", type = SchemaField.SchemaFieldType.TEXT),
+                    collection.schema!![0]
+                )
             }
-            println()
         }
     }
 
     @Test
-    fun getList() = runBlocking {
+    fun getList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
-                service.create<Collection>(Json.encodeToString(Collection(
-                    name = "test_collection_3",
-                    type = Collection.CollectionType.VIEW,
-                    options = Collection.CollectionOptions(query = "select id,created FROM test_auth")
-                )))
-                service.create<Collection>(Json.encodeToString(Collection(
-                    name = "test_collection_2",
-                    type = Collection.CollectionType.VIEW,
-                    options = Collection.CollectionOptions(query = "select id,updated FROM test_auth")
-                )))
+                service.create<Collection>(
+                    Json.encodeToString(
+                        Collection(
+                            name = "test_collection_3",
+                            type = Collection.CollectionType.VIEW,
+                            options = Collection.CollectionOptions(query = "select id,created FROM test_auth")
+                        )
+                    )
+                )
+                service.create<Collection>(
+                    Json.encodeToString(
+                        Collection(
+                            name = "test_collection_2",
+                            type = Collection.CollectionType.VIEW,
+                            options = Collection.CollectionOptions(query = "select id,updated FROM test_auth")
+                        )
+                    )
+                )
                 val list = service.getList<Collection>(1, 2)
                 assertMatchesCreation<Collection>("page", 1, list.page)
                 assertMatchesCreation<Collection>("perPage", 2, list.perPage)
                 assertEquals(list.items.size, 2)
                 list.items.forEach { collection -> assertCollectionValid(collection) }
             }
-            println()
         }
     }
 
     @Test
-    fun getFullList() = runBlocking {
+    fun getFullList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val list = service.getFullList<Collection>(10)
                 assertEquals(3, list.size)
                 list.forEach { collection -> assertCollectionValid(collection) }
             }
-            println()
         }
     }
 
     @Test
-    fun delete() = runBlocking {
+    fun delete(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 delete = false
@@ -347,24 +361,22 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                 val isClean = service.getFullList<Collection>(10).size == 1
                 assertTrue(isClean, "Collections should only contain the user's collection!")
             }
-            println()
         }
     }
 
     @Test
-    fun recordGetOne() = runBlocking {
+    fun recordGetOne(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = client.records.getOne<TestRecord>("test_auth", recordId!!)
                 assertNotNull(record.id)
                 assertNotNull(record.username)
             }
-            println()
         }
     }
 
     @Test
-    fun recordGetList() = runBlocking {
+    fun recordGetList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val list = client.records.getList<TestRecord>("test_auth", 1, 2)
@@ -379,12 +391,11 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                     assertNotNull(record.username)
                 }
             }
-            println()
         }
     }
 
     @Test
-    fun recordGetFullList() = runBlocking {
+    fun recordGetFullList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val list = client.records.getFullList<TestRecord>("test_auth", 10)
@@ -394,7 +405,6 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                     assertNotNull(record.username)
                 }
             }
-            println()
         }
     }
 

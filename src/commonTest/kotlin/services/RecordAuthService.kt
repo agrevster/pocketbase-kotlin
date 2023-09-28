@@ -2,9 +2,9 @@ package services
 
 import TestingUtils
 import io.github.agrevster.pocketbaseKotlin.dsl.login
+import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-import io.github.agrevster.pocketbaseKotlin.models.Collection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -13,7 +13,6 @@ import kotlinx.serialization.Transient
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.*
-import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 
@@ -43,7 +42,7 @@ class RecordAuthService : TestingUtils() {
     open class TestRecord(val bool: Boolean, val int: Int, val username: String, val email: String) : Record()
 
     @BeforeTest
-    fun before() = runBlocking {
+    fun before(): Unit = runBlocking {
         launch {
             client.login {
                 val login = client.admins.authWithPassword(
@@ -53,20 +52,29 @@ class RecordAuthService : TestingUtils() {
                 token = login.token
             }
             delay(500)
-            client.collections.create<Collection>(Json.encodeToString(Collection(
-                name = testCollection,
-                type = Collection.CollectionType.AUTH,
-                schema = listOf(
-                    SchemaField("bool", type = SchemaField.SchemaFieldType.BOOL),
-                    SchemaField("int", type = SchemaField.SchemaFieldType.NUMBER)
-                    ),
-                options = Collection.CollectionOptions(allowOAuth2Auth = true, allowEmailAuth = true, allowUsernameAuth = true, minPasswordLength = 8),
-                createRule = "",
-                updateRule = "",
-                deleteRule = "",
-                listRule = "",
-                viewRule = "",
-            )))
+            client.collections.create<Collection>(
+                Json.encodeToString(
+                    Collection(
+                        name = testCollection,
+                        type = Collection.CollectionType.AUTH,
+                        schema = listOf(
+                            SchemaField("bool", type = SchemaField.SchemaFieldType.BOOL),
+                            SchemaField("int", type = SchemaField.SchemaFieldType.NUMBER)
+                        ),
+                        options = Collection.CollectionOptions(
+                            allowOAuth2Auth = true,
+                            allowEmailAuth = true,
+                            allowUsernameAuth = true,
+                            minPasswordLength = 8
+                        ),
+                        createRule = "",
+                        updateRule = "",
+                        deleteRule = "",
+                        listRule = "",
+                        viewRule = "",
+                    )
+                )
+            )
 
             val mainUser = client.records.create<TestRecord>(
                 testCollection,
@@ -92,7 +100,6 @@ class RecordAuthService : TestingUtils() {
                 token = login.token
             }
         }
-        println()
     }
 
     @AfterTest
@@ -109,7 +116,6 @@ class RecordAuthService : TestingUtils() {
             delay(500)
             client.collections.delete(testCollection)
         }
-        println()
     }
 
 
@@ -127,7 +133,7 @@ class RecordAuthService : TestingUtils() {
     }
 
     @Test
-    fun authWithPassword() = runBlocking {
+    fun authWithPassword(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response =
@@ -135,12 +141,11 @@ class RecordAuthService : TestingUtils() {
                 assertNotNull(response.token)
                 assertRecordValid(response.record)
             }
-            println()
         }
     }
 
     @Test
-    fun authWithUsername() = runBlocking {
+    fun authWithUsername(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response =
@@ -148,26 +153,24 @@ class RecordAuthService : TestingUtils() {
                 assertNotNull(response.token)
                 assertRecordValid(response.record)
             }
-            println()
         }
     }
 
 
     @Test
-    fun refresh() = runBlocking {
+    fun refresh(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response = service.refresh<TestRecord>(testCollection)
                 assertNotNull(response.token)
                 assertRecordValid(response.record)
             }
-            println()
         }
     }
 
 
     @Test
-    fun listAuthMethods() = runBlocking {
+    fun listAuthMethods(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response = service.listAuthMethods(testCollection)
@@ -176,13 +179,12 @@ class RecordAuthService : TestingUtils() {
                 assertNotNull(response.authProviders)
                 response.authProviders.forEach { provider -> println(provider) }
             }
-            println()
         }
     }
 
 
     @Test
-    fun create() = runBlocking {
+    fun create(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = service.create<TestRecord>(
@@ -200,13 +202,12 @@ class RecordAuthService : TestingUtils() {
                 assertMatchesCreation<TestRecord>("bool", true, record.bool)
                 assertMatchesCreation<TestRecord>("int", 5, record.int)
             }
-            println()
         }
     }
 
 
     @Test
-    fun update() = runBlocking {
+    fun update(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = service.update<TestRecord>(
@@ -223,12 +224,11 @@ class RecordAuthService : TestingUtils() {
                 assertMatchesCreation<TestRecord>("bool", false, record.bool)
                 assertMatchesCreation<TestRecord>("int", 1, record.int)
             }
-            println()
         }
     }
 
     @Test
-    fun getOne() = runBlocking {
+    fun getOne(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = service.getOne<TestRecord>(testCollection, mainRecordId!!)
@@ -238,12 +238,11 @@ class RecordAuthService : TestingUtils() {
                 assertMatchesCreation<TestRecord>("bool", true, record.bool)
                 assertMatchesCreation<TestRecord>("int", 5, record.int)
             }
-            println()
         }
     }
 
     @Test
-    fun getList() = runBlocking {
+    fun getList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 service.create<TestRecord>(
@@ -302,24 +301,22 @@ class RecordAuthService : TestingUtils() {
                 assertEquals(list.items.size, 2)
                 list.items.forEach { record -> assertRecordValid(record) }
             }
-            println()
         }
     }
 
     @Test
-    fun getFullList() = runBlocking {
+    fun getFullList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val list = service.getFullList<TestRecord>(testCollection, 10)
                 assertEquals(list.size, 1)
                 list.forEach { record -> assertRecordValid(record) }
             }
-            println()
         }
     }
 
     @Test
-    fun delete() = runBlocking {
+    fun delete(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val records = service.getFullList<TestRecord>(testCollection, 10)
@@ -329,7 +326,6 @@ class RecordAuthService : TestingUtils() {
                 val isClean = client.records.getFullList<TestRecord>(testCollection, 10).size == 1
                 assertTrue(isClean, "The collection should only contain one test record!")
             }
-            println()
         }
     }
 

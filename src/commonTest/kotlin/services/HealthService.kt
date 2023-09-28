@@ -13,12 +13,11 @@ class HealthService : TestingUtils() {
     }
 
     @Test
-    fun healthCheck() = runBlocking {
+    fun healthCheck(): Unit = runBlocking {
         assertDoesNotFail {
             launch {
                 client.health.healthCheck()
             }
-            println()
         }
     }
 

@@ -2,9 +2,9 @@ package services
 
 import TestingUtils
 import io.github.agrevster.pocketbaseKotlin.dsl.login
+import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-import io.github.agrevster.pocketbaseKotlin.models.Collection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -12,7 +12,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.*
-import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 class RecordService : TestingUtils() {
@@ -23,34 +22,37 @@ class RecordService : TestingUtils() {
     private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
 
     @BeforeTest
-    fun before() = runBlocking {
+    fun before(): Unit = runBlocking {
         launch {
             client.login {
                 val login = client.admins.authWithPassword(TestClient.adminLogin.first, TestClient.adminLogin.second)
                 token = login.token
             }
-            client.collections.create<Collection>(Json.encodeToString(Collection(
-                name = testCollection,
-                type = Collection.CollectionType.BASE,
-                collectionId = "123456789123478",
-                schema = listOf(
-                    SchemaField("name", required = true, type = SchemaField.SchemaFieldType.TEXT),
-                    SchemaField("age", required = true, type = SchemaField.SchemaFieldType.NUMBER),
-                    SchemaField("happy",type = SchemaField.SchemaFieldType.BOOL)
+            client.collections.create<Collection>(
+                Json.encodeToString(
+                    Collection(
+                        name = testCollection,
+                        type = Collection.CollectionType.BASE,
+                        collectionId = "123456789123478",
+                        schema = listOf(
+                            SchemaField("name", required = true, type = SchemaField.SchemaFieldType.TEXT),
+                            SchemaField("age", required = true, type = SchemaField.SchemaFieldType.NUMBER),
+                            SchemaField("happy", type = SchemaField.SchemaFieldType.BOOL)
+                        )
+                    )
                 )
-            )))
-            modifyRecordId = service.create<TestRecord>(testCollection, Json.encodeToString(TestRecord("Jim", 70, true))).id
+            )
+            modifyRecordId =
+                service.create<TestRecord>(testCollection, Json.encodeToString(TestRecord("Jim", 70, true))).id
         }
-        println()
     }
 
     @AfterTest
-    fun after() = runBlocking {
+    fun after(): Unit = runBlocking {
         launch {
             delay(delayAmount)
             client.collections.delete("123456789123478")
         }
-        println()
     }
 
 
@@ -76,7 +78,7 @@ class RecordService : TestingUtils() {
     class TestRecord(val name: String, val age: Int, val happy: Boolean? = null) : Record()
 
     @Test
-    fun create() = runBlocking {
+    fun create(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = service.create<TestRecord>(
@@ -87,12 +89,11 @@ class RecordService : TestingUtils() {
                 assertMatchesCreation<TestRecord>("age", 32, record.age)
                 assertMatchesCreation<TestRecord>("happy", false, record.happy)
             }
-            println()
         }
     }
 
     @Test
-    fun update() = runBlocking {
+    fun update(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = service.update<TestRecord>(
@@ -103,12 +104,11 @@ class RecordService : TestingUtils() {
                 assertMatchesCreation<TestRecord>("age", 33, record.age)
                 assertMatchesCreation<TestRecord>("happy", false, record.happy)
             }
-            println()
         }
     }
 
     @Test
-    fun getOne() = runBlocking {
+    fun getOne(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = service.getOne<TestRecord>(testCollection, modifyRecordId!!)
@@ -117,12 +117,11 @@ class RecordService : TestingUtils() {
                 assertMatchesCreation<TestRecord>("age", 70, record.age)
                 assertMatchesCreation<TestRecord>("happy", true, record.happy)
             }
-            println()
         }
     }
 
     @Test
-    fun getList() = runBlocking {
+    fun getList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 service.create<TestRecord>(testCollection, Json.encodeToString(TestRecord("Tim", 23, true)))
@@ -138,24 +137,22 @@ class RecordService : TestingUtils() {
                 assertEquals(list.items.size, 2)
                 list.items.forEach { record -> assertRecordValid(record) }
             }
-            println()
         }
     }
 
     @Test
-    fun getFullList() = runBlocking {
+    fun getFullList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val list = service.getFullList<TestRecord>(testCollection, 10)
                 assertEquals(list.size, 1)
                 list.forEach { record -> assertRecordValid(record) }
             }
-            println()
         }
     }
 
     @Test
-    fun delete() = runBlocking {
+    fun delete(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val records = service.getFullList<Record>(testCollection, 6)
@@ -165,6 +162,5 @@ class RecordService : TestingUtils() {
                 assertTrue(isClean, "Collections should only contain the user's collection!")
             }
         }
-        println()
     }
 }

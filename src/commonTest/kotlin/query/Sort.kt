@@ -39,7 +39,7 @@ class Sort : TestingUtils() {
 
 
     @BeforeTest
-    fun before() = runBlocking {
+    fun before(): Unit = runBlocking {
         launch {
             client.login {
                 val login = client.admins.authWithPassword(TestClient.adminLogin.first, TestClient.adminLogin.second)
@@ -63,57 +63,52 @@ class Sort : TestingUtils() {
                 )
             }
         }
-        println()
     }
 
     @AfterTest
-    fun after() = runBlocking {
+    fun after(): Unit = runBlocking {
         launch {
             client.collections.delete(collectionId!!)
             delay(delayAmount)
         }
-        println()
     }
 
 
     @Test
-    fun sortByName() = runBlocking {
+    fun sortByName(): Unit = runBlocking {
         assertDoesNotFail {
             launch {
                 val sortedResponse = client.records.getList<TestRecord>(testCollection, 1, 5, SortFields("field1"))
                 val expectedSort = sortedResponse.items.sortedBy { r -> r.field1 }
                 assertEquals(expectedSort, sortedResponse.items, "Sorting does not match the expected sort!")
             }
-            println()
         }
     }
 
     @Test
-    fun sortByNameDescending() = runBlocking {
+    fun sortByNameDescending(): Unit = runBlocking {
         assertDoesNotFail {
             launch {
                 val sortedResponse = client.records.getList<TestRecord>(testCollection, 1, 5, -SortFields("field1"))
                 val expectedSort = sortedResponse.items.sortedByDescending { r -> r.field1 }
                 assertEquals(expectedSort, sortedResponse.items, "Sorting does not match the expected sort!")
             }
-            println()
         }
     }
 
     @Test
-    fun sortByPlus() = runBlocking {
+    fun sortByPlus(): Unit = runBlocking {
         assertDoesNotFail {
             launch {
                 val sortedResponse = client.records.getList<TestRecord>(testCollection, 1, 5, +SortFields("field1"))
                 val expectedSort = sortedResponse.items.sortedBy { r -> r.field1 }
                 assertEquals(expectedSort, sortedResponse.items, "Sorting does not match the expected sort!")
             }
-            println()
         }
     }
 
     @Test
-    fun sortByMultiple() = runBlocking {
+    fun sortByMultiple(): Unit = runBlocking {
         assertDoesNotFail {
             launch {
                 val sortedResponse =
@@ -121,12 +116,11 @@ class Sort : TestingUtils() {
                 val expectedSort = sortedResponse.items.sortedWith(compareBy({ r -> r.field1 }, { r -> r.field2 }))
                 assertEquals(expectedSort, sortedResponse.items, "Sorting does not match the expected sort!")
             }
-            println()
         }
     }
 
     @Test
-    fun sortByMultipleDescending() = runBlocking {
+    fun sortByMultipleDescending(): Unit = runBlocking {
         assertDoesNotFail {
             launch {
                 val sortedResponse =
@@ -135,7 +129,6 @@ class Sort : TestingUtils() {
                     sortedResponse.items.sortedWith(compareByDescending({ r -> r.field1 }, { r -> r.field2 }))
                 assertEquals(expectedSort, sortedResponse.items, "Sorting does not match the expected sort!")
             }
-            println()
         }
     }
 

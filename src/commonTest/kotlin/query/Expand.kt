@@ -50,24 +50,54 @@ class Expand : TestingUtils() {
     fun before(): Unit = runBlocking {
         launch {
             client.login {
-                val login =
-                    client.admins.authWithPassword(TestClient.adminLogin.first, TestClient.adminLogin.second)
+                val login = client.admins.authWithPassword(TestClient.adminLogin.first, TestClient.adminLogin.second)
                 token = login.token
             }
-            val data = client.collections.create<Collection>(Json.encodeToString<Collection>(Collection(name = dataCollection,type = Collection.CollectionType.BASE, schema = listOf(SchemaField(name = "field1", required = true, type = SchemaField.SchemaFieldType.TEXT)))))
+            val data = client.collections.create<Collection>(
+                Json.encodeToString<Collection>(
+                    Collection(
+                        name = dataCollection,
+                        type = Collection.CollectionType.BASE,
+                        schema = listOf(
+                            SchemaField(
+                                name = "field1",
+                                required = true,
+                                type = SchemaField.SchemaFieldType.TEXT
+                            )
+                        )
+                    )
+                )
+            )
             dataCollectionId = data.id
 
-            val testing = client.collections.create<Collection>(Json.encodeToString<Collection>(Collection(name = testCollection, type = Collection.CollectionType.BASE, schema = listOf(SchemaField(name = "rel", required = true, type = SchemaField.SchemaFieldType.RELATION, options = SchemaField.SchemaOptions(collectionId = dataCollectionId!!, maxSelect = 1, cascadeDelete = false))))))
+            val testing = client.collections.create<Collection>(
+                Json.encodeToString<Collection>(
+                    Collection(
+                        name = testCollection,
+                        type = Collection.CollectionType.BASE,
+                        schema = listOf(
+                            SchemaField(
+                                name = "rel",
+                                required = true,
+                                type = SchemaField.SchemaFieldType.RELATION,
+                                options = SchemaField.SchemaOptions(
+                                    collectionId = dataCollectionId!!,
+                                    maxSelect = 1,
+                                    cascadeDelete = false
+                                )
+                            )
+                        )
+                    )
+                )
+            )
             testingCollectionId = testing.id
 
             for (i in 1..5) {
                 val d = client.records.create<DataRecord>(
-                    dataCollection,
-                    Json.encodeToString(DataRecord(randomName()))
+                    dataCollection, Json.encodeToString(DataRecord(randomName()))
                 )
                 val r = client.records.create<TestRecord>(
-                    testCollection,
-                    Json.encodeToString(TestRecord(d.id!!))
+                    testCollection, Json.encodeToString(TestRecord(d.id!!))
                 )
                 recordRelations[r.id!!] = d.id!!
             }
@@ -75,34 +105,29 @@ class Expand : TestingUtils() {
     }
 
     @AfterTest
-    fun after() = runBlocking {
+    fun after(): Unit = runBlocking {
         launch {
             delay(delayAmount)
             client.collections.delete(testingCollectionId!!)
             client.collections.delete(dataCollectionId!!)
         }
-        println()
     }
 
     @Test
-    fun getOneRelation() = runBlocking {
+    fun getOneRelation(): Unit = runBlocking {
         assertDoesNotFail {
             launch {
                 val relatedResponse = client.records.getList<TestRecord>(
-                    testCollection,
-                    1,
-                    1,
-                    expandRelations = ExpandRelations("rel")
+                    testCollection, 1, 1, expandRelations = ExpandRelations("rel")
                 ).items[0]
                 val relation = relatedResponse.expand!!["rel"]!!.id
                 assertEquals(recordRelations[relatedResponse.id], relation)
             }
-            println()
         }
     }
 
     @Test
-    fun getAllRelations() = runBlocking {
+    fun getAllRelations(): Unit = runBlocking {
         assertDoesNotFail {
             launch {
                 val relatedResponse =
@@ -112,7 +137,6 @@ class Expand : TestingUtils() {
                     assertEquals(recordRelations[testRecord.id], relation)
                 }
             }
-            println()
         }
     }
 }

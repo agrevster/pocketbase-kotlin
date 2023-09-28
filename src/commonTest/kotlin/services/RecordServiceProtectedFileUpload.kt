@@ -29,7 +29,7 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
     private val client = io.github.agrevster.pocketbaseKotlin.PocketbaseClient(TestClient.url)
 
     @BeforeTest
-    fun before() = runBlocking {
+    fun before(): Unit = runBlocking {
         launch {
             client.login {
                 val login = client.admins.authWithPassword(TestClient.adminLogin.first, TestClient.adminLogin.second)
@@ -60,16 +60,14 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
             modifyRecordId = record.id
             imageId = record.file
         }
-        println()
     }
 
     @AfterTest
-    fun after() = runBlocking {
+    fun after(): Unit = runBlocking {
         launch {
             delay(delayAmount)
             client.collections.delete("123456789123478")
         }
-        println()
     }
 
 
@@ -95,7 +93,7 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
     class TestRecord(val text: String, val file: String?) : Record()
 
     @Test
-    fun create() = runBlocking {
+    fun create(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = records.create<TestRecord>(
@@ -107,12 +105,11 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
                 assertMatchesCreation<TestRecord>("text", "\"HELLO\"", record.text)
                 assertTrue(record.file!!.contains("monkey"), "File name invalid!")
             }
-            println()
         }
     }
 
     @Test
-    fun update() = runBlocking {
+    fun update(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = records.update<TestRecord>(
@@ -126,12 +123,11 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
                 assertTrue(record.file!!.contains("ape"), "File name invalid!")
 
             }
-            println()
         }
     }
 
     @Test
-    fun getFile() = runBlocking {
+    fun getFile(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = records.getOne<TestRecord>(testCollection, modifyRecordId!!)
@@ -140,12 +136,11 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
                 println(image.call.request.url)
                 PocketbaseException.handle(image)
             }
-            println()
         }
     }
 
     @Test
-    fun getFileWithDownloadUrl() = runBlocking {
+    fun getFileWithDownloadUrl(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val token = service.generateProtectedFileToken()
@@ -155,12 +150,11 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
                 assertTrue { image.call.request.url.parameters.contains("download") }
                 PocketbaseException.handle(image)
             }
-            println()
         }
     }
 
     @Test
-    fun getFileWithThumbs() = runBlocking {
+    fun getFileWithThumbs(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val token = service.generateProtectedFileToken()
@@ -174,12 +168,11 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
                 assertTrue { image.call.request.url.parameters.contains("thumb") }
                 PocketbaseException.handle(image)
             }
-            println()
         }
     }
 
     @Test
-    fun getFileWithThumbsAndDownload() = runBlocking {
+    fun getFileWithThumbsAndDownload(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val token = service.generateProtectedFileToken()
@@ -194,13 +187,12 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
                 assertTrue { image.call.request.url.parameters.contains("thumb") }
                 PocketbaseException.handle(image)
             }
-            println()
         }
     }
 
 
     @Test
-    fun removeFile() = runBlocking {
+    fun removeFile(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val record = records.update<TestRecord>(
@@ -213,7 +205,6 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
                 assertMatchesCreation<TestRecord>("text", "\"BYE\"", record.text)
                 assertEquals("", record.file, "File should be empty!")
             }
-            println()
         }
     }
 }

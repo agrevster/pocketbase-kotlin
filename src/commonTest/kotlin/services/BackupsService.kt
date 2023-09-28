@@ -14,7 +14,7 @@ import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 @Ignore
-class BackupsService: TestingUtils() {
+class BackupsService : TestingUtils() {
 
     /**
      * IMPORTANT NOTE ABOUT TESTING BACKUPS!
@@ -47,7 +47,7 @@ class BackupsService: TestingUtils() {
     @Test
     fun createWithoutName(): Unit = runBlocking {
         assertDoesNotFail {
-        launch {
+            launch {
                 service.create()
             }
         }
@@ -78,7 +78,7 @@ class BackupsService: TestingUtils() {
         assertDoesNotFail {
             launch {
                 val adminFileKey = client.files.generateProtectedFileToken()
-                val backupUrl = service.getBackupUrl("testbackup.zip",adminFileKey)
+                val backupUrl = service.getBackupUrl("testbackup.zip", adminFileKey)
                 print(backupUrl)
                 val backupFile = client.httpClient.get(backupUrl)
                 PocketbaseException.handle(backupFile)
@@ -110,7 +110,7 @@ class BackupsService: TestingUtils() {
         assertDoesNotFail {
             launch {
                 val backups = service.getFullList().map { it.key }
-                backups.forEach {backupKey ->
+                backups.forEach { backupKey ->
                     service.delete(backupKey)
                 }
                 assertTrue { service.getFullList().isEmpty() }

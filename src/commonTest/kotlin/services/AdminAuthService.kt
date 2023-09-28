@@ -2,17 +2,14 @@ package services
 
 import CrudServiceTestSuite
 import PocketbaseClient.Companion.adminId
-import io.github.agrevster.pocketbaseKotlin.*
 import io.github.agrevster.pocketbaseKotlin.dsl.create
 import io.github.agrevster.pocketbaseKotlin.dsl.login
 import io.github.agrevster.pocketbaseKotlin.dsl.update
 import io.github.agrevster.pocketbaseKotlin.models.Admin
-import io.github.agrevster.pocketbaseKotlin.models.Collection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.test.*
-import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins") {
@@ -26,7 +23,7 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
     private var delete = true
 
     @BeforeTest
-    fun before() = runBlocking {
+    fun before(): Unit = runBlocking {
         launch {
             client.login {
                 val login = client.admins.authWithPassword(
@@ -43,12 +40,11 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
             }
             testAdminId = testAdmin.id
         }
-        println()
     }
 
 
     @AfterTest
-    fun after() = runBlocking {
+    fun after(): Unit = runBlocking {
         launch {
             delay(delayAmount)
             if (delete) {
@@ -59,7 +55,6 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
                 assertTrue(isClean, "Admins should only contain the test admin!")
             }
         }
-        println()
     }
 
 
@@ -84,31 +79,29 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
     }
 
     @Test
-    fun authWithPassword() = runBlocking {
+    fun authWithPassword(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response = service.authWithPassword(TestClient.adminLogin.first, TestClient.adminLogin.second)
                 assertNotNull(response.token)
                 assertAdminValid(response.record)
             }
-            println()
         }
     }
 
     @Test
-    fun refresh() = runBlocking {
+    fun refresh(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response = service.authRefresh()
                 assertNotNull(response.token)
                 assertAdminValid(response.record)
             }
-            println()
         }
     }
 
     @Test
-    fun create() = runBlocking {
+    fun create(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val admin = service.create {
@@ -123,12 +116,11 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
                 assertMatchesCreation<Admin>("avatar", 0, admin.avatar)
                 assertMatchesCreation<Admin>("id", "123456789123478", admin.id)
             }
-            println()
         }
     }
 
     @Test
-    fun update() = runBlocking {
+    fun update(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val admin = service.update(testAdminId!!) {
@@ -140,12 +132,11 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
                 assertMatchesCreation<Admin>("avatar", 9, admin.avatar)
                 assertMatchesCreation<Admin>("id", testAdminId!!, admin.id)
             }
-            println()
         }
     }
 
     @Test
-    fun getOne() = runBlocking {
+    fun getOne(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val admin = service.getOne<Admin>(testAdminId!!)
@@ -154,12 +145,12 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
                 assertMatchesCreation<Admin>("avatar", 0, admin.avatar)
                 assertMatchesCreation<Admin>("id", testAdminId, admin.id)
             }
-            println()
+
         }
     }
 
     @Test
-    fun getList() = runBlocking {
+    fun getList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 service.create {
@@ -189,12 +180,12 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
                 assertEquals(list.items.size, 2)
                 list.items.forEach { admin -> assertAdminValid(admin) }
             }
-            println()
+
         }
     }
 
     @Test
-    fun getFullList() = runBlocking {
+    fun getFullList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val list = service.getFullList<Admin>(10)
@@ -202,12 +193,12 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
                 println(list)
                 list.forEach { admin -> assertAdminValid(admin) }
             }
-            println()
+
         }
     }
 
     @Test
-    fun delete() = runBlocking {
+    fun delete(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 delete = false
@@ -218,7 +209,7 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
                 assertTrue(isClean, "Admins should only contain the test admin!")
                 testAdminId = null
             }
-            println()
+
         }
     }
 }

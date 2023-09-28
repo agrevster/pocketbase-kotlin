@@ -18,7 +18,7 @@ class SettingsService : TestingUtils() {
     private var gotSettings: BaseSettings? = null
 
     @BeforeTest
-    fun before() = runBlocking {
+    fun before(): Unit = runBlocking {
         launch {
             client.login {
                 val login = client.admins.authWithPassword(
@@ -29,7 +29,6 @@ class SettingsService : TestingUtils() {
             val body = Json.encodeToString(BaseSettings(Meta("testApe", "http://localhost:8090", true)))
             service.update<BaseSettings>(body)
         }
-        println()
     }
 
 
@@ -40,19 +39,18 @@ class SettingsService : TestingUtils() {
     private data class BaseSettings(val meta: Meta)
 
     @Test
-    fun getAll() = runBlocking {
+    fun getAll(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response = service.getAll<BaseSettings>()
                 gotSettings = response
                 printJson(response)
             }
-            println()
         }
     }
 
     @Test
-    fun modify() = runBlocking {
+    fun modify(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 var body = Json.encodeToString(BaseSettings(Meta("testApp", "http://localhost:8090", false)))
@@ -65,7 +63,6 @@ class SettingsService : TestingUtils() {
                 service.update<BaseSettings>(body)
                 printJson(response)
             }
-            println()
         }
     }
 }

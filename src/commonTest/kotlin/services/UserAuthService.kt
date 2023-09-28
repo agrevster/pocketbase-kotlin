@@ -5,13 +5,11 @@ import PocketbaseClient.Companion.testUserID
 import io.github.agrevster.pocketbaseKotlin.dsl.create
 import io.github.agrevster.pocketbaseKotlin.dsl.login
 import io.github.agrevster.pocketbaseKotlin.dsl.update
-import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.User
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.test.*
-import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 
@@ -25,7 +23,7 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
     private var delete = true
 
     @BeforeTest
-    fun before() = runBlocking {
+    fun before(): Unit = runBlocking {
         launch {
             client.login {
                 val login = client.users.authWithUsername(
@@ -44,11 +42,10 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
             recordId = user.id
             delete = true
         }
-        println()
     }
 
     @AfterTest
-    fun after() = runBlocking {
+    fun after(): Unit = runBlocking {
         launch {
             delay(delayAmount)
             if (delete) {
@@ -60,7 +57,6 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
                 assertTrue(isClean, "Users should only contain the test user!")
             }
         }
-        println()
     }
 
 
@@ -88,45 +84,45 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
     }
 
     @Test
-    fun authWithPassword() = runBlocking {
+    fun authWithPassword(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response = service.authWithPassword(TestClient.userLogin.first.first, TestClient.userLogin.second)
                 assertNotNull(response.token)
                 assertUserValid(response.record)
             }
-            println()
+
         }
     }
 
     @Test
-    fun authWithUsername() = runBlocking {
+    fun authWithUsername(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response = service.authWithUsername(TestClient.userLogin.first.second, TestClient.userLogin.second)
                 assertNotNull(response.token)
                 assertUserValid(response.record)
             }
-            println()
+
         }
     }
 
 
     @Test
-    fun refresh() = runBlocking {
+    fun refresh(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response = service.refresh()
                 assertNotNull(response.token)
                 assertUserValid(response.record)
             }
-            println()
+
         }
     }
 
 
     @Test
-    fun listAuthMethods() = runBlocking {
+    fun listAuthMethods(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response = service.listAuthMethods("users")
@@ -134,13 +130,13 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
                 assertNotNull(response.authProviders)
                 response.authProviders.forEach { provider -> println(provider) }
             }
-            println()
+
         }
     }
 
 
     @Test
-    fun create() = runBlocking {
+    fun create(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val user = service.create {
@@ -157,12 +153,12 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
                 assertMatchesCreation<User>("id", "123456789123498", user.id)
             }
         }
-        println()
+
     }
 
 
     @Test
-    fun update() = runBlocking {
+    fun update(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val user = service.update(recordId!!) {
@@ -175,12 +171,12 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
                 assertMatchesCreation<User>("id", "123456789123478", user.id)
                 assertMatchesCreation<User>("email", "0.genuser@test.com", user.email)
             }
-            println()
+
         }
     }
 
     @Test
-    fun getOne() = runBlocking {
+    fun getOne(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val user = service.getOne<User>(recordId!!)
@@ -189,12 +185,12 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
                 assertMatchesCreation<User>("emailVisibility", false, user.emailVisibility)
                 assertMatchesCreation<User>("id", "123456789123478", user.id)
             }
-            println()
+
         }
     }
 
     @Test
-    fun getList() = runBlocking {
+    fun getList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 service.create {
@@ -227,24 +223,23 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
                 assertEquals(list.items.size, 2)
                 list.items.forEach { user -> assertUserValid(user) }
             }
-            println()
         }
     }
 
     @Test
-    fun getFullList() = runBlocking {
+    fun getFullList(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val list = service.getFullList<User>(10)
                 assertEquals(list.size, 2)
                 list.forEach { user -> assertUserValid(user) }
             }
-            println()
+
         }
     }
 
     @Test
-    fun delete() = runBlocking {
+    fun delete(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 delete = false
@@ -255,7 +250,7 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
                 val isClean = service.getFullList<User>(10).size == 1
                 assertTrue(isClean, "Users should only contain the test user!")
             }
-            println()
+
         }
     }
 

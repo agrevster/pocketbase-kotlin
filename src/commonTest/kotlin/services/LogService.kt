@@ -13,7 +13,7 @@ class LogService : TestingUtils() {
     private val service = client.logs
 
     @BeforeTest
-    fun before() = runBlocking {
+    fun before(): Unit = runBlocking {
         launch {
             client.login {
                 val login = client.admins.authWithPassword(
@@ -23,11 +23,10 @@ class LogService : TestingUtils() {
                 token = login.token
             }
         }
-        println()
     }
 
     @Test
-    fun getAll() = runBlocking {
+    fun getAll(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val response = service.getRequestsList(1, 5)
@@ -38,12 +37,11 @@ class LogService : TestingUtils() {
                 assertEquals(5, response.items.size)
                 printJson(response)
             }
-            println()
         }
     }
 
     @Test
-    fun getOne() = runBlocking {
+    fun getOne(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val id = service.getRequestsList(1, 1).items[0].id
@@ -60,7 +58,6 @@ class LogService : TestingUtils() {
                 assertNotNull(response.meta)
                 printJson(response)
             }
-            println()
         }
     }
 
@@ -73,7 +70,6 @@ class LogService : TestingUtils() {
                 assertNotNull(response[0].date)
                 printJson(response)
             }
-            println()
         }
     }
 
