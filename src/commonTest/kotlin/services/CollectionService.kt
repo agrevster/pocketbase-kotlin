@@ -183,7 +183,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                                     required = true,
                                     options = SchemaField.SchemaOptions(min = 4.toJsonPrimitive())
                                 ),
-                                SchemaField("int", type = SchemaField.SchemaFieldType.NUMBER, required = true),
+                                SchemaField("int", type = SchemaField.SchemaFieldType.NUMBER, required = true, options = SchemaField.SchemaOptions(noDecimal = true)),
                                 SchemaField("bool", type = SchemaField.SchemaFieldType.BOOL),
                                 SchemaField(
                                     "email",
@@ -228,7 +228,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                                         minSelect = 1
                                     )
                                 ),
-                                SchemaField("editer", type = SchemaField.SchemaFieldType.EDITOR)
+                                SchemaField("editer", type = SchemaField.SchemaFieldType.EDITOR, options = SchemaField.SchemaOptions(convertUrls = true))
                             ),
                             createRule = "@request.auth.verified = true"
                         )
@@ -246,7 +246,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                     ), schema!![0]
                 )
                 assertSchemaMatches(
-                    SchemaField("int", type = SchemaField.SchemaFieldType.NUMBER, required = true),
+                    SchemaField("int", type = SchemaField.SchemaFieldType.NUMBER, required = true, options = SchemaField.SchemaOptions(noDecimal = true)),
                     schema[1]
                 )
                 assertSchemaMatches(SchemaField("bool", type = SchemaField.SchemaFieldType.BOOL), schema[2])
@@ -303,7 +303,8 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                         )
                     ), schema[9]
                 )
-                assertSchemaMatches(SchemaField("editer", type = SchemaField.SchemaFieldType.EDITOR), schema[10])
+                assertSchemaMatches(SchemaField("editer", type = SchemaField.SchemaFieldType.EDITOR, options = SchemaField.SchemaOptions(convertUrls = true)), schema[10])
+
                 assertMatchesCreation<Collection>("name", "test_collection", collection.name)
                 assertMatchesCreation<Collection>("id", "123456789123478", collection.id)
                 assertMatchesCreation<Collection>("type", "BASE", collection.type?.name)

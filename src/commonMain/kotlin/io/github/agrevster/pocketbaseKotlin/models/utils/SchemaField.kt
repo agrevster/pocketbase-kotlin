@@ -47,7 +47,9 @@ public class SchemaField(
         val thumbs: List<String>? = null,
         val minSelect: Int? = null,
         val displayFields: List<String>? = null,
-        val protected: Boolean? = null
+        val protected: Boolean? = null,
+        val noDecimal: Boolean? = null,
+        val convertUrls: Boolean? = null
     )
 
     @Serializable
