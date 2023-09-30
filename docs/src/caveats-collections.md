@@ -55,6 +55,6 @@ val collection = Collection(
         )
     )
 ) 
-//Returning a collection as that is what we created
+//The generic '<Collection>' encodes our collection to JSON based on the Collection class
 client.collections.create<Collection>(Json.encodeToString(collection))
 ```
