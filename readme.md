@@ -1,6 +1,6 @@
 # Pocketbase Kotlin
 > Pocketbase Kotlin is a multi-platform Kotlin SDK for [Pocketbase](https://pocketbase.io).
-> Current supported Pocketbase Version *0.17*
+> Current supported Pocketbase Version *0.18*
 ---
 
 ### More info can be found in [the docs](https://agrevster.github.io/pocketbase-kotlin/)
@@ -17,6 +17,6 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.agrevster:pocketbase-kotlin:2.4.0")
+    implementation("io.github.agrevster:pocketbase-kotlin:2.5.0")
 }
 ```
