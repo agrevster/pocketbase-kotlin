@@ -38,3 +38,33 @@ client.records.create<FileUploadRecord>(
     )
 )
 ```
+#### Expanding related fields
+
+```kotlin
+//!val client = PocketbaseClient({ 
+//!    protocol = URLProtocol.HTTP
+//!    host = "localhost"
+//!    port = 8090
+//!})
+//!
+//!client.login { 
+//!    token = client.users.authWithPassword("email", "password").token
+//!} 
+//!
+//For this example imagine we have two collections. One that contains users...
+@Serializable
+data class PersonRecord(val name: String) : User()
+
+//And one that contains their pets
+//Each Pet has a name (text), owner (relation), and each Person has a name (text) 
+@Serializable 
+data class PetRecord(val owner: String,val name: String) : ExpandRecord<PersonRecord>()
+//This example gets a list of pets, selects the first one and gets its owner 
+
+val records = client.records.getList<PetRecord>("pets_collection",1,3, 
+//This tells Pocketbase to expand the relation field of owner 
+    expandRelations = ExpandRelations("owner"))
+
+//This returns the expanded record with the field name of owner 
+val owner: PersonRecord? = records.items[0].expand?.get("owner")
+```
