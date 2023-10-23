@@ -46,7 +46,7 @@ class PocketbaseClient {
 
         //                         EMAIL               PASSWORD
         val adminLogin = "admin@test.com" to "test12345!"
-        val adminId = "9pnyyihlffqpr1c"
+        val adminId = "z49xvnuw8tzfjrv"
     }
 
 }
