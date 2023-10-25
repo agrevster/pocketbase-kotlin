@@ -10,6 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.test.*
+import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 
@@ -47,7 +48,7 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
     @AfterTest
     fun after(): Unit = runBlocking {
         launch {
-            delay(delayAmount)
+            delay(delayAmount + 2.seconds)
             if (delete) {
                 val users = service.getFullList<User>(10)
                 val ids = users.map { it.id }
@@ -116,7 +117,6 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
                 assertNotNull(response.token)
                 assertUserValid(response.record)
             }
-
         }
     }
 
