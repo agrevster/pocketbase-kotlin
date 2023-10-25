@@ -31,7 +31,7 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
             val list = _getList<T>(path, page, batch, sortBy, filterBy, expandRelations, showFields, skipTotal)
             val items = list.items.toMutableList()
             result.addAll(items)
-            if (items.isNotEmpty() && list.totalItems <= result.size) return result
+            if (list.perPage != items.size) return result
             page += 1
         }
     }
