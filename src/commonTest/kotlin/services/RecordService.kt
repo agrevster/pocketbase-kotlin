@@ -134,7 +134,7 @@ class RecordService : TestingUtils() {
                 assertMatchesCreation<Collection>("totalItems", 4, list.totalItems)
                 assertMatchesCreation<Collection>("totalPages", 2, list.totalPages)
 
-                assertEquals(list.items.size, 2)
+                assertEquals(2, list.items.size)
                 list.items.forEach { record -> assertRecordValid(record) }
             }
         }
@@ -145,7 +145,7 @@ class RecordService : TestingUtils() {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val list = service.getFullList<TestRecord>(testCollection, 10)
-                assertEquals(list.size, 1)
+                assertEquals(1, list.size)
                 list.forEach { record -> assertRecordValid(record) }
             }
         }

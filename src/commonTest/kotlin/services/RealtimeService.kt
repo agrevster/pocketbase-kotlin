@@ -128,7 +128,7 @@ class RealtimeService : TestingUtils() {
                 delay(8000)
                 service.disconnect()
                 clean()
-                assertEquals(receivedRecords, testRecords, "Test records are missing from received records")
+                assertEquals(testRecords, receivedRecords, "Test records are missing from received records")
                 testRecords.clear()
             }
         }
@@ -184,7 +184,7 @@ class RealtimeService : TestingUtils() {
                 delay(8000)
                 service.disconnect()
                 clean()
-                assertEquals(receivedRecords, testRecords, "Test records are missing from received records")
+                assertEquals(testRecords, receivedRecords, "Test records are missing from received records")
                 testRecords.clear()
             }
         }
@@ -230,7 +230,7 @@ class RealtimeService : TestingUtils() {
             launch(CoroutineName("Disconnect")) {
                 delay(8000)
                 service.disconnect()
-                assertEquals(removedIds, ids, "Test records are missing from received records")
+                assertEquals(ids, removedIds, "Test records are missing from received records")
                 testRecords.clear()
             }
         }

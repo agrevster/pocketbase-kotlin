@@ -327,7 +327,7 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                 val list = service.getList<Collection>(1, 2)
                 assertMatchesCreation<Collection>("page", 1, list.page)
                 assertMatchesCreation<Collection>("perPage", 2, list.perPage)
-                assertEquals(list.items.size, 2)
+                assertEquals(2, list.items.size)
                 list.items.forEach { collection -> assertCollectionValid(collection) }
             }
         }
@@ -385,7 +385,7 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
                 assertMatchesCreation<Collection>("totalItems", 4, list.totalItems)
                 assertMatchesCreation<Collection>("totalPages", 2, list.totalPages)
 
-                assertEquals(list.items.size, 2)
+                assertEquals(2, list.items.size)
                 list.items.forEach { record ->
                     assertNotNull(record.id)
                     assertNotNull(record.username)
@@ -399,7 +399,7 @@ class CollectionViewService : CrudServiceTestSuite<Collection>(client.collection
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val list = client.records.getFullList<TestRecord>("test_auth", 10)
-                assertEquals(list.size, 4)
+                assertEquals(4, list.size)
                 list.forEach { record ->
                     assertNotNull(record.id)
                     assertNotNull(record.username)

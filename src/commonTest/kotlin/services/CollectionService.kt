@@ -396,7 +396,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 val list = service.getList<Collection>(1, 2)
                 assertMatchesCreation<Collection>("page", 1, list.page)
                 assertMatchesCreation<Collection>("perPage", 2, list.perPage)
-                assertEquals(list.items.size, 2)
+                assertEquals(2, list.items.size)
                 list.items.forEach { collection -> assertCollectionValid(collection) }
             }
         }

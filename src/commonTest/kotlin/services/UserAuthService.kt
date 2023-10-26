@@ -220,7 +220,7 @@ class UserAuthService : CrudServiceTestSuite<User>(client.users, "api/collection
                 assertMatchesCreation<User>("totalItems", 5, list.totalItems)
                 assertMatchesCreation<User>("totalPages", 3, list.totalPages)
 
-                assertEquals(list.items.size, 2)
+                assertEquals(2, list.items.size)
                 list.items.forEach { user -> assertUserValid(user) }
             }
         }

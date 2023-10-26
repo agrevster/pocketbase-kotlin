@@ -298,7 +298,7 @@ class RecordAuthService : TestingUtils() {
                 assertMatchesCreation<TestRecord>("totalItems", 5, list.totalItems)
                 assertMatchesCreation<TestRecord>("totalPages", 3, list.totalPages)
 
-                assertEquals(list.items.size, 2)
+                assertEquals(2, list.items.size)
                 list.items.forEach { record -> assertRecordValid(record) }
             }
         }
@@ -309,7 +309,7 @@ class RecordAuthService : TestingUtils() {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
                 val list = service.getFullList<TestRecord>(testCollection, 10)
-                assertEquals(list.size, 1)
+                assertEquals(1, list.size)
                 list.forEach { record -> assertRecordValid(record) }
             }
         }

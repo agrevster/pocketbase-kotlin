@@ -177,7 +177,7 @@ class AdminAuthService : CrudServiceTestSuite<Admin>(client.admins, "api/admins"
                 assertMatchesCreation<Admin>("totalItems", 5, list.totalItems)
                 assertMatchesCreation<Admin>("totalPages", 3, list.totalPages)
 
-                assertEquals(list.items.size, 2)
+                assertEquals(2, list.items.size)
                 list.items.forEach { admin -> assertAdminValid(admin) }
             }
 
