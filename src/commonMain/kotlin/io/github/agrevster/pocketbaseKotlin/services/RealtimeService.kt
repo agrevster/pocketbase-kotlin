@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.*
 
 public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) : BaseService(client) {
@@ -132,7 +131,7 @@ public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.Pocket
      * }
      */
     public suspend fun listen(callback: MessageData.() -> Unit) {
-        if (!connected) PocketbaseException("You must connect to the SSE client first!")
+        if (!connected) throw PocketbaseException("You must connect to the SSE client first!")
         coroutineScope {
             val job = launch {
                 connection.collectLatest { event ->
@@ -151,7 +150,7 @@ public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.Pocket
      */
     public suspend fun subscribe(subscription: String, delay: Long = 2000) {
         if (!connected || clientId == null) delay(delay)
-        if (!connected) PocketbaseException("You must connect to the SSE client first!")
+        if (!connected) throw PocketbaseException("You must connect to the SSE client first!")
         subscriptions.add(subscription)
         sendSubscribeRequest()
     }
@@ -163,7 +162,7 @@ public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.Pocket
      */
     public suspend fun subscribe(delay: Long = 2000, vararg subscriptionList: String) {
         if (!connected || clientId == null) delay(delay)
-        if (!connected) PocketbaseException("You must connect to the SSE client first!")
+        if (!connected) throw PocketbaseException("You must connect to the SSE client first!")
         subscriptionList.forEach { subscription -> subscriptions.add(subscription) }
         sendSubscribeRequest()
     }
@@ -175,7 +174,7 @@ public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.Pocket
      */
     public suspend fun unsubscribe(subscription: String, delay: Long = 2000) {
         if (!connected || clientId == null) delay(delay)
-        if (!connected) PocketbaseException("You must connect to the SSE client first!")
+        if (!connected) throw PocketbaseException("You must connect to the SSE client first!")
         subscriptions.remove(subscription)
         sendSubscribeRequest()
     }
@@ -186,7 +185,7 @@ public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.Pocket
      */
     public suspend fun unsubscribeAll(delay: Long = 2000) {
         if (!connected || clientId == null) delay(delay)
-        if (!connected) PocketbaseException("You must connect to the SSE client first!")
+        if (!connected) throw PocketbaseException("You must connect to the SSE client first!")
         subscriptions.clear()
         sendSubscribeRequest()
     }
@@ -198,7 +197,7 @@ public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.Pocket
      */
     public suspend fun unsubscribe(delay: Long = 2000, vararg subscriptionList: String) {
         if (!connected || clientId == null) delay(delay)
-        if (!connected) PocketbaseException("You must connect to the SSE client first!")
+        if (!connected) throw PocketbaseException("You must connect to the SSE client first!")
         subscriptionList.forEach { subscription -> subscriptions.remove(subscription) }
         sendSubscribeRequest()
     }
