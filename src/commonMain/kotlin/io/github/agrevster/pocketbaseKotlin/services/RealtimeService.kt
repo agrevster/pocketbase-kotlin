@@ -11,10 +11,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.*
 
 public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) : BaseService(client) {
 
@@ -26,34 +25,27 @@ public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.Pocket
     /**
      * The data sent when a realtime event is emitted
      */
-    public data class MessageData(val action: RealtimeActionType, val record: String?) {
+    public data class MessageData(val action: RealtimeActionType, val record: JsonElement?) {
         /**
          * Serializes the record emitted to type [T]
          * Used to get the record from an event
          */
         public inline fun <reified T> parseRecord(): T {
             if (action == RealtimeActionType.CONNECT) throw PocketbaseException("Connect event cannot be parsed!")
-            val cleanedAction = record!!
-                .replaceFirst("{\"action\":\"${action.name.lowercase()}\",\"record\":", "")
-                .replaceFirst("}", "")
-            return Json.decodeFromString(cleanedAction)
+            return Json.decodeFromJsonElement(record!!)
         }
     }
 
-    @Serializable
     /**
      * The type of realtime event emitted
      */
     public enum class RealtimeActionType {
         CONNECT,
 
-        @SerialName("create")
         CREATE,
 
-        @SerialName("update")
         UPDATE,
 
-        @SerialName("delete")
         DELETE;
 
         /**
@@ -67,9 +59,6 @@ public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.Pocket
                 }
             }
         }
-
-        @Serializable
-        internal data class Action(val action: RealtimeActionType)
 
     }
 
@@ -117,9 +106,10 @@ public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.Pocket
                             clientId = event.id
                             sendSubscribeRequest()
                         }
+                        //If there is data emit it, else, assume it is a new connection attempt
                         try {
-                            val a = unknownKeysJson.decodeFromString<RealtimeActionType.Action>(event.data).action
-                            connection.emit(MessageData(a, event.data))
+                            val jsonData = unknownKeysJson.decodeFromString<JsonObject>(event.data)
+                            connection.emit(MessageData(RealtimeActionType.valueOf(jsonData["action"].toString().removeSurrounding("\"").uppercase()), jsonData["record"]))
                         } catch (e: Exception) {
                             connection.emit(MessageData(RealtimeActionType.CONNECT, null))
                         }
