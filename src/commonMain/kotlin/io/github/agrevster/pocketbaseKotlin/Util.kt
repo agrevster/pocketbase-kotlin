@@ -1,13 +1,14 @@
 package io.github.agrevster.pocketbaseKotlin
 
 import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
+import io.github.agrevster.pocketbaseKotlin.models.utils.parsePocketbase
+import io.github.agrevster.pocketbaseKotlin.models.utils.toStringPocketbase
 import io.ktor.client.call.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.datetime.Instant
-import kotlinx.datetime.toInstant
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -91,9 +92,9 @@ public fun Boolean?.toJsonPrimitiveOrNull(): JsonPrimitive = JsonPrimitive(this)
 public fun Number.toJsonPrimitive(): JsonPrimitive = JsonPrimitive(this)
 
 public fun Instant?.toJsonPrimitive(): JsonPrimitive? =
-    if (this.toString() != "null") JsonPrimitive(this.toString().replace("T", " ")) else null
+    if (this != null) JsonPrimitive(this.toStringPocketbase()) else null
 
-public fun JsonPrimitive.toInstant(): Instant = this.toString().replace(" ", "T").removeSurrounding("\"").toInstant()
+public fun JsonPrimitive.toInstant(): Instant = Instant.parsePocketbase(this.toString().removeSurrounding("\""))
 
 public fun JsonPrimitive.toNumber(): Double = this.toString().toDouble()
 
