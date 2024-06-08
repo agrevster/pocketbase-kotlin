@@ -7,6 +7,7 @@ build/
 /mkdocs
 mdbook
 *.http
+.kotlin/*
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
