@@ -9,12 +9,7 @@ import io.ktor.http.*
  * @param [fields] all of the fields you want to be shown in the record's response
  */
 public class ShowFields(vararg fields: String) {
-    private lateinit var fieldsToShow: String
-
-    init {
-        fieldsToShow = fields.joinToString(separator = ",")
-        println(fieldsToShow)
-    }
+    private var fieldsToShow: String = fields.joinToString(separator = ",")
 
     /**s
      * Adds the current [ShowFields] to a request's parameters

@@ -121,5 +121,5 @@ internal sealed interface SseRawEvent {
     data class Id(val value: EventId) : SseRawEvent
     data class Event(val value: EventType) : SseRawEvent
     data class Data(val value: EventData) : SseRawEvent
-    object End : SseRawEvent
+    data object End : SseRawEvent
 }

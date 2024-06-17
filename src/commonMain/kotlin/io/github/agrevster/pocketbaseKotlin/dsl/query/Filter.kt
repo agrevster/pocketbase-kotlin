@@ -1,6 +1,7 @@
 package io.github.agrevster.pocketbaseKotlin.dsl.query
 
 import io.ktor.http.*
+import io.github.agrevster.pocketbaseKotlin.models.Record
 
 /**
  * Used to filter the list of [Record]s returned by a request.
