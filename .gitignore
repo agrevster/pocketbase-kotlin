@@ -8,6 +8,7 @@ build/
 mdbook
 *.http
 .kotlin/*
+pocketbase-executables/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

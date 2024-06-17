@@ -13,10 +13,10 @@ plugins {
 
 }
 
-val ktorVersion = "2.2.4"
-val kotlinSerializationVersion = "1.5.1"
-val kotlinCoroutinesVersion = "1.6.4"
-val kotlinTimeVersion = "0.4.0"
+val ktorVersion = "2.3.11"
+val kotlinSerializationVersion = "1.7.0"
+val kotlinCoroutinesVersion = "1.8.1"
+val kotlinTimeVersion = "0.6.0"
 
 
 repositories {
