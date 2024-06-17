@@ -5,23 +5,17 @@ import io.github.agrevster.pocketbaseKotlin.dsl.query.Filter
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import io.github.agrevster.pocketbaseKotlin.dsl.query.SortFields
 import io.github.agrevster.pocketbaseKotlin.models.LogRequest
+import io.github.agrevster.pocketbaseKotlin.models.utils.InstantPocketbase
 import io.github.agrevster.pocketbaseKotlin.models.utils.ListResult
 import io.github.agrevster.pocketbaseKotlin.services.utils.BaseService
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toInstant
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) : BaseService(client) {
     @Serializable
-    public data class HourlyStats(val total: Int, @SerialName("date") val initialDate: String) {
-        @Transient
-        val date: Instant = initialDate.replace(" ", "T").toInstant()
-    }
+    public data class HourlyStats(val total: Int, val date: InstantPocketbase)
 
     /**
      * Returns a paginated request logs list.
