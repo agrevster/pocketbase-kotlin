@@ -8,6 +8,7 @@ import io.github.agrevster.pocketbaseKotlin.toJsonPrimitive
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.Instant
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -200,8 +201,8 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                                     type = SchemaField.SchemaFieldType.DATE,
                                     required = true,
                                     options = SchemaField.SchemaOptions(
-                                        min = "2022-08-19T02:22:00.00Z".toInstant().toJsonPrimitive(),
-                                        max = "2023-08-19T02:22:00.00Z".toInstant().toJsonPrimitive()
+                                        min = Instant.parse("2022-08-19T02:22:00.00Z").toJsonPrimitive(),
+                                        max = Instant.parse("2023-08-19T02:22:00.00Z").toJsonPrimitive()
                                     )
                                 ),
                                 SchemaField(
