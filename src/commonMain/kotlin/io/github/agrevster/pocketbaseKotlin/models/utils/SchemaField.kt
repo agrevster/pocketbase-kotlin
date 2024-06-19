@@ -42,14 +42,14 @@ public class SchemaField(
         val maxSelect: Int? = null,
         val collectionId: String? = null,
         val cascadeDelete: Boolean? = null,
-        val maxSize: Int? = null,
+        val maxSize: Long? = null,
         val mimeTypes: List<String>? = null,
         val thumbs: List<String>? = null,
         val minSelect: Int? = null,
         val displayFields: List<String>? = null,
         val protected: Boolean? = null,
         val noDecimal: Boolean? = null,
-        val convertUrls: Boolean? = null
+        val convertUrls: Boolean? = null,
     )
 
     @Serializable

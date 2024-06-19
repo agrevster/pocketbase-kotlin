@@ -213,11 +213,14 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                                     "select",
                                     type = SchemaField.SchemaFieldType.SELECT,
                                     options = SchemaField.SchemaOptions(
-                                        maxSelect = 1,
-                                        values = listOf("VALUE1", "VALUE2", "VALUE3")
+                                        maxSelect = 1, values = listOf("VALUE1", "VALUE2", "VALUE3")
                                     )
                                 ),
-                                SchemaField("json", type = SchemaField.SchemaFieldType.JSON),
+                                SchemaField(
+                                    "json",
+                                    type = SchemaField.SchemaFieldType.JSON,
+                                    options = SchemaField.SchemaOptions(maxSize = 2000000)
+                                ),
                                 SchemaField(
                                     "file",
                                     type = SchemaField.SchemaFieldType.FILE,
@@ -227,10 +230,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                                     "relation",
                                     SchemaField.SchemaFieldType.RELATION,
                                     options = SchemaField.SchemaOptions(
-                                        collectionId = usersId,
-                                        cascadeDelete = false,
-                                        maxSelect = 1,
-                                        minSelect = 1
+                                        collectionId = usersId, cascadeDelete = false, maxSelect = 1, minSelect = 1
                                     )
                                 ),
                                 SchemaField(
@@ -260,8 +260,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                         type = SchemaField.SchemaFieldType.NUMBER,
                         required = true,
                         options = SchemaField.SchemaOptions(noDecimal = true)
-                    ),
-                    schema[1]
+                    ), schema[1]
                 )
                 assertSchemaMatches(SchemaField("bool", type = SchemaField.SchemaFieldType.BOOL), schema[2])
                 assertSchemaMatches(
@@ -291,15 +290,18 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 )
                 assertSchemaMatches(
                     SchemaField(
-                        "select",
-                        type = SchemaField.SchemaFieldType.SELECT,
-                        options = SchemaField.SchemaOptions(
-                            maxSelect = 1,
-                            values = listOf("VALUE1", "VALUE2", "VALUE3")
+                        "select", type = SchemaField.SchemaFieldType.SELECT, options = SchemaField.SchemaOptions(
+                            maxSelect = 1, values = listOf("VALUE1", "VALUE2", "VALUE3")
                         )
                     ), schema[6]
                 )
-                assertSchemaMatches(SchemaField("json", type = SchemaField.SchemaFieldType.JSON), schema[7])
+                assertSchemaMatches(
+                    SchemaField(
+                        "json",
+                        type = SchemaField.SchemaFieldType.JSON,
+                        options = SchemaField.SchemaOptions(maxSize = 2000000)
+                    ), schema[7]
+                )
                 assertSchemaMatches(
                     SchemaField(
                         "file",
@@ -310,10 +312,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 assertSchemaMatches(
                     SchemaField(
                         "relation", SchemaField.SchemaFieldType.RELATION, options = SchemaField.SchemaOptions(
-                            collectionId = usersId,
-                            cascadeDelete = false,
-                            maxSelect = 1,
-                            minSelect = 1
+                            collectionId = usersId, cascadeDelete = false, maxSelect = 1, minSelect = 1
                         )
                     ), schema[9]
                 )
@@ -331,10 +330,9 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 assertMatchesCreation<Collection>("createRule", "@request.auth.verified = true", collection.createRule)
 
                 assertEquals(
-                    "CREATE UNIQUE INDEX `idx_TMnwjg8` ON `test_collection` (\n" +
-                            "  `string`,\n" +
-                            "  `email`\n" +
-                            ")", collection.indexes?.first(), "Indexes do not match"
+                    "CREATE UNIQUE INDEX `idx_TMnwjg8` ON `test_collection` (\n" + "  `string`,\n" + "  `email`\n" + ")",
+                    collection.indexes?.first(),
+                    "Indexes do not match"
                 )
 
             }
@@ -374,8 +372,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 assertMatchesCreation<Collection>("name", "test_collection_0", collection.name)
                 assertMatchesCreation<Collection>("createRule", null, collection.createRule)
                 assertSchemaMatches(
-                    SchemaField("text", type = SchemaField.SchemaFieldType.TEXT),
-                    collection.schema!![0]
+                    SchemaField("text", type = SchemaField.SchemaFieldType.TEXT), collection.schema!![0]
                 )
             }
         }
@@ -388,9 +385,7 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 service.create<Collection>(
                     Json.encodeToString(
                         Collection(
-                            name = "test_collection_3",
-                            type = Collection.CollectionType.BASE,
-                            schema = listOf(
+                            name = "test_collection_3", type = Collection.CollectionType.BASE, schema = listOf(
                                 SchemaField(
                                     "int",
                                     required = true,
@@ -404,10 +399,8 @@ class CollectionService : CrudServiceTestSuite<Collection>(client.collections, "
                 service.create<Collection>(
                     Json.encodeToString(
                         Collection(
-                            name = "test_collection_4",
-                            type = Collection.CollectionType.BASE,
-                            schema = listOf(
-                                SchemaField("json", type = SchemaField.SchemaFieldType.JSON)
+                            name = "test_collection_4", type = Collection.CollectionType.BASE, schema = listOf(
+                                SchemaField("json", type = SchemaField.SchemaFieldType.JSON, options = SchemaField.SchemaOptions(maxSize = 200000))
                             )
                         )
                     )
