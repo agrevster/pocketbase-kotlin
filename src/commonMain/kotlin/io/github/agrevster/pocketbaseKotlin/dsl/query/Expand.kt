@@ -29,7 +29,7 @@ public data class ExpandRelations(val relations: String? = null) {
  * @property [expand] the list of records that have been expanded.
  * Key: (expanded record name) -> Value: expanded record object of type [T]
  */
-public open class ExpandRecord<T> : Record() {
+public open class ExpandRecord<T: Record> : Record() {
 
     public val expand: Map<String, T>? = null
 
