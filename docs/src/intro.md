@@ -4,7 +4,7 @@
 
 ## Support
 
-Pocketbase Kotlin offers support for [Pocketbase 0.18](https://github.com/pocketbase/pocketbase/releases/tag/v0.18.9)
+Pocketbase Kotlin offers support for [Pocketbase 0.20](https://github.com/pocketbase/pocketbase/releases/tag/v0.20.0) and above.
 and above.
 Support for new Pocketbase releases will be added as soon as possible.
 
@@ -33,6 +33,6 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.agrevster:pocketbase-kotlin:2.5.0")
+    implementation("io.github.agrevster:pocketbase-kotlin:2.6.0")
 }
 ```              
