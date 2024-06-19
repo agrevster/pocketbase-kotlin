@@ -4,8 +4,8 @@ import TestingUtils
 import io.github.agrevster.pocketbaseKotlin.dsl.login
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRecord
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
-import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.models.Collection
+import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,7 +17,6 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.time.Duration.Companion.seconds
 import PocketbaseClient as TestClient
 
 class Expand : TestingUtils() {

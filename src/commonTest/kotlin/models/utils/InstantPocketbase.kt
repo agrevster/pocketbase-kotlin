@@ -2,14 +2,10 @@ package models.utils
 
 import TestingUtils
 import io.github.agrevster.pocketbaseKotlin.models.utils.InstantPocketbase
-import io.github.agrevster.pocketbaseKotlin.models.utils.InstantPocketbaseSerializer
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.contextual
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

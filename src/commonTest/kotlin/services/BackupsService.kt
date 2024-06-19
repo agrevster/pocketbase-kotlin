@@ -17,9 +17,9 @@ import PocketbaseClient as TestClient
 class BackupsService : TestingUtils() {
 
     /**
-     * IMPORTANT NOTE ABOUT TESTING BACKUPS!
-     * Before committing please remove the ignore annotation and run each test top to bottom.
-     * If all of them pass, add the ignore annotation back and commit.
+     * IMPORTANT NOTE ABOUT TESTING BACKUPS! Before committing please remove
+     * the ignore annotation and run each test top to bottom. If all of them
+     * pass, add the ignore annotation back and commit.
      *
      * There have been issues with testing backups automatically in the past.
      * This inconveniences removes any of these issues.
