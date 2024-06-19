@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
+@Deprecated("This this model is no longer used in Pocketbase 0.20.0+ please use Log instead", ReplaceWith("Log()"))
 public open class LogRequest : BaseModel() {
 
     public val url: String? = null

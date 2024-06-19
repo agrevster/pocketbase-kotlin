@@ -29,7 +29,7 @@ class LogService : TestingUtils() {
     fun getAll(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
-                val response = service.getRequestsList(1, 5)
+                val response = service.getList(1, 5)
                 assertEquals(1, response.page)
                 assertEquals(5, response.perPage)
                 assertIs<Int>(response.totalItems)
@@ -44,18 +44,8 @@ class LogService : TestingUtils() {
     fun getOne(): Unit = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
-                val id = service.getRequestsList(1, 1).items[0].id
-                val response = service.getRequest(id!!)
-                assertNotNull(response.id)
-                assertNotNull(response.url)
-                assertNotNull(response.method)
-                assertNotNull(response.status)
-                assertNotNull(response.auth)
-                assertNotNull(response.remoteIp)
-                assertNotNull(response.userIp)
-                assertNotNull(response.referer)
-                assertNotNull(response.userAgent)
-                assertNotNull(response.meta)
+                val id = service.getList(1, 1).items[0].id
+                val response = service.getOne(id!!)
                 printJson(response)
             }
         }
@@ -65,7 +55,7 @@ class LogService : TestingUtils() {
     fun getStats() = runBlocking {
         assertDoesNotFail("No exceptions should be thrown") {
             launch {
-                val response = service.getRequestsStats()
+                val response = service.getStats()
                 assertNotNull(response[0].total)
                 assertNotNull(response[0].date)
                 printJson(response)
