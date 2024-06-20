@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
@@ -27,10 +25,9 @@ repositories {
 kotlin {
     explicitApi()
 
+    jvmToolchain(18)
+
     jvm {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class) compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-        }
         withJava()
     }
 
@@ -109,13 +106,10 @@ kotlin {
             if (winHTTP) {
                 if (test) {
                     this.dependsOn(winHTTPTest)
-                } else
-                    this.dependsOn(winHTTPMain)
-            }else
-                if (test) {
-                    this.dependsOn(cioTest)
-                } else
-                    this.dependsOn(cioMain)
+                } else this.dependsOn(winHTTPMain)
+            } else if (test) {
+                this.dependsOn(cioTest)
+            } else this.dependsOn(cioMain)
         }
 
         getByName("jvmMain").configureDependencies()
