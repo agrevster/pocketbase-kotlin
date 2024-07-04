@@ -46,6 +46,7 @@ public interface AuthService {
             url {
                 path(recordAuthFrom(collection), "auth-methods")
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()
@@ -64,6 +65,7 @@ public interface AuthService {
             url {
                 path(recordAuthFrom(collection), id, "external-auths")
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()

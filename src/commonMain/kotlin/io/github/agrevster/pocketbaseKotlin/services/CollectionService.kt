@@ -28,8 +28,8 @@ public class CollectionService(client: io.github.agrevster.pocketbaseKotlin.Pock
         val response = client.httpClient.put {
             url {
                 path(baseCrudPath, "import")
-                contentType(ContentType.Application.Json)
             }
+            contentType(ContentType.Application.Json)
             setBody(ImportRequestBody(collections, deleteMissing))
         }
         PocketbaseException.handle(response)

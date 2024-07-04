@@ -98,6 +98,7 @@ public class UserAuthService(client: io.github.agrevster.pocketbaseKotlin.Pocket
                 expandRelations.addTo(parameters)
                 fields.addTo(parameters)
             }
+            contentType(ContentType.Application.Json)
             setBody(Json.encodeToString(params))
         }
         PocketbaseException.handle(response)
@@ -115,10 +116,10 @@ public class UserAuthService(client: io.github.agrevster.pocketbaseKotlin.Pocket
         val response = client.httpClient.post {
             url {
                 path(basePath, "auth-refresh")
-                contentType(ContentType.Application.Json)
                 expandRelations.addTo(parameters)
                 fields.addTo(parameters)
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()

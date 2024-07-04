@@ -23,6 +23,7 @@ public class HealthService(client: io.github.agrevster.pocketbaseKotlin.Pocketba
                 path("api", "health")
                 fields.addTo(parameters)
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()

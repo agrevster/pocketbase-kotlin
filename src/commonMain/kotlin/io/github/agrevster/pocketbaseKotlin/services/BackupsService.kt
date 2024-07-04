@@ -24,6 +24,7 @@ public class BackupsService(client: io.github.agrevster.pocketbaseKotlin.Pocketb
                 path("api", "backups")
                 fields.addTo(parameters)
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()

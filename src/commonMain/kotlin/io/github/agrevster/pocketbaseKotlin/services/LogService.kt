@@ -77,6 +77,7 @@ public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseC
                 sortBy.addTo(parameters)
                 fields.addTo(parameters)
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()
@@ -98,6 +99,7 @@ public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseC
                 fields.addTo(parameters)
 
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()
@@ -115,6 +117,7 @@ public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseC
                 fields.addTo(parameters)
 
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()
@@ -134,6 +137,7 @@ public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseC
                 filterBy.addTo(parameters)
                 fields.addTo(parameters)
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()
@@ -149,6 +153,7 @@ public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseC
                 filterBy.addTo(parameters)
                 fields.addTo(parameters)
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()

@@ -41,11 +41,11 @@ public class AdminAuthService(client: io.github.agrevster.pocketbaseKotlin.Pocke
         val response = client.httpClient.post {
             url {
                 path(baseCrudPath, "auth-with-password")
-                contentType(ContentType.Application.Json)
                 header("Authorization", "")
                 fields.addTo(parameters)
             }
             setBody(Json.encodeToString(params))
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()
@@ -60,6 +60,7 @@ public class AdminAuthService(client: io.github.agrevster.pocketbaseKotlin.Pocke
                 path(baseCrudPath, "auth-refresh")
                 fields.addTo(parameters)
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()
@@ -79,9 +80,9 @@ public class AdminAuthService(client: io.github.agrevster.pocketbaseKotlin.Pocke
         val response = client.httpClient.post {
             url {
                 path(baseCrudPath, "request-password-reset")
-                contentType(ContentType.Application.Json)
             }
             setBody(Json.encodeToString(params))
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return true
@@ -108,9 +109,9 @@ public class AdminAuthService(client: io.github.agrevster.pocketbaseKotlin.Pocke
         val response = client.httpClient.post {
             url {
                 path(baseCrudPath, "confirm-password-reset")
-                contentType(ContentType.Application.Json)
                 fields.addTo(parameters)
             }
+            contentType(ContentType.Application.Json)
             setBody(Json.encodeToString(params))
         }
         PocketbaseException.handle(response)

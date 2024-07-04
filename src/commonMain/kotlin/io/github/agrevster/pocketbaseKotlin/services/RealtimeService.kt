@@ -75,8 +75,8 @@ public class RealtimeService(client: io.github.agrevster.pocketbaseKotlin.Pocket
         val response = client.httpClient.post {
             url {
                 path("/api/realtime")
-                contentType(ContentType.Application.Json)
             }
+            contentType(ContentType.Application.Json)
             setBody(body)
         }
         PocketbaseException.handle(response)

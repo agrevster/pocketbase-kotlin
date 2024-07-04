@@ -110,6 +110,7 @@ public class RecordsService(client: io.github.agrevster.pocketbaseKotlin.Pocketb
                 expandRelations.addTo(parameters)
                 fields.addTo(parameters)
             }
+            contentType(ContentType.Application.Json)
             setBody(Json.encodeToString(params))
         }
         PocketbaseException.handle(response)
@@ -133,6 +134,7 @@ public class RecordsService(client: io.github.agrevster.pocketbaseKotlin.Pocketb
                 expandRelations.addTo(parameters)
                 fields.addTo(parameters)
             }
+            contentType(ContentType.Application.Json)
         }
         PocketbaseException.handle(response)
         return response.body()
