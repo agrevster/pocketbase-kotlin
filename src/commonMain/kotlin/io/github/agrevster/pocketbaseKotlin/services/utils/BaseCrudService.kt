@@ -13,6 +13,7 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
+import kotlinx.serialization.json.JsonPrimitive
 
 public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) :
     BaseService(client) {
@@ -137,7 +138,7 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
     @PocketKtInternal
     public suspend inline fun <reified T : BaseModel> _create(
         path: String,
-        body: Map<String, Any>,
+        body: Map<String, JsonPrimitive>,
         files: List<FileUpload>,
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
@@ -161,8 +162,8 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
                             ) else headersOf()
                         )
                     }
-                    for (element in body) {
-                        append(element.key, element.value.toString())
+                    body.forEach { (key,value) ->
+                        append(key,value.content)
                     }
                 }
             ))
@@ -175,7 +176,7 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
     public suspend inline fun <reified T : BaseModel> _update(
         path: String,
         id: String,
-        body: Map<String, Any>,
+        body: Map<String, JsonPrimitive>,
         files: List<FileUpload>,
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
@@ -199,8 +200,8 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
                             ) else headersOf()
                         )
                     }
-                    for (element in body) {
-                        append(element.key, element.value.toString())
+                    body.forEach { (key,value) ->
+                        append(key,value.content)
                     }
                 }
             ))

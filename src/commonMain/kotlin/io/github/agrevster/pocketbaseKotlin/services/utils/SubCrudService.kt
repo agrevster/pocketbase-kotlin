@@ -8,7 +8,7 @@ import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import io.github.agrevster.pocketbaseKotlin.dsl.query.SortFields
 import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import io.github.agrevster.pocketbaseKotlin.models.utils.ListResult
-import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 
 @OptIn(PocketKtInternal::class)
 public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) :
@@ -107,7 +107,7 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
      */
     public suspend inline fun <reified T : BaseModel> create(
         sub: String,
-        body: Map<String, JsonElement>,
+        body: Map<String, JsonPrimitive>,
         files: List<FileUpload>,
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()
@@ -125,7 +125,7 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
     public suspend inline fun <reified T : BaseModel> update(
         sub: String,
         id: String,
-        body: Map<String, JsonElement>,
+        body: Map<String, JsonPrimitive>,
         files: List<FileUpload>,
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields()

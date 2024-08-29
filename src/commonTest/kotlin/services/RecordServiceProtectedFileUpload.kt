@@ -102,7 +102,7 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
                     listOf(FileUpload("file", getTestFile(1), "monkey.jpg"))
                 )
                 assertRecordValid(record)
-                assertMatchesCreation<TestRecord>("text", "\"HELLO\"", record.text)
+                assertMatchesCreation<TestRecord>("text", "HELLO", record.text)
                 assertTrue(record.file!!.contains("monkey"), "File name invalid!")
             }
         }
@@ -119,7 +119,7 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
                     listOf(FileUpload("file", getTestFile(2), "ape.jpg"))
                 )
                 assertRecordValid(record)
-                assertMatchesCreation<TestRecord>("text", "\"BYE\"", record.text)
+                assertMatchesCreation<TestRecord>("text", "BYE", record.text)
                 assertTrue(record.file!!.contains("ape"), "File name invalid!")
 
             }
@@ -202,7 +202,7 @@ class RecordServiceProtectedFileUpload : TestingUtils() {
                     listOf(FileUpload("file", null, ""))
                 )
                 assertRecordValid(record)
-                assertMatchesCreation<TestRecord>("text", "\"BYE\"", record.text)
+                assertMatchesCreation<TestRecord>("text", "BYE", record.text)
                 assertEquals("", record.file, "File should be empty!")
             }
         }
