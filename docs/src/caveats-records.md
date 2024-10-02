@@ -68,3 +68,35 @@ val records = client.records.getList<PetRecord>("pets_collection",1,3,
 //This returns the expanded record with the field name of owner 
 val owner: PersonRecord? = records.items[0].expand?.get("owner")
 ```
+
+#### Expanding lists of related fields
+*Sometimes people own multiple pets*
+```kotlin
+//!val client = PocketbaseClient({
+//!    protocol = URLProtocol.HTTP
+//!    host = "localhost"
+//!    port = 8090
+//!})
+//!
+//!client.login {
+//!    token = client.users.authWithPassword("email", "password").token
+//!}
+
+//For this example we have two collections. One for people and another for their pets
+//Each pet has a name (text)
+@Serializable
+data class PetRecord(val name: String) : Record()
+
+//Each person has a name (text) and pets (relation)[multiple]
+@Serializable
+//It extends expand record list : used for when you need more than one of the same relation type
+data class PersonRecord(val name: String, val pets: List<String>) : ExpandRecordList<PetRecord>()
+//
+val records = client.records.getList<PersonRecord>(
+    //This tells Pocketbase to expand the relation field of pets 
+    "people_collection", 1, 5, expandRelations = ExpandRelations("pets")
+)
+
+//This returns the expanded record with the field name of owner 
+val pets: List<PetRecord>? = records.items.first().expand?.get("pets")
+```

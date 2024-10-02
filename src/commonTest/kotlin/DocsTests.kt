@@ -4,6 +4,7 @@ import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 import io.github.agrevster.pocketbaseKotlin.dsl.login
 import io.github.agrevster.pocketbaseKotlin.dsl.logout
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRecord
+import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRecordList
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
 import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.Record
@@ -228,6 +229,33 @@ class DocsTests : TestingUtils() {
 
             //This returns the expanded record with the field name of owner
             val owner: PersonRecord? = records.items[0].expand?.get("owner")
+        }
+    }
+
+    @Test
+    fun `Expanding a list of relations`(): Unit = runBlocking {
+        launch {
+            val client = PocketbaseClient({
+                protocol = URLProtocol.HTTP
+                host = "localhost"
+                port = 8090
+            })
+
+            client.login {
+                token = client.users.authWithPassword("email", "password").token
+            }
+            @Serializable
+            data class PetRecord(val name: String) : Record()
+
+            @Serializable
+            data class PersonRecord(val name: String, val pets: List<String>) : ExpandRecordList<PetRecord>()
+
+            val records = client.records.getList<PersonRecord>(
+                "people_collection", 1, 5,
+                expandRelations = ExpandRelations("pets")
+            )
+
+            val pets: List<PetRecord>? = records.items.first().expand?.get("pets")
         }
     }
 }

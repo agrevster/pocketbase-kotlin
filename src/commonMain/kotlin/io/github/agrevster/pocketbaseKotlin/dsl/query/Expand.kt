@@ -24,7 +24,7 @@ public data class ExpandRelations(val relations: String? = null) {
  * Type [T] is the [Serializable] class of the related record.
  * Be sure you include the [ExpandRelations] field in the request.
  *
- * For a full example of how to serialize a [Record] with expanded relations see [the docs]()
+ * For a full example of how to serialize a [Record] with expanded relations see [the docs](https://agrevster.github.io/pocketbase-kotlin/caveats-records.html#expanding-related-fields)
  *
  * @property [expand] the list of records that have been expanded.
  * Key: (expanded record name) -> Value: expanded record object of type [T]
@@ -35,6 +35,26 @@ public open class ExpandRecord<T: Record> : Record() {
 
     override fun toString(): String {
         return "ExpandRecord(expand=$expand)"
+    }
+}
+
+@Serializable
+/**
+ * Used for when you wish to serialize a list of [Record] with expanded relations.
+ * Type [T] is the [Serializable] class of the related record in the list.
+ * Be sure you include the [ExpandRelations] field in the request.
+ *
+ * For a full example of how to serialize a [Record] with expanded relations see [the docs](https://agrevster.github.io/pocketbase-kotlin/caveats-records.html#expanding-related-fields)
+ *
+ * @property [expand] the list of records that have been expanded.
+ * Key: (expanded record name) -> Value: a list of the expanded record object of type [T]
+ */
+public open class ExpandRecordList<T: Record> : Record() {
+
+    public val expand: Map<String, List<T>>? = null
+
+    override fun toString(): String {
+        return "ExpandRecordList(expand=$expand)"
     }
 }
 
