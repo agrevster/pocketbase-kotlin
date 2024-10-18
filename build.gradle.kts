@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
-    val kotlinVersion = "2.0.0"
+    val kotlinVersion = "2.0.20"
     val dokkaVersion = "1.9.20"
     kotlin("multiplatform") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
@@ -11,10 +11,10 @@ plugins {
 
 }
 
-val ktorVersion = "2.3.11"
-val kotlinSerializationVersion = "1.7.0"
-val kotlinCoroutinesVersion = "1.8.1"
-val kotlinTimeVersion = "0.6.0"
+val ktorVersion = "3.0.0"
+val kotlinSerializationVersion = "1.7.3"
+val kotlinCoroutinesVersion = "1.9.0"
+val kotlinTimeVersion = "0.6.1"
 
 
 repositories {
