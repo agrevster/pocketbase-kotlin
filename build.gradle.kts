@@ -1,26 +1,17 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
-    val kotlinVersion = "2.0.20"
-    val dokkaVersion = "1.9.20"
-    kotlin("multiplatform") version kotlinVersion
-    kotlin("plugin.serialization") version kotlinVersion
-    id("org.jetbrains.dokka") version dokkaVersion
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.dokka)
     id("maven-publish")
     id("signing")
-
 }
-
-val ktorVersion = "3.0.0"
-val kotlinSerializationVersion = "1.7.3"
-val kotlinCoroutinesVersion = "1.9.0"
-val kotlinTimeVersion = "0.6.1"
 
 
 repositories {
     mavenCentral()
 }
-
 
 kotlin {
     explicitApi()
@@ -49,53 +40,55 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api("io.ktor:ktor-client-core:$ktorVersion")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
-                api("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinTimeVersion")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
-                api("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                api("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                api(libs.ktor.client.core)
+                api(libs.ktor.client.content.negociation)
+                api(libs.ktor.serialization.json)
+
+                api(libs.kotlin.coroutines)
+                api(libs.kotlin.datetime)
+                api(libs.kotlin.serlization.json)
             }
         }
 
         commonTest {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinTimeVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinSerializationVersion")
+
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.content.negociation)
+                implementation(libs.ktor.serialization.json)
+
+                implementation(libs.kotlin.coroutines)
+                implementation(libs.kotlin.datetime)
+                implementation(libs.kotlin.serlization.json)
             }
         }
 
         val cioMain by creating {
             dependsOn(commonMain.get())
             dependencies {
-                api("io.ktor:ktor-client-cio:$ktorVersion")
+                api(libs.ktor.client.cio)
             }
         }
 
         val cioTest by creating {
             dependsOn(commonTest.get())
             dependencies {
-                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+                implementation(libs.ktor.client.cio)
             }
         }
 
         val winHTTPMain by creating {
             dependsOn(commonMain.get())
             dependencies {
-                api("io.ktor:ktor-client-winhttp:$ktorVersion")
+                api(libs.ktor.client.winhttp)
             }
         }
 
         val winHTTPTest by creating {
             dependsOn(commonTest.get())
             dependencies {
-                implementation("io.ktor:ktor-client-winhttp:$ktorVersion")
+                implementation(libs.ktor.client.winhttp)
             }
         }
 
