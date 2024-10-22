@@ -128,9 +128,6 @@ kotlin {
 
         getByName("macosArm64Main").configureDependencies()
         getByName("macosArm64Test").configureDependencies(test = true)
-
-        getByName("mingwX64Main").configureDependencies(winHTTP = true)
-        getByName("mingwX64Test").configureDependencies(winHTTP = true, test = true)
     }
 }
 

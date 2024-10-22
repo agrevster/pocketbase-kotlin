@@ -6,6 +6,7 @@ import io.github.agrevster.pocketbaseKotlin.stores.BaseAuthStore
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.sse.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -96,6 +97,7 @@ public class PocketbaseClient(baseUrl: URLBuilder.() -> Unit, lang: String = "en
             json(json)
         }
         install(HttpTimeout)
+        install(SSE)
         defaultRequest {
             url(baseUrl)
             header("Authorization", authStore.token)
