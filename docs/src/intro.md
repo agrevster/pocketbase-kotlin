@@ -17,6 +17,7 @@ Currently, the following platforms are supported,
 | Windows (x64)                     |       
 | Mac OS (x64) (arm x64)            |       
 | IOS (arm x64) (x64) (sim arm x64) |
+| Android                           |
 
 *Want a platform supported? Open an [issue](https://github.com/agrevster/pocketbase-kotlin/issues), and we will try our
 best to add it.*
