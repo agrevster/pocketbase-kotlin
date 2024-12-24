@@ -4,23 +4,30 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.serialization)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.androidLibrary)
     id("maven-publish")
     id("signing")
 }
 
-
 repositories {
     mavenCentral()
+    google()
+    gradlePluginPortal()
+}
+
+enum class HttpClientType {
+    WIN_HTTP, CIO;
 }
 
 kotlin {
     explicitApi()
 
-    jvmToolchain(18)
-
-    jvm {
-        withJava()
+    androidTarget {
+        publishAllLibraryVariants()
     }
+
+    jvmToolchain(18)
+    jvm()
 
     // Linux
     linuxX64()
@@ -36,6 +43,13 @@ kotlin {
 
     // Windows
     mingwX64()
+
+    // Android
+    androidNativeArm32()
+    androidNativeArm64()
+    androidNativeX64()
+    androidNativeX86()
+
 
     sourceSets {
         commonMain {
@@ -92,11 +106,12 @@ kotlin {
             }
         }
 
+
         fun KotlinSourceSet.configureDependencies(
             test: Boolean = false,
-            winHTTP: Boolean = false,
+            httpClientType: HttpClientType = HttpClientType.CIO,
         ) {
-            if (winHTTP) {
+            if (httpClientType == HttpClientType.WIN_HTTP) {
                 if (test) {
                     this.dependsOn(winHTTPTest)
                 } else this.dependsOn(winHTTPMain)
@@ -104,6 +119,7 @@ kotlin {
                 this.dependsOn(cioTest)
             } else this.dependsOn(cioMain)
         }
+
 
         getByName("jvmMain").configureDependencies()
         getByName("jvmTest").configureDependencies(test = true)
@@ -128,6 +144,24 @@ kotlin {
 
         getByName("macosArm64Main").configureDependencies()
         getByName("macosArm64Test").configureDependencies(test = true)
+
+        getByName("mingwX64Main").configureDependencies(httpClientType = HttpClientType.WIN_HTTP)
+        getByName("mingwX64Test").configureDependencies(test=true, httpClientType = HttpClientType.WIN_HTTP)
+
+        getByName("androidMain").configureDependencies()
+        getByName("androidUnitTest").configureDependencies(test = true)
+    }
+}
+
+android {
+    namespace = "io.github.agrevster.pocketbaseKotlin"
+    compileSdk = 34
+    defaultConfig {
+        minSdk = 21
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
 }
 

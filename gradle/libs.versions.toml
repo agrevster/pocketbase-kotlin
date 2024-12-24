@@ -1,6 +1,7 @@
 [versions]
-kotlin = "2.0.20"
+kotlin = "2.1.0"
 dokka = "1.9.20"
+android = "8.2.2"
 ktor = "3.0.0"
 serialization = "1.7.3"
 coroutines = "1.9.0"
@@ -25,3 +26,4 @@ kotlin-serlization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializatio
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+androidLibrary = { id = "com.android.library", version.ref = "android" }
