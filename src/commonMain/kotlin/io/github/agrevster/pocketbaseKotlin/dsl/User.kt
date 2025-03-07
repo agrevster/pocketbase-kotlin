@@ -78,6 +78,7 @@ public class EditUserBuilder : BaseUserParams() {
 /**
  * Creates a new [User] in the collection 'users'.
  */
+@Deprecated("DSL support will be dropped in the next version...\nUse collection service instead...", level = DeprecationLevel.ERROR)
 public suspend inline fun UserAuthService.create(
     expandRelations: ExpandRelations = ExpandRelations(),
     showFields: ShowFields = ShowFields(),
@@ -96,6 +97,7 @@ public suspend inline fun UserAuthService.create(
  * Updates an existing [User] with the given [id] in the collection 'users'.
  * @param [id] The user's id that you wish to update.
  */
+@Deprecated("DSL support will be dropped in the next version...\nUse collection service instead...", level = DeprecationLevel.ERROR)
 public suspend inline fun UserAuthService.update(
     id: String,
     expandRelations: ExpandRelations = ExpandRelations(),
