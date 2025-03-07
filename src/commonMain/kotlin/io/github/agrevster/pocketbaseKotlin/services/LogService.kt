@@ -5,7 +5,6 @@ import io.github.agrevster.pocketbaseKotlin.dsl.query.Filter
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import io.github.agrevster.pocketbaseKotlin.dsl.query.SortFields
 import io.github.agrevster.pocketbaseKotlin.models.Log
-import io.github.agrevster.pocketbaseKotlin.models.LogRequest
 import io.github.agrevster.pocketbaseKotlin.models.utils.InstantPocketbase
 import io.github.agrevster.pocketbaseKotlin.models.utils.ListResult
 import io.github.agrevster.pocketbaseKotlin.services.utils.BaseService
@@ -17,40 +16,6 @@ import kotlinx.serialization.Serializable
 public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) : BaseService(client) {
     @Serializable
     public data class HourlyStats(val total: Int, val date: InstantPocketbase)
-
-    /**
-     * Returns a paginated request logs list.
-     *
-     * @param page The page (aka. offset) of the paginated list.
-     * @param perPage The max returned request logs per page.
-     */
-    @Deprecated(
-        "This API route was removed in Pocketbase 0.20.0 if you plan on updating please use getList",
-        replaceWith = ReplaceWith("getList")
-    )
-    public suspend fun getRequestsList(
-        page: Int = 1,
-        perPage: Int = 30,
-        sortBy: SortFields = SortFields(),
-        filterBy: Filter = Filter(),
-        fields: ShowFields = ShowFields()
-    ): ListResult<LogRequest> {
-        val params = mapOf(
-            "page" to page.toString(),
-            "perPage" to perPage.toString(),
-        )
-        val response = client.httpClient.get {
-            url {
-                path("api", "logs", "requests")
-                params.forEach { parameters.append(it.key, it.value) }
-                filterBy.addTo(parameters)
-                sortBy.addTo(parameters)
-                fields.addTo(parameters)
-            }
-        }
-        PocketbaseException.handle(response)
-        return response.body()
-    }
 
     /**
      * Returns a paginated log list.
@@ -83,27 +48,6 @@ public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseC
         return response.body()
     }
 
-    /**
-     * Returns a single request log by its ID.
-     *
-     * @param id
-     */
-    @Deprecated(
-        "This API route was removed in Pocketbase 0.20.0 if you plan on updating please use getOne",
-        replaceWith = ReplaceWith("getOne")
-    )
-    public suspend fun getRequest(id: String, fields: ShowFields = ShowFields()): LogRequest {
-        val response = client.httpClient.get {
-            url {
-                path("api", "logs", "requests", id)
-                fields.addTo(parameters)
-
-            }
-            contentType(ContentType.Application.Json)
-        }
-        PocketbaseException.handle(response)
-        return response.body()
-    }
 
     /**
      * Returns a single log by its ID.
@@ -116,26 +60,6 @@ public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseC
                 path("api", "logs", id)
                 fields.addTo(parameters)
 
-            }
-            contentType(ContentType.Application.Json)
-        }
-        PocketbaseException.handle(response)
-        return response.body()
-    }
-
-    /** Returns hourly aggregated request logs statistics. */
-    @Deprecated(
-        "This API route was removed in Pocketbase 0.20.0 if you plan on updating please use getStats",
-        replaceWith = ReplaceWith("getStats")
-    )
-    public suspend fun getRequestsStats(
-        filterBy: Filter = Filter(), fields: ShowFields = ShowFields()
-    ): List<HourlyStats> {
-        val response = client.httpClient.get {
-            url {
-                path("api", "logs", "requests", "stats")
-                filterBy.addTo(parameters)
-                fields.addTo(parameters)
             }
             contentType(ContentType.Application.Json)
         }
