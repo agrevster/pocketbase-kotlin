@@ -1,10 +1,11 @@
 package io.github.agrevster.pocketbaseKotlin.stores
 
 /**
- * Pocket-kt's method of storing Pocketbase authentication tokens
+ * The SDKS's method of storing Pocketbase authentication tokens
  *
  * This can be extended to implement your own custom ways to store authentication data,
  * see or docs for an example.
+ * TODO: Put it in the docs...
  *
  * @param [baseToken] The base Pocketbase authentication token to be stored when this object is created.
  *
