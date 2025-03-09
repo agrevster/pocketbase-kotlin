@@ -1,6 +1,7 @@
-package models.utils
+package models
 
 import TestingUtils
+import io.github.agrevster.pocketbaseKotlin.models.utils.DurationPocketbase
 import io.github.agrevster.pocketbaseKotlin.models.utils.InstantPocketbase
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
@@ -8,18 +9,19 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration
 
-class InstantPocketbaseTest : TestingUtils() {
+class DurationPocketbaseTest : TestingUtils() {
     @Test
     fun testSerializeDeserialize(): Unit {
         @Serializable
-        data class TestSerializable(val instant: InstantPocketbase)
+        data class TestSerializable(val duration: DurationPocketbase)
 
-        val original = TestSerializable(Instant.parse("2023-10-24T01:02:03.123Z"))
+        val original = TestSerializable(Duration.parse("5m"))
 
         val encoded = Json.encodeToString(original)
         assertEquals(
-            expected = "{\"instant\":\"2023-10-24 01:02:03.123Z\"}",
+            expected = "{\"duration\":\"${5 * 60}\"}",
             actual = encoded,
         )
         val decoded: TestSerializable = Json.decodeFromString(encoded)
