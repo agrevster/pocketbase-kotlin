@@ -1,13 +1,13 @@
 package io.github.agrevster.pocketbaseKotlin.models
 
-import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
+import io.github.agrevster.pocketbaseKotlin.models.utils.TimestampedModel
 import kotlinx.serialization.Serializable
 
 @Serializable
 /**
  * A Pocketbase external authentication provider
  */
-public open class ExternalAuth : BaseModel() {
+public open class ExternalAuth : TimestampedModel() {
 
     public val userId: String? = null
     public val collectionId: String? = null

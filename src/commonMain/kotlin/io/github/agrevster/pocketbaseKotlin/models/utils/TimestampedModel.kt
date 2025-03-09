@@ -1,7 +1,5 @@
-package io.github.agrevster.pocketbaseKotlin.models
+package io.github.agrevster.pocketbaseKotlin.models.utils
 
-import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
-import io.github.agrevster.pocketbaseKotlin.models.utils.InstantPocketbase
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
