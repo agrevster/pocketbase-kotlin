@@ -25,10 +25,11 @@ public class RealtimeService(client: PocketbaseClient) : BaseService(client) {
         /**
          * Serializes the record emitted to type [T] Used to get the record from an
          * event
+         * @param [json] An optional custom Json parser
          */
-        public inline fun <reified T> parseRecord(): T {
+        public inline fun <reified T> parseRecord(json: Json = Json): T {
             if (action == RealtimeActionType.CONNECT) throw PocketbaseException("Connect event cannot be parsed!")
-            return Json.decodeFromJsonElement(record!!)
+            return json.decodeFromJsonElement(record!!)
         }
     }
 
