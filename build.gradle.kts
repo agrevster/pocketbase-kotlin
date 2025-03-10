@@ -148,8 +148,21 @@ kotlin {
         getByName("mingwX64Main").configureDependencies(httpClientType = HttpClientType.WIN_HTTP)
         getByName("mingwX64Test").configureDependencies(test=true, httpClientType = HttpClientType.WIN_HTTP)
 
+
         getByName("androidMain").configureDependencies()
         getByName("androidUnitTest").configureDependencies(test = true)
+
+        getByName("androidNativeArm32Main").configureDependencies()
+        getByName("androidNativeArm32Test").configureDependencies(test = true)
+
+        getByName("androidNativeArm64Main").configureDependencies()
+        getByName("androidNativeArm64Test").configureDependencies(test = true)
+
+        getByName("androidNativeX64Main").configureDependencies()
+        getByName("androidNativeX64Test").configureDependencies(test = true)
+
+        getByName("androidNativeX86Main").configureDependencies()
+        getByName("androidNativeX86Test").configureDependencies(test = true)
     }
 }
 
