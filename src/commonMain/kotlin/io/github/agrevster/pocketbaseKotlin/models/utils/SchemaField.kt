@@ -9,53 +9,94 @@ import kotlinx.serialization.json.JsonPrimitive
 /**
  * The schema for a [Collection]'s field
  *
- * @property [name] the name given to the schema by the creator
- * @property [type] the [SchemaFieldType] assigned to the schema on creation
- * @property [required] weather or not the schema is required to have a value. If this is false the [Serializable] class should have an optional(?) type
- * @property [options] all of the possible options data for the schema. These all depend on the [SchemaFieldType], see our [documentation]() for a full explanation.
- * @property [system] weather or not the schema change be modified
- * @property [id] the unique ID of the schema
- * @TODO Link do docs
+ * There are additional fields that depend on the [SchemaFieldType]. For a
+ * list of them see
+ * [this file's source](https://github.com/agrevster/pocketbase-kotlin/blob/master/src/commonMain/kotlin/io/github/agrevster/pocketbaseKotlin/models/Collection.kt)
+ *
+ * @param name the name given to the schema by the creator
+ * @param type the [SchemaFieldType] assigned to the schema on creation
+ * @param required weather or not the schema is required to have a value.
+ *    If this is false the [Serializable] class should have an optional(?)
+ *    type
+ * @param system whether or not the schema is part of the pocketbase system
+ * @param hidden whether or not the field is hidden from JSON API and
+ *    filters
+ * @param presentable whether or not the field should be prioritized in
+ *    superuser relations
+ * @param id the unique ID of the schema
  */
 public class SchemaField(
     public val name: String? = null,
     public val type: SchemaFieldType? = null,
     public val required: Boolean? = null,
-    public val options: SchemaOptions? = SchemaOptions(),
     public val system: Boolean? = null,
+    public val hidden: Boolean? = null,
+    public val presentable: Boolean? = null,
     public val id: String? = null,
-) {
+
+//    Type specific fields
+    // multiple:
+    public val min: JsonPrimitive? = null,
+    public val max: JsonPrimitive? = null,
+    public val exceptDomains: List<String>? = null,
+    public val onlyDomains: List<String>? = null,
+    public val maxSelect: Int? = null,
+    public val maxSize: Long? = null,
+
+    // text:
+    public val autogeneratePattern: String? = null,
+    public val pattern: String? = null,
+    public val primaryKey: String? = null,
+    // USES min max
+
+    // editor:
+    public val convertUrls: Boolean? = null,
+    // USES maxSize
+
+    //number:
+    // USES min max
+    public val onlyInt: Boolean? = null,
+
+    //bool:
+    //N/A
+
+    //email:
+    // USES exceptDomains onlyDomains
+
+    //url:
+    // USES exceptDomains onlyDomains
+
+    //date:
+    // USES min max
+
+    //select:
+    public val values: List<String>? = null,
+    // USES maxSelect
+
+    //file:
+    public val mimeTypes: List<String>? = null,
+    public val thumbs: List<String>? = null,
+    public val protected: Boolean? = null,
+    // USES maxSelect maxSize
+
+    //relation:
+    public val collectionId: String? = null,
+    public val minSelect: Int? = null,
+    public val cascadeDelete: Boolean? = null,
+    // USES maxSelect
+
+    //json
+    // USES maxSize
+
+    //autodate
+    public val onCreate: Boolean? = null,
+    public val onUpdate: Boolean? = null,
+
+    ) {
 
 
     @Serializable
-    /**
-     * All the possible options data for the schema. These all depend on the [SchemaFieldType], see our [documentation]() for a full explanation.
-     * @TODO Link do docs
-     */
-    public data class SchemaOptions(
-        val min: JsonPrimitive? = null,
-        val max: JsonPrimitive? = null,
-        val pattern: String? = null,
-        val exceptDomains: List<String>? = null,
-        val onlyDomains: List<String>? = null,
-        val values: List<String>? = null,
-        val maxSelect: Int? = null,
-        val collectionId: String? = null,
-        val cascadeDelete: Boolean? = null,
-        val maxSize: Long? = null,
-        val mimeTypes: List<String>? = null,
-        val thumbs: List<String>? = null,
-        val minSelect: Int? = null,
-        val displayFields: List<String>? = null,
-        val protected: Boolean? = null,
-        val noDecimal: Boolean? = null,
-        val convertUrls: Boolean? = null,
-    )
-
-    @Serializable
-    /**
-     * The type of Schema Field selected by the creator
-     */
+    /** The type of Schema Field selected by the creator */
     public enum class SchemaFieldType {
         @SerialName("text")
         TEXT,
@@ -88,11 +129,14 @@ public class SchemaField(
         RELATION,
 
         @SerialName("editor")
-        EDITOR
+        EDITOR,
+
+        @SerialName("autodate")
+        AUTO_DATE
     }
 
     override fun toString(): String {
-        return "SchemaField(system=$system, id=$id, name=$name, type=$type, required=$required, options=$options)"
+        return "SchemaField(name=$name, type=$type, required=$required, system=$system, hidden=$hidden, presentable=$presentable, id=$id)"
     }
 
 }
