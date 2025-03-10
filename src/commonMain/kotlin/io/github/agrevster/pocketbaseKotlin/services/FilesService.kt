@@ -1,6 +1,7 @@
 package io.github.agrevster.pocketbaseKotlin.services
 
 
+import io.github.agrevster.pocketbaseKotlin.PocketbaseClient
 import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.services.utils.BaseService
@@ -9,51 +10,39 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
 
-public class FilesService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) : BaseService(client) {
+public class FilesService(client: PocketbaseClient) : BaseService(client) {
 
 
-    /**
-     * The currently supported Pocketbase thumb formats
-     */
+    /** The currently supported Pocketbase thumb formats */
     public enum class ThumbFormat {
-        /**
-         * (eg. 100x300) - crop to WxH viewbox (from center)
-         */
+        /** (eg. 100x300) - crop to WxH viewbox (from center) */
         WxH,
 
-        /**
-         * (eg. 100x300t) - crop to WxH viewbox (from top)
-         */
+        /** (eg. 100x300t) - crop to WxH viewbox (from top) */
         WxHt,
 
-        /**
-         *  (eg. 100x300b) - crop to WxH viewbox (from bottom)
-         */
+        /** (eg. 100x300b) - crop to WxH viewbox (from bottom) */
         WxHb,
 
-        /**
-         *  (eg. 100x300f) - fit inside a WxH viewbox (without cropping)
-         */
+        /** (eg. 100x300f) - fit inside a WxH viewbox (without cropping) */
         WxHf,
 
-        /**
-         * (eg. 0x300) - resize to H height preserving the aspect ratio
-         */
+        /** (eg. 0x300) - resize to H height preserving the aspect ratio */
         `0xH`,
 
-        /**
-         * (eg. 100x0) - resize to W width preserving the aspect ratio
-         */
+        /** (eg. 100x0) - resize to W width preserving the aspect ratio */
         Wx0;
     }
 
     /**
      * Gets the url to a file in Pocketbase
-     * @param [record] the record where the file is present
-     * @param [filename] the file's name
-     * @param [thumbFormat] the thumb variant of the requested file
-     * @param [token] the file token used to access protected files
-     * @param [download] weather or not pocketbase should force the browser to download the file rather than showing a preview
+     *
+     * @param record the record where the file is present
+     * @param filename the file's name
+     * @param thumbFormat the thumb variant of the requested file
+     * @param token the file token used to access protected files
+     * @param download weather or not pocketbase should force the browser to
+     *    download the file rather than showing a preview
      */
     public fun getFileURL(
         record: Record,
@@ -71,7 +60,11 @@ public class FilesService(client: io.github.agrevster.pocketbaseKotlin.Pocketbas
 
             path(
                 *pocketbaseUrl.pathSegments.toTypedArray(),
-                "api", "files", record.collectionId ?: "", record.id ?: "", filename
+                "api",
+                "files",
+                record.collectionId ?: "",
+                record.id ?: "",
+                filename
             )
 
             thumbFormat?.let { parameters.append("thumb", thumbFormat.toString()) }
@@ -85,8 +78,8 @@ public class FilesService(client: io.github.agrevster.pocketbaseKotlin.Pocketbas
     }
 
     /**
-     * Generates a temporary token for accessing protected files
-     * The client must be authenticated to use this function
+     * Generates a temporary token for accessing protected files The client
+     * must be authenticated to use this function
      */
     public suspend fun generateProtectedFileToken(): String {
         @Serializable

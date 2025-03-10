@@ -1,8 +1,5 @@
 package io.github.agrevster.pocketbaseKotlin.models.utils
 
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -15,8 +12,7 @@ import kotlin.time.Duration
 public typealias DurationPocketbase = @Serializable(DurationPocketbaseSerializer::class) Duration
 
 public object DurationPocketbaseSerializer : KSerializer<Duration> {
-    override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor("duration", PrimitiveKind.LONG)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("duration", PrimitiveKind.LONG)
 
     override fun deserialize(decoder: Decoder): Duration {
         val durationValue = decoder.decodeLong()

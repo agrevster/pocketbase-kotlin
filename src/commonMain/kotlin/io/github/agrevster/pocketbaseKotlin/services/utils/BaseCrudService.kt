@@ -153,18 +153,19 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
 
             setBody(
                 MultiPartFormDataContent(
-                formData {
-                    for (file in files) {
-                        append(
-                            file.field, file.file ?: ByteArray(0), headers = if (file.file != null) headersOf(
-                                HttpHeaders.ContentDisposition, "filename=\"${file.fileName}\""
-                            ) else headersOf()
-                        )
-                    }
-                    body.forEach { (key, value) ->
-                        append(key, value.content)
-                    }
-                }))
+                    formData {
+                        for (file in files) {
+                            append(
+                                file.field, file.file ?: ByteArray(0), headers = if (file.file != null) headersOf(
+                                    HttpHeaders.ContentDisposition, "filename=\"${file.fileName}\""
+                                ) else headersOf()
+                            )
+                        }
+                        body.forEach { (key, value) ->
+                            append(key, value.content)
+                        }
+                    })
+            )
         }
         PocketbaseException.handle(response)
         return response.body()
@@ -188,18 +189,19 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
 
             setBody(
                 MultiPartFormDataContent(
-                formData {
-                    for (file in files) {
-                        append(
-                            file.field, file.file ?: ByteArray(0), headers = if (file.file != null) headersOf(
-                                HttpHeaders.ContentDisposition, "filename=\"${file.fileName}\""
-                            ) else headersOf()
-                        )
-                    }
-                    body.forEach { (key, value) ->
-                        append(key, value.content)
-                    }
-                }))
+                    formData {
+                        for (file in files) {
+                            append(
+                                file.field, file.file ?: ByteArray(0), headers = if (file.file != null) headersOf(
+                                    HttpHeaders.ContentDisposition, "filename=\"${file.fileName}\""
+                                ) else headersOf()
+                            )
+                        }
+                        body.forEach { (key, value) ->
+                            append(key, value.content)
+                        }
+                    })
+            )
         }
         PocketbaseException.handle(response)
         return response.body()

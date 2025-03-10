@@ -1,5 +1,6 @@
 package io.github.agrevster.pocketbaseKotlin.services
 
+import io.github.agrevster.pocketbaseKotlin.PocketbaseClient
 import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 import io.github.agrevster.pocketbaseKotlin.dsl.query.Filter
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
@@ -13,7 +14,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
 
-public class LogService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) : BaseService(client) {
+public class LogService(client: PocketbaseClient) : BaseService(client) {
     @Serializable
     public data class HourlyStats(val total: Int, val date: InstantPocketbase)
 

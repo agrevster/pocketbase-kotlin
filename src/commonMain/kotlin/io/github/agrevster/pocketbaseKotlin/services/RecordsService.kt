@@ -1,6 +1,7 @@
 package io.github.agrevster.pocketbaseKotlin.services
 
 import io.github.agrevster.pocketbaseKotlin.AuthResponse
+import io.github.agrevster.pocketbaseKotlin.PocketbaseClient
 import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 import io.github.agrevster.pocketbaseKotlin.Untested
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
@@ -18,8 +19,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 import kotlin.time.Duration
 
-public class RecordsService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) :
-    SubCrudService<Record>(client), AuthService {
+public class RecordsService(client: PocketbaseClient) : SubCrudService<Record>(client), AuthService {
     public fun basePath(collectionId: String): String = "api/collections/$collectionId"
     override fun baseCrudPath(collectionId: String): String = "${basePath(collectionId)}/records"
 
@@ -108,12 +108,11 @@ public class RecordsService(client: io.github.agrevster.pocketbaseKotlin.Pocketb
 
 
     /**
-     * Requests an OTP email be sent
-     * Authenticate a single auth record with an one-time password (OTP).
+     * Requests an OTP email be sent Authenticate a single auth record with an
+     * one-time password (OTP).
      *
-     * Note that when requesting an OTP we return an otpId even if a user
-     * with the provided email doesn't exist as a very basic enumeration
-     * protection.
+     * Note that when requesting an OTP we return an otpId even if a user with
+     * the provided email doesn't exist as a very basic enumeration protection.
      *
      * @param collection the ID or name of the auth collection
      * @param email the auth record's email.
@@ -139,12 +138,11 @@ public class RecordsService(client: io.github.agrevster.pocketbaseKotlin.Pocketb
 
 
     /**
-     * Use the OTP password from the OTP email to log in
-     * Authenticate a single auth record with an one-time password (OTP).
+     * Use the OTP password from the OTP email to log in Authenticate a single
+     * auth record with an one-time password (OTP).
      *
-     * Note that when requesting an OTP we return an otpId even if a user
-     * with the provided email doesn't exist as a very basic enumeration
-     * protection.
+     * Note that when requesting an OTP we return an otpId even if a user with
+     * the provided email doesn't exist as a very basic enumeration protection.
      *
      * @param collection the ID or name of the auth collection
      * @param otpID the auth record's email.

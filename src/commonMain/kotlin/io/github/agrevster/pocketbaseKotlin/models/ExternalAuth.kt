@@ -4,9 +4,7 @@ import io.github.agrevster.pocketbaseKotlin.models.utils.TimestampedModel
 import kotlinx.serialization.Serializable
 
 @Serializable
-/**
- * A Pocketbase external authentication provider
- */
+/** A Pocketbase external authentication provider */
 public open class ExternalAuth : TimestampedModel() {
 
     public val userId: String? = null

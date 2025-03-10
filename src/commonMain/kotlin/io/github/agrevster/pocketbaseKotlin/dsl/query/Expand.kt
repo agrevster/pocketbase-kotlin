@@ -6,13 +6,15 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
 /**
- * This allows a [Record]'s relations to be expanded and added to the response.
- * @param [relations] See [the Pocketbase website](https://pocketbase.io/docs/expanding-relations/) for a guide on how to format the [relations].
+ * This allows a [Record]'s relations to be expanded and added to the
+ * response.
+ *
+ * @param relations See
+ *    [the Pocketbase website](https://pocketbase.io/docs/expanding-relations/)
+ *    for a guide on how to format the [relations].
  */
 public data class ExpandRelations(val relations: String? = null) {
-    /**
-     * Adds the current [ExpandRelations] to a request's parameters
-     */
+    /** Adds the current [ExpandRelations] to a request's parameters */
     public fun addTo(params: ParametersBuilder) {
         if (relations != null) params.append("expand", this.relations)
     }
@@ -21,15 +23,17 @@ public data class ExpandRelations(val relations: String? = null) {
 @Serializable
 /**
  * Used for when you wish to serialize a [Record] with expanded relations.
- * Type [T] is the [Serializable] class of the related record.
- * Be sure you include the [ExpandRelations] field in the request.
+ * Type [T] is the [Serializable] class of the related record. Be sure you
+ * include the [ExpandRelations] field in the request.
  *
- * For a full example of how to serialize a [Record] with expanded relations see [the docs](https://agrevster.github.io/pocketbase-kotlin/caveats-records.html#expanding-related-fields)
+ * For a full example of how to serialize a [Record] with expanded
+ * relations see
+ * [the docs](https://agrevster.github.io/pocketbase-kotlin/caveats-records.html#expanding-related-fields)
  *
- * @property [expand] the list of records that have been expanded.
- * Key: (expanded record name) -> Value: expanded record object of type [T]
+ * @property [expand] the list of records that have been expanded. Key:
+ *    (expanded record name) -> Value: expanded record object of type [T]
  */
-public open class ExpandRecord<T: Record> : Record() {
+public open class ExpandRecord<T : Record> : Record() {
 
     public val expand: Map<String, T>? = null
 
@@ -40,16 +44,20 @@ public open class ExpandRecord<T: Record> : Record() {
 
 @Serializable
 /**
- * Used for when you wish to serialize a list of [Record] with expanded relations.
- * Type [T] is the [Serializable] class of the related record in the list.
- * Be sure you include the [ExpandRelations] field in the request.
+ * Used for when you wish to serialize a list of [Record] with expanded
+ * relations. Type [T] is the [Serializable] class of the related record
+ * in the list. Be sure you include the [ExpandRelations] field in the
+ * request.
  *
- * For a full example of how to serialize a [Record] with expanded relations see [the docs](https://agrevster.github.io/pocketbase-kotlin/caveats-records.html#expanding-related-fields)
+ * For a full example of how to serialize a [Record] with expanded
+ * relations see
+ * [the docs](https://agrevster.github.io/pocketbase-kotlin/caveats-records.html#expanding-related-fields)
  *
- * @property [expand] the list of records that have been expanded.
- * Key: (expanded record name) -> Value: a list of the expanded record object of type [T]
+ * @property [expand] the list of records that have been expanded. Key:
+ *    (expanded record name) -> Value: a list of the expanded record object
+ *    of type [T]
  */
-public open class ExpandRecordList<T: Record> : Record() {
+public open class ExpandRecordList<T : Record> : Record() {
 
     public val expand: Map<String, List<T>>? = null
 
@@ -60,13 +68,15 @@ public open class ExpandRecordList<T: Record> : Record() {
 
 @Serializable
 /**
- * Used for when you wish to serialize a [Record] with multiple expanded relations of different types or nested relations.
- * Be sure you include the [ExpandRelations] field in the request.
+ * Used for when you wish to serialize a [Record] with multiple expanded
+ * relations of different types or nested relations. Be sure you include
+ * the [ExpandRelations] field in the request.
  *
- * For a full example of how to serialize a [Record] with multiple or nested expanded relations see [the docs]()
+ * For a full example of how to serialize a [Record] with multiple or
+ * nested expanded relations see [the docs]()
  *
- * @property [expand] the list of records that have been expanded.
- * Key: (expanded record name) -> Value: expanded record object's fields
+ * @property [expand] the list of records that have been expanded. Key:
+ *    (expanded record name) -> Value: expanded record object's fields
  */
 public open class ExpandJsonElement : Record() {
     public val expand: Map<String, JsonElement>? = null

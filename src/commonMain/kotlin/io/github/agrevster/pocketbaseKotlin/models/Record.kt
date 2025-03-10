@@ -6,9 +6,10 @@ import kotlinx.serialization.Transient
 
 @Serializable
 /**
- * A Pocketbase record retried from an API call
- * @property [collectionId] the ID of the record's [Collection]
- * @property [collectionName] the name of the record's [Collection]
+ * A Pocketbase record retried from an API call.
+ *
+ * @property collectionId the ID of the record's [Collection].
+ * @property collectionName the name of the record's [Collection].
  */
 public open class Record(@Transient private val recordId: String? = null) : BaseModel(recordId) {
     public val collectionId: String? = null

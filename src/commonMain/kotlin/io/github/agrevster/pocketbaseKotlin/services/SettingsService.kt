@@ -1,5 +1,6 @@
 package io.github.agrevster.pocketbaseKotlin.services
 
+import io.github.agrevster.pocketbaseKotlin.PocketbaseClient
 import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 import io.github.agrevster.pocketbaseKotlin.Untested
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
@@ -12,11 +13,12 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-public class SettingsService(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) : BaseService(client) {
+public class SettingsService(client: PocketbaseClient) : BaseService(client) {
     /**
      * Returns a list with all available application settings.
      *
-     * Secret/password fields are automatically redacted with ****** characters.
+     * Secret/password fields are automatically redacted with ******
+     * characters.
      */
     public suspend inline fun <reified T> getAll(fields: ShowFields = ShowFields()): T {
         val response = client.httpClient.get {
@@ -31,7 +33,8 @@ public class SettingsService(client: io.github.agrevster.pocketbaseKotlin.Pocket
 
     /**
      * Bulk updates application settings and returns the updated settings list.
-     * @param [body] the JSON body of the settings you want to tweak.
+     *
+     * @param body the JSON body of the settings you want to tweak.
      */
     public suspend inline fun <reified T> update(body: String, fields: ShowFields = ShowFields()): T {
         val response = client.httpClient.patch {
@@ -48,9 +51,7 @@ public class SettingsService(client: io.github.agrevster.pocketbaseKotlin.Pocket
     }
 
     @Untested("Requires an S3 Server. Will not be tested because it's just an http request without a body.")
-    /**
-     * Performs a S3 storage connection test.
-     */
+    /** Performs a S3 storage connection test. */
     public suspend fun testS3(): Boolean {
         val response = client.httpClient.post {
             url {
@@ -64,14 +65,14 @@ public class SettingsService(client: io.github.agrevster.pocketbaseKotlin.Pocket
     @Untested("Requires SMTP server")
     /**
      * Sends a test user email.
-     * @param [toEmail] The receiver of the test email.
-     * @param [emailTemplate] The test email template to send:
-     * verification, password-reset or email-change.
+     *
+     * @param toEmail The receiver of the test email.
+     * @param emailTemplate The test email template to send: verification,
+     *    password-reset or email-change.
      */
     public suspend fun testEmail(toEmail: String, emailTemplate: String): Boolean {
         val body = mapOf(
-            "email" to toEmail.toJsonPrimitive(),
-            "template" to emailTemplate.toJsonPrimitive()
+            "email" to toEmail.toJsonPrimitive(), "template" to emailTemplate.toJsonPrimitive()
         )
         val response = client.httpClient.post {
             url {
@@ -86,18 +87,20 @@ public class SettingsService(client: io.github.agrevster.pocketbaseKotlin.Pocket
     @Untested("Requires Apple OAuth2")
     /**
      * Generates a new Apple OAuth2 client secret key.
-     * @param [clientId] the apple service id.
-     * @param [teamId] 10-character string associated with your developer account (usually could be found next to your name in the Apple Developer site)
-     * @param [keyId] 10-character key identifier generated for the "Sign in with Apple" private key associated with your developer account
-     * @param [privateKey] the private key associated to your app
-     * @param [duration] how long the generated JWT token should be considered valid. The specified value must be in seconds and max 15777000 (~6months).
+     *
+     * @param clientId the apple service id.
+     * @param teamId 10-character string associated with your developer account
+     *    (usually could be found next to your name in the Apple Developer
+     *    site)
+     * @param keyId 10-character key identifier generated for the "Sign in with
+     *    Apple" private key associated with your developer account
+     * @param privateKey the private key associated to your app
+     * @param duration how long the generated JWT token should be considered
+     *    valid. The specified value must be in seconds and max 15777000
+     *    (~6months).
      */
     public suspend fun generateAppleClientSecret(
-        clientId: String,
-        teamId: String,
-        keyId: String,
-        privateKey: String,
-        duration: Long
+        clientId: String, teamId: String, keyId: String, privateKey: String, duration: Long
     ): String {
         @Serializable
         data class AppleSecret(val secret: String)

@@ -20,7 +20,11 @@ internal fun Int.padded(length: Int): String {
 public fun Instant.toStringPocketbase(): String {
     val dt = this.toLocalDateTime(TimeZone.UTC)
 
-    return "${dt.year}-${dt.monthNumber.padded(2)}-${dt.dayOfMonth.padded(2)} ${dt.hour.padded(2)}:${dt.minute.padded(2)}:${dt.second.padded(2)}.${dt.nanosecond / 1_000_000}Z"
+    return "${dt.year}-${dt.monthNumber.padded(2)}-${dt.dayOfMonth.padded(2)} ${dt.hour.padded(2)}:${dt.minute.padded(2)}:${
+        dt.second.padded(
+            2
+        )
+    }.${dt.nanosecond / 1_000_000}Z"
 }
 
 public fun Instant.Companion.parsePocketbase(string: String): InstantPocketbase {
@@ -28,8 +32,7 @@ public fun Instant.Companion.parsePocketbase(string: String): InstantPocketbase 
 }
 
 public object InstantPocketbaseSerializer : KSerializer<Instant> {
-    override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor("Instant", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Instant", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): Instant {
         val dateStr = decoder.decodeString()

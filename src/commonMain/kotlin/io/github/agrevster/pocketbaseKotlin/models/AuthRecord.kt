@@ -10,8 +10,8 @@ import kotlinx.serialization.Transient
  *
  * @param verified whether the user is verified.
  * @param email the user's email.
- * @param emailVisibility whether the user's email is visible to
- *    other users when they query the user's collection.
+ * @param emailVisibility whether the user's email is visible to other
+ *    users when they query the user's collection.
  * @param authRecordId An optional parameter used if you want to set the
  *    record's id explicitly when creating.
  */
