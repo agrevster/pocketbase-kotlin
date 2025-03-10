@@ -9,18 +9,19 @@ import kotlinx.serialization.Transient
 
 @Serializable
 /**
- * The object returned from the Pocketbase Collections API
+ * The object returned from the Pocketbase Collections API.
+ * Depending on the collection type, if you would like access to addition methods see [CollectionType]'s comments.
  *
- * @property [name] the name of the collection
- * @property [type] the type of the collection
- * @property [system] weather or not the collection was created internally by Pocketbase
- * @property [fields] the collection's [SchemaField]s which are used to determine what values are acceptable
- * @property [listRule] the pocketbase API rule which determines who can view each [Record] in the collection
- * @property [viewRule] the pocketbase API rule which determines who can view an individual [Record] in the collection
- * @property [createRule] the pocketbase API rules which determines who can create a [Record] in the collection
- * @property [updateRule] the pocketbase API rules which determines who can update a [Record] in the collection
- * @property [deleteRule] the pocketbase API rules which determines who can delete a [Record] in the collection
- * @property [indexes] the collections indexes which are used to determine which fields are unique.
+ * @param name the name of the collection.
+ * @param type the type of the collection.
+ * @param system weather or not the collection was created internally by Pocketbase.
+ * @param fields the collection's [SchemaField]s which are used to determine what values are acceptable.
+ * @param listRule the pocketbase API rule which determines who can view each [Record] in the collection.
+ * @param viewRule the pocketbase API rule which determines who can view an individual [Record] in the collection.
+ * @param createRule the pocketbase API rules which determines who can create a [Record] in the collection.
+ * @param updateRule the pocketbase API rules which determines who can update a [Record] in the collection.
+ * @param deleteRule the pocketbase API rules which determines who can delete a [Record] in the collection.
+ * @param indexes the collections indexes which are used to determine which fields are unique.
  * */
 public open class Collection(
     public val name: String? = null,
@@ -35,28 +36,14 @@ public open class Collection(
     public val indexes: List<String>? = null,
     @Transient private val collectionId: String? = null
 ) : TimestampedModel(modelId = collectionId) {
-    @Serializable
-    /**
-     * a collection's options (This only applicable for collections with the type of [CollectionType.AUTH] and [CollectionType.VIEW])
-     */
-    public data class CollectionOptions(
-        val manageRule: String? = null,
-        val allowOAuth2Auth: Boolean? = null,
-        val allowUsernameAuth: Boolean? = null,
-        val allowEmailAuth: Boolean? = null,
-        val requireEmail: Boolean? = null,
-        val exceptEmailDomains: List<String>? = null,
-        val onlyEmailDomains: List<String>? = null,
-        val minPasswordLength: Int? = null,
-        val query: String? = null
-    )
 
     /**
-     * All the supported collection types
-     * @property [BASE] the base collection type, no additional options
-     * @property [AUTH] an authentication collection with [CollectionOptions] (everything besides query)
-     * @property [VIEW] a view collection with [CollectionOptions] (only query)
+     * All the supported collection types.
+     * @property BASE the base collection type, no additional options. Use class: [Collection].
+     * @property AUTH an authentication collection. Use class: [AuthCollection].
+     * @property VIEW a view collection. Use class: [ViewCollection].
      */
+    @Serializable
     public enum class CollectionType {
         @SerialName("base")
         BASE,
