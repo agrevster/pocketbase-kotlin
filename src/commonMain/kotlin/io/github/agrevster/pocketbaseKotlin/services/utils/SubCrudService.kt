@@ -2,6 +2,7 @@ package io.github.agrevster.pocketbaseKotlin.services.utils
 
 import io.github.agrevster.pocketbaseKotlin.FileUpload
 import io.github.agrevster.pocketbaseKotlin.PocketKtInternal
+import io.github.agrevster.pocketbaseKotlin.PocketbaseClient
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
 import io.github.agrevster.pocketbaseKotlin.dsl.query.Filter
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
@@ -11,18 +12,16 @@ import io.github.agrevster.pocketbaseKotlin.models.utils.ListResult
 import kotlinx.serialization.json.JsonPrimitive
 
 @OptIn(PocketKtInternal::class)
-public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) :
-    BaseCrudService<T>(client) {
+public abstract class SubCrudService<T : BaseModel>(client: PocketbaseClient) : BaseCrudService<T>(client) {
 
-    /**
-     * The url path to the service's API
-     */
+    /** The url path to the service's API */
     public abstract fun baseCrudPath(collectionId: String): String
 
     /**
      * Fetches all records in the collection at once
-     * @param [sub] The collection you wish to preform this action on
-     * @param [batch] The amount of records you wish to fetch.
+     *
+     * @param sub The collection you wish to preform this action on
+     * @param batch The amount of records you wish to fetch.
      */
     public suspend inline fun <reified T : BaseModel> getFullList(
         sub: String,
@@ -31,16 +30,17 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
         filterBy: Filter = Filter(),
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields(),
-        skipTotal: Boolean = true
+        skipTotal: Boolean = false
     ): List<T> {
         return _getFullList(baseCrudPath(sub), batch, sortBy, filterBy, expandRelations, showFields, skipTotal)
     }
 
     /**
      * Fetches a paged list of records
-     * @param [sub] The collection you wish to preform this action on
-     * @param [page] The page number you wish to fetch.
-     * @param [perPage] The amount of records you wish to have per-single-page
+     *
+     * @param sub The collection you wish to preform this action on
+     * @param page The page number you wish to fetch.
+     * @param perPage The amount of records you wish to have per-single-page
      */
     public suspend inline fun <reified T : BaseModel> getList(
         sub: String,
@@ -57,8 +57,9 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
 
     /**
      * Fetches a single record
-     * @param [sub] The collection you wish to preform this action on
-     * @param [id] ID of the record you wish to view.
+     *
+     * @param sub The collection you wish to preform this action on
+     * @param id ID of the record you wish to view.
      */
     public suspend inline fun <reified T : BaseModel> getOne(
         sub: String,
@@ -71,8 +72,9 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
 
     /**
      * Creates a new record and gets the record
-     * @param [sub] The collection you wish to preform this action on
-     * @param [body] JSON data used to create the record in the form of a string
+     *
+     * @param sub The collection you wish to preform this action on
+     * @param body JSON data used to create the record in the form of a string
      */
     public suspend inline fun <reified T : BaseModel> create(
         sub: String,
@@ -85,9 +87,10 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
 
     /**
      * Updates an existing records and gets it
-     * @param [sub] The collection you wish to preform this action on
-     * @param [id] the id of the record to update
-     * @param [body] JSON data used to update the record in the form of a string
+     *
+     * @param sub The collection you wish to preform this action on
+     * @param id the id of the record to update
+     * @param body JSON data used to update the record in the form of a string
      */
     public suspend inline fun <reified T : BaseModel> update(
         sub: String,
@@ -101,9 +104,10 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
 
     /**
      * Creates a new record and gets the record
-     * @param [sub] The collection you wish to preform this action on
-     * @param [body] the key value data used to create the record
-     * @param [files] the files you wish to upload
+     *
+     * @param sub The collection you wish to preform this action on
+     * @param body the key value data used to create the record
+     * @param files the files you wish to upload
      */
     public suspend inline fun <reified T : BaseModel> create(
         sub: String,
@@ -117,10 +121,11 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
 
     /**
      * Updates an existing records and gets it
-     * @param [sub] The collection you wish to preform this action on
-     * @param [id] the id of the record to update
-     * @param [body] the key value data used to create the record
-     * @param [files] the files you wish to upload
+     *
+     * @param sub The collection you wish to preform this action on
+     * @param id the id of the record to update
+     * @param body the key value data used to create the record
+     * @param files the files you wish to upload
      */
     public suspend inline fun <reified T : BaseModel> update(
         sub: String,
@@ -133,10 +138,11 @@ public abstract class SubCrudService<T : BaseModel>(client: io.github.agrevster.
         return _update(baseCrudPath(sub), id, body, files, expandRelations, showFields)
     }
 
-    /***
+    /**
      * Deletes the specified record
-     * @param [sub] The collection you wish to preform this action on
-     * @param [id] the id of the record you wish to delete
+     *
+     * @param sub The collection you wish to preform this action on
+     * @param id the id of the record you wish to delete
      */
     public suspend inline fun delete(sub: String, id: String): Boolean {
         return _delete(baseCrudPath(sub), id)

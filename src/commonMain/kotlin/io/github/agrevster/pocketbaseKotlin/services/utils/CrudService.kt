@@ -5,6 +5,7 @@ package io.github.agrevster.pocketbaseKotlin.services.utils
 
 import io.github.agrevster.pocketbaseKotlin.FileUpload
 import io.github.agrevster.pocketbaseKotlin.PocketKtInternal
+import io.github.agrevster.pocketbaseKotlin.PocketbaseClient
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
 import io.github.agrevster.pocketbaseKotlin.dsl.query.Filter
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
@@ -14,7 +15,7 @@ import io.github.agrevster.pocketbaseKotlin.models.utils.ListResult
 import kotlinx.serialization.json.JsonPrimitive
 
 @OptIn(PocketKtInternal::class)
-public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) :
+public abstract class CrudService<T : BaseModel>(client: PocketbaseClient) :
     BaseCrudService<T>(client) {
 
     /**
@@ -32,7 +33,7 @@ public abstract class CrudService<T : BaseModel>(client: io.github.agrevster.poc
         filterBy: Filter = Filter(),
         expandRelations: ExpandRelations = ExpandRelations(),
         showFields: ShowFields = ShowFields(),
-        skipTotal: Boolean = true
+        skipTotal: Boolean = false
     ): List<T> {
         return _getFullList(baseCrudPath, batch, sortBy, filterBy, expandRelations, showFields, skipTotal)
     }

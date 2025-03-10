@@ -2,6 +2,7 @@ package io.github.agrevster.pocketbaseKotlin.services.utils
 
 import io.github.agrevster.pocketbaseKotlin.FileUpload
 import io.github.agrevster.pocketbaseKotlin.PocketKtInternal
+import io.github.agrevster.pocketbaseKotlin.PocketbaseClient
 import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ExpandRelations
 import io.github.agrevster.pocketbaseKotlin.dsl.query.Filter
@@ -15,8 +16,7 @@ import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import kotlinx.serialization.json.JsonPrimitive
 
-public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster.pocketbaseKotlin.PocketbaseClient) :
-    BaseService(client) {
+public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) : BaseService(client) {
     @PocketKtInternal
     public suspend inline fun <reified T : BaseModel> _getFullList(
         path: String,
@@ -24,7 +24,8 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
         sortBy: SortFields = SortFields(),
         filterBy: Filter = Filter(),
         expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields(), skipTotal: Boolean = true
+        showFields: ShowFields = ShowFields(),
+        skipTotal: Boolean = false
     ): List<T> {
         val result = mutableListOf<T>()
         var page = 1
@@ -150,23 +151,20 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
                 showFields.addTo(parameters)
             }
 
-            setBody(MultiPartFormDataContent(
+            setBody(
+                MultiPartFormDataContent(
                 formData {
                     for (file in files) {
                         append(
-                            file.field,
-                            file.file ?: ByteArray(0),
-                            headers = if (file.file != null) headersOf(
-                                HttpHeaders.ContentDisposition,
-                                "filename=\"${file.fileName}\""
+                            file.field, file.file ?: ByteArray(0), headers = if (file.file != null) headersOf(
+                                HttpHeaders.ContentDisposition, "filename=\"${file.fileName}\""
                             ) else headersOf()
                         )
                     }
-                    body.forEach { (key,value) ->
-                        append(key,value.content)
+                    body.forEach { (key, value) ->
+                        append(key, value.content)
                     }
-                }
-            ))
+                }))
         }
         PocketbaseException.handle(response)
         return response.body()
@@ -188,23 +186,20 @@ public abstract class BaseCrudService<T : BaseModel>(client: io.github.agrevster
                 showFields.addTo(parameters)
             }
 
-            setBody(MultiPartFormDataContent(
+            setBody(
+                MultiPartFormDataContent(
                 formData {
                     for (file in files) {
                         append(
-                            file.field,
-                            file.file ?: ByteArray(0),
-                            headers = if (file.file != null) headersOf(
-                                HttpHeaders.ContentDisposition,
-                                "filename=\"${file.fileName}\""
+                            file.field, file.file ?: ByteArray(0), headers = if (file.file != null) headersOf(
+                                HttpHeaders.ContentDisposition, "filename=\"${file.fileName}\""
                             ) else headersOf()
                         )
                     }
-                    body.forEach { (key,value) ->
-                        append(key,value.content)
+                    body.forEach { (key, value) ->
+                        append(key, value.content)
                     }
-                }
-            ))
+                }))
         }
         PocketbaseException.handle(response)
         return response.body()
