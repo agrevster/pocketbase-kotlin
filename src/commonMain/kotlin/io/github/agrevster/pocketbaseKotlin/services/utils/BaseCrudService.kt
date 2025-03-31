@@ -18,15 +18,7 @@ import kotlinx.serialization.json.JsonPrimitive
 
 public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) : BaseService(client) {
     @PocketKtInternal
-    public suspend inline fun <reified T : BaseModel> _getFullList(
-        path: String,
-        batch: Int,
-        sortBy: SortFields = SortFields(),
-        filterBy: Filter = Filter(),
-        expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields(),
-        skipTotal: Boolean = false
-    ): List<T> {
+    public suspend inline fun <reified T : BaseModel> _getFullList(path: String, batch: Int, sortBy: SortFields = SortFields(), filterBy: Filter = Filter(), expandRelations: ExpandRelations = ExpandRelations(), showFields: ShowFields = ShowFields(), skipTotal: Boolean = false): List<T> {
         val result = mutableListOf<T>()
         var page = 1
         while (true) {
@@ -39,16 +31,7 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
     }
 
     @PocketKtInternal
-    public suspend inline fun <reified T : BaseModel> _getList(
-        path: String,
-        page: Int,
-        perPage: Int,
-        sortBy: SortFields = SortFields(),
-        filterBy: Filter = Filter(),
-        expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields(),
-        skipTotal: Boolean = false
-    ): ListResult<T> {
+    public suspend inline fun <reified T : BaseModel> _getList(path: String, page: Int, perPage: Int, sortBy: SortFields = SortFields(), filterBy: Filter = Filter(), expandRelations: ExpandRelations = ExpandRelations(), showFields: ShowFields = ShowFields(), skipTotal: Boolean = false): ListResult<T> {
         val response = client.httpClient.get {
             url {
                 path(path)
@@ -66,12 +49,7 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
     }
 
     @PocketKtInternal
-    public suspend inline fun <reified T : BaseModel> _getOne(
-        path: String,
-        id: String,
-        expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields()
-    ): T {
+    public suspend inline fun <reified T : BaseModel> _getOne(path: String, id: String, expandRelations: ExpandRelations = ExpandRelations(), showFields: ShowFields = ShowFields()): T {
         val response = client.httpClient.get {
             url {
                 path(path, id)
@@ -85,12 +63,7 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
     }
 
     @PocketKtInternal
-    public suspend inline fun <reified T : BaseModel> _create(
-        path: String,
-        body: String,
-        expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields()
-    ): T {
+    public suspend inline fun <reified T : BaseModel> _create(path: String, body: String, expandRelations: ExpandRelations = ExpandRelations(), showFields: ShowFields = ShowFields()): T {
         val response = client.httpClient.post {
             url {
                 path(path)
@@ -105,13 +78,7 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
     }
 
     @PocketKtInternal
-    public suspend inline fun <reified T : BaseModel> _update(
-        path: String,
-        id: String,
-        body: String,
-        expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields()
-    ): T {
+    public suspend inline fun <reified T : BaseModel> _update(path: String, id: String, body: String, expandRelations: ExpandRelations = ExpandRelations(), showFields: ShowFields = ShowFields()): T {
         val response = client.httpClient.patch {
             url {
                 path(path, id)
@@ -137,13 +104,7 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
     }
 
     @PocketKtInternal
-    public suspend inline fun <reified T : BaseModel> _create(
-        path: String,
-        body: Map<String, JsonPrimitive>,
-        files: List<FileUpload>,
-        expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields()
-    ): T {
+    public suspend inline fun <reified T : BaseModel> _create(path: String, body: Map<String, JsonPrimitive>, files: List<FileUpload>, expandRelations: ExpandRelations = ExpandRelations(), showFields: ShowFields = ShowFields()): T {
         val response = client.httpClient.post {
             url {
                 path(path)
@@ -151,35 +112,21 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
                 showFields.addTo(parameters)
             }
 
-            setBody(
-                MultiPartFormDataContent(
-                    formData {
-                        for (file in files) {
-                            append(
-                                file.field, file.file ?: ByteArray(0), headers = if (file.file != null) headersOf(
-                                    HttpHeaders.ContentDisposition, "filename=\"${file.fileName}\""
-                                ) else headersOf()
-                            )
-                        }
-                        body.forEach { (key, value) ->
-                            append(key, value.content)
-                        }
-                    })
-            )
+            setBody(MultiPartFormDataContent(formData {
+                for (file in files) {
+                    append(file.field, file.file ?: ByteArray(0), headers = if (file.file != null) headersOf(HttpHeaders.ContentDisposition, "filename=\"${file.fileName}\"") else headersOf())
+                }
+                body.forEach { (key, value) ->
+                    append(key, value.content)
+                }
+            }))
         }
         PocketbaseException.handle(response)
         return response.body()
     }
 
     @PocketKtInternal
-    public suspend inline fun <reified T : BaseModel> _update(
-        path: String,
-        id: String,
-        body: Map<String, JsonPrimitive>,
-        files: List<FileUpload>,
-        expandRelations: ExpandRelations = ExpandRelations(),
-        showFields: ShowFields = ShowFields()
-    ): T {
+    public suspend inline fun <reified T : BaseModel> _update(path: String, id: String, body: Map<String, JsonPrimitive>, files: List<FileUpload>, expandRelations: ExpandRelations = ExpandRelations(), showFields: ShowFields = ShowFields()): T {
         val response = client.httpClient.patch {
             url {
                 path(path, id)
@@ -187,21 +134,14 @@ public abstract class BaseCrudService<T : BaseModel>(client: PocketbaseClient) :
                 showFields.addTo(parameters)
             }
 
-            setBody(
-                MultiPartFormDataContent(
-                    formData {
-                        for (file in files) {
-                            append(
-                                file.field, file.file ?: ByteArray(0), headers = if (file.file != null) headersOf(
-                                    HttpHeaders.ContentDisposition, "filename=\"${file.fileName}\""
-                                ) else headersOf()
-                            )
-                        }
-                        body.forEach { (key, value) ->
-                            append(key, value.content)
-                        }
-                    })
-            )
+            setBody(MultiPartFormDataContent(formData {
+                for (file in files) {
+                    append(file.field, file.file ?: ByteArray(0), headers = if (file.file != null) headersOf(HttpHeaders.ContentDisposition, "filename=\"${file.fileName}\"") else headersOf())
+                }
+                body.forEach { (key, value) ->
+                    append(key, value.content)
+                }
+            }))
         }
         PocketbaseException.handle(response)
         return response.body()

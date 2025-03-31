@@ -7,7 +7,7 @@ import kotlinx.serialization.json.JsonPrimitive
 
 @Serializable
 /**
- * The schema for a [Collection]'s field
+ * The schema for a [Collection]'s field.
  *
  * There are additional fields that depend on the [SchemaFieldType]. For a
  * list of them see
@@ -46,7 +46,7 @@ public class SchemaField(
     // text:
     public val autogeneratePattern: String? = null,
     public val pattern: String? = null,
-    public val primaryKey: String? = null,
+    public val primaryKey: Boolean? = null,
     // USES min max
 
     // editor:
@@ -96,7 +96,7 @@ public class SchemaField(
 
 
     @Serializable
-    /** The type of Schema Field selected by the creator */
+    /** The type of Schema Field selected by the creator. */
     public enum class SchemaFieldType {
         @SerialName("text")
         TEXT,
@@ -132,11 +132,49 @@ public class SchemaField(
         EDITOR,
 
         @SerialName("autodate")
-        AUTO_DATE
+        AUTO_DATE,
+
+        @SerialName("password")
+        PASSWORD
     }
 
     override fun toString(): String {
         return "SchemaField(name=$name, type=$type, required=$required, system=$system, hidden=$hidden, presentable=$presentable, id=$id)"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is SchemaField) return false
+
+        if (required != other.required) return false
+        if (system != other.system) return false
+        if (hidden != other.hidden) return false
+        if (presentable != other.presentable) return false
+        if (maxSelect != other.maxSelect) return false
+        if (maxSize != other.maxSize) return false
+        if (primaryKey != other.primaryKey) return false
+        if (convertUrls != other.convertUrls) return false
+        if (onlyInt != other.onlyInt) return false
+        if (protected != other.protected) return false
+        if (minSelect != other.minSelect) return false
+        if (cascadeDelete != other.cascadeDelete) return false
+        if (onCreate != other.onCreate) return false
+        if (onUpdate != other.onUpdate) return false
+        if (name != other.name) return false
+        if (type != other.type) return false
+        if (id != other.id) return false
+        if (min != other.min) return false
+        if (max != other.max) return false
+        if (exceptDomains != other.exceptDomains) return false
+        if (onlyDomains != other.onlyDomains) return false
+        if (autogeneratePattern != other.autogeneratePattern) return false
+        if (pattern != other.pattern) return false
+        if (values != other.values) return false
+        if (mimeTypes != other.mimeTypes) return false
+        if (thumbs != other.thumbs) return false
+        if (collectionId != other.collectionId) return false
+
+        return true
     }
 
 }

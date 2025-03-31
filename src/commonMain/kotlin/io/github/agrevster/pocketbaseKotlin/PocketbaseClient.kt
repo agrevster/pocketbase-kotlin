@@ -20,9 +20,7 @@ import kotlinx.serialization.json.Json
  * @param store the authentication store used to store Pocketbase
  *    authentication data
  */
-public class PocketbaseClient(
-    baseUrl: URLBuilder.() -> Unit, lang: String = "en-US", store: BaseAuthStore = BaseAuthStore(null)
-) {
+public class PocketbaseClient(baseUrl: URLBuilder.() -> Unit, lang: String = "en-US", store: BaseAuthStore = BaseAuthStore(null)) {
 
     public val baseUrl: URLBuilder.() -> Unit = baseUrl
     public val lang: String = lang
@@ -49,7 +47,7 @@ public class PocketbaseClient(
      * The API for Pocketbase
      * [records](https://pocketbase.io/docs/api-records/)
      *
-     * This includes both CRUD actions and collection auth methods
+     * This includes both CRUD actions and collection auth methods.
      */
     public val records: RecordsService = RecordsService(this)
 
@@ -81,7 +79,7 @@ public class PocketbaseClient(
 
     /**
      * The Ktor [HttpClient] used to connect to the
-     * [Pocketbase](https://pocketbase.io) API
+     * [Pocketbase](https://pocketbase.io) API.
      *
      * This automatically adds the current authorization token from the
      * client's [authStore].

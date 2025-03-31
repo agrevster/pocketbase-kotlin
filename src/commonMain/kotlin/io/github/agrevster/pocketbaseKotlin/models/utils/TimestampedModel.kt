@@ -15,4 +15,17 @@ public open class TimestampedModel(
     public val created: InstantPocketbase? = null,
     public val updated: InstantPocketbase? = null,
     @Transient private val modelId: String? = null,
-) : BaseModel(modelId)
+) : BaseModel(modelId) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TimestampedModel) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return modelId?.hashCode() ?: 0
+    }
+}

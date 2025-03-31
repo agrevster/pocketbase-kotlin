@@ -15,9 +15,4 @@ import kotlinx.serialization.Transient
  * @param authRecordId An optional parameter used if you want to set the
  *    record's id explicitly when creating.
  */
-public open class AuthRecord(
-    public val email: String? = null,
-    public val emailVisibility: Boolean? = null,
-    public val verified: Boolean? = null,
-    @Transient private val authRecordId: String? = null
-) : Record(authRecordId)
+public open class AuthRecord(public val email: String, public val emailVisibility: Boolean, public val verified: Boolean, @Transient private val authRecordId: String? = null) : Record(authRecordId)
