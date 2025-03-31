@@ -1,14 +1,11 @@
 package io.github.agrevster.pocketbaseKotlin
 
 import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
-import io.github.agrevster.pocketbaseKotlin.models.utils.parsePocketbase
-import io.github.agrevster.pocketbaseKotlin.models.utils.toStringPocketbase
 import io.ktor.client.call.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
-import kotlinx.datetime.Instant
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -21,37 +18,28 @@ import kotlin.coroutines.CoroutineContext
 internal inline fun <reified T> className() = T::class::simpleName
 
 @Serializable
-public data class PocketbaseError(val code: Int, val message: String, val data: Map<String, JsonElement>)
+public data class PocketbaseError(val status: Int, val message: String, val data: Map<String, JsonElement>)
 
 @DslMarker
 public annotation class PocketKtDSL
 
-@RequiresOptIn(
-    level = RequiresOptIn.Level.WARNING,
-    message = "This function does not have an automated test associated with it. Use at your own risk!"
-)
+@RequiresOptIn(level = RequiresOptIn.Level.WARNING, message = "This function does not have an automated test associated with it. Use at your own risk!")
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 internal annotation class Untested(@Suppress("unused") val reason: String = "")
 
-@RequiresOptIn(
-    level = RequiresOptIn.Level.ERROR,
-    message = "This property only exists for serialization purposes. Please use the non internal property unless you really know what your doing!"
-)
+@RequiresOptIn(level = RequiresOptIn.Level.ERROR, message = "This property only exists for serialization purposes. Please use the non internal property unless you really know what your doing!")
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.PROPERTY, AnnotationTarget.FUNCTION)
 internal annotation class PocketKtInternal
 
-@RequiresOptIn(
-    level = RequiresOptIn.Level.ERROR,
-    message = "This API is experimental. It may be changed in the future without notice."
-)
+@RequiresOptIn(level = RequiresOptIn.Level.ERROR, message = "This API is experimental. It may be changed in the future without notice.")
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.CLASS)
 internal annotation class PocketKtExperimental
 
 public class PocketbaseException(public val reason: String) : Exception(reason) {
-    public constructor(error: PocketbaseError) : this("${error.message}: ${error.code}\n ${Json.encodeToString(error.data)}")
+    public constructor(error: PocketbaseError) : this("${error.message}: ${error.status}\n ${Json.encodeToString(error.data)}")
 
     public companion object {
         public suspend fun handle(response: HttpResponse) {
@@ -91,11 +79,6 @@ public fun Boolean?.toJsonPrimitiveOrNull(): JsonPrimitive = JsonPrimitive(this)
 
 public fun Number.toJsonPrimitive(): JsonPrimitive = JsonPrimitive(this)
 
-public fun Instant?.toJsonPrimitive(): JsonPrimitive? =
-    if (this != null) JsonPrimitive(this.toStringPocketbase()) else null
-
-public fun JsonPrimitive.toInstant(): Instant = Instant.parsePocketbase(this.toString().removeSurrounding("\""))
-
 public fun JsonPrimitive.toNumber(): Double = this.toString().toDouble()
 
 public fun JsonPrimitive.isNumber(): Boolean = this.toString().all { c -> c.isDigit() || c == '.' }
@@ -104,15 +87,6 @@ public fun putIfNotNull(map: MutableMap<String, Any>, key: String, value: Any?) 
     if (value != null) map[key] = value
 }
 
-public fun JsonPrimitive.isInstant(): Boolean {
-    var ret = true
-    try {
-        this.toInstant()
-    } catch (e: Exception) {
-        ret = false
-    }
-    return ret
-}
 
 public data class FileUpload(val field: String, val file: ByteArray?, val fileName: String) {
     override fun equals(other: Any?): Boolean {
