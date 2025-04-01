@@ -260,3 +260,10 @@ val records = client.records.getList<PersonRecord>(
 //This returns the expanded record with the field name of owner
 val pets: List<PetRecord>? = records.items.first().expand?.get("pets")
 ```
+
+---
+
+## Testing
+
+For instructions on how to run the integration tests to see if a certain pocketbase version is computable
+see [testing.md](testing.md)
