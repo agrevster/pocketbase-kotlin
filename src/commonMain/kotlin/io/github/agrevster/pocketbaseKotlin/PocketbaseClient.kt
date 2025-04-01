@@ -72,6 +72,9 @@ public class PocketbaseClient(baseUrl: URLBuilder.() -> Unit, lang: String = "en
      */
     public val backups: BackupsService = BackupsService(this)
 
+    /** The API for Pocketbase [crons](https://pocketbase.io/docs/api-crons/) */
+    public val crons: CronsService = CronsService(this)
+
     private val json: Json = Json {
         prettyPrint = true
         ignoreUnknownKeys = true
