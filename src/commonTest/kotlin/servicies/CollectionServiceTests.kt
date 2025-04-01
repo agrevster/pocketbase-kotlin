@@ -226,7 +226,7 @@ class CollectionServiceTests {
     @Test
     fun getOne(): Unit = coroutine {
         val collection = client.collections.getOne<Collection>("test1")
-        assertNull(collection)
+        assertNotNull(collection)
     }
 
 
