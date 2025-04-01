@@ -54,9 +54,6 @@ val client = PocketbaseClient({
                                   host = "localhost"
                                   port = 8090
                               })
-
-//Logging in 
-client.login { token = "TOKEN FROM AN AUTH METHOD" }
 ```
 
 ### Logging in
@@ -74,16 +71,14 @@ If you want to log the client out simply use `client.logout()`
 
                                })
 var loginToken: String
-//Using the admin auth service to log in 
-loginToken = client.admins.authWithPassword("email", "password").token
 
-//Using the collection auth service to log in 
+//Logs in as an admin/superuser
+loginToken = client.records.authWithPassword<AuthRecord>("_superusers", email = "email", password = "password").token
+
 // This authenticates a user rather than an admin
-//The user auth service is the same as collection auth, but it uses the "users" collection 
-loginToken = client.records.authWithPassword<User>("collectionName", "email", "password").token
-loginToken = client.records.authWithUsername<User>("collectionName", "username", "password").token
+loginToken = client.records.authWithPassword<AuthRecord>("collectionName", "email", "password").token
 //You can also use oauth2
-loginToken = client.records.authWithOauth2<User>("collectionName", "provider", "code", "codeVerifier", "redirectUrl").token
+loginToken = client.records.authWithOauth2<AuthRecord>("collectionName", "provider", "code", "codeVerifier", "redirectUrl").token
 
 client.login { token = loginToken }
 ```
@@ -97,7 +92,7 @@ client.login { token = loginToken }
                                    port = 8090
                                })
 
-client.login { token = client.users.authWithPassword("email", "password").token }
+client.login { token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token }
 
 //We are using this to hold records created in the collection "people".
 //Each record has a name (required), age (required number) and a pet optional.
@@ -118,7 +113,7 @@ val collectionId = response.collectionId
 **All done!** Now that you have a Pocketbase client set up and know how to log in, the rest is easy!
 Simply follow the [Pocketbase Web API Docs](https://pocketbase.io/docs/api-records/) and our internal KDocs to find your
 way around the Pocketbase API.
-There are a few exceptions for which features could not be made to match the other SDKs, for a guide on them go to
+There are a few exceptions for features that could not be made to match the other SDKs, for a guide on them go to
 our [caveats page](#caveats)
 
 ---
@@ -186,11 +181,11 @@ val client = PocketbaseClient({
                               })
 
 client.login {
-    token = client.users.authWithPassword("email", "password").token
+    token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
 }
 
 //Make sure that the field for your file is a string
-//If you have multiple file uploads in your schema make it a list of strings 
+//If you have multiple file uploads in your schema make it a list of strings
 @Serializable
 data class FileUploadRecord(val imageFile: String, val imageDescription: String) : Record()
 
@@ -212,24 +207,24 @@ val client = PocketbaseClient({
                               })
 
 client.login {
-    token = client.users.authWithPassword("email", "password").token
+    token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
 }
 
 //For this example imagine we have two collections. One that contains users...
 @Serializable
-data class PersonRecord(val name: String) : User()
+data class PersonRecord(val name: String) : Record()
 
 //And one that contains their pets
-//Each Pet has a name (text), owner (relation), and each Person has a name (text) 
+//Each Pet has a name (text), owner (relation), and each Person has a name (text)
 @Serializable
 data class PetRecord(val owner: String, val name: String) : ExpandRecord<PersonRecord>()
-//This example gets a list of pets, selects the first one and gets its owner 
+//This example gets a list of pets, selects the first one and gets its owner
 
 val records = client.records.getList<PetRecord>("pets_collection", 1, 3,
-//This tells Pocketbase to expand the relation field of owner 
+//This tells Pocketbase to expand the relation field of owner
                                                 expandRelations = ExpandRelations("owner"))
 
-//This returns the expanded record with the field name of owner 
+//This returns the expanded record with the field name of owner
 val owner: PersonRecord? = records.items[0].expand?.get("owner")
 ```
 
@@ -245,7 +240,7 @@ val client = PocketbaseClient({
                               })
 
 client.login {
-    token = client.users.authWithPassword("email", "password").token
+    token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
 }
 
 //For this example we have two collections. One for people and another for their pets
@@ -259,9 +254,9 @@ data class PetRecord(val name: String) : Record()
 data class PersonRecord(val name: String, val pets: List<String>) : ExpandRecordList<PetRecord>()
 //
 val records = client.records.getList<PersonRecord>(
-    //This tells Pocketbase to expand the relation field of pets 
+    //This tells Pocketbase to expand the relation field of pets
     "people_collection", 1, 5, expandRelations = ExpandRelations("pets"))
 
-//This returns the expanded record with the field name of owner 
+//This returns the expanded record with the field name of owner
 val pets: List<PetRecord>? = records.items.first().expand?.get("pets")
 ```

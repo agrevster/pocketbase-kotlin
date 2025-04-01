@@ -64,7 +64,7 @@ class SortTests {
         return 0
     }
 
-    private inline fun <T> compareByDescending(vararg selectors: (T) -> Comparable<*>?): Comparator<T> {
+    private fun <T> compareByDescending(vararg selectors: (T) -> Comparable<*>?): Comparator<T> {
         require(selectors.isNotEmpty())
         return Comparator { a, b -> compareValuesByImpl(b, a, selectors) }
     }
