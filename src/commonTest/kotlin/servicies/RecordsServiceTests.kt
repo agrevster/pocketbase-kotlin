@@ -42,7 +42,7 @@ class RecordsServiceTests {
     fun update(): Unit = coroutine {
         val testRecord = createTestRecord()
 
-        val updatedTestRecord = TestRecord(testRecord.name, testRecord.age, !testRecord.married)
+        val updatedTestRecord = TestRecord(testRecord.name, testRecord.age, !testRecord.married, testRecordId = testRecord.id!!)
         client.records.update<TestRecord>("test", testRecord.id!!, Json.encodeToString(updatedTestRecord))
 
         assertEquals(testRecord.name, updatedTestRecord.name)

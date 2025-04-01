@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
@@ -87,7 +88,7 @@ suspend fun createTestRecord(collectionName: String = "test"): TestRecord {
 }
 
 @Serializable
-data class TestRecord(val name: String, val age: Int, val married: Boolean) : Record() {
+data class TestRecord(val name: String, val age: Int, val married: Boolean, @Transient val testRecordId: String? = null) : Record(testRecordId) {
     companion object {
         fun generateRandomRecord(): TestRecord {
             val chars = ('A'..'Z') + ('a'..'z') // Uppercase and lowercase letters

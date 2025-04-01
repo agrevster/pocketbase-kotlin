@@ -9,8 +9,8 @@ import io.github.agrevster.pocketbaseKotlin.FileUpload
 import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import io.github.agrevster.pocketbaseKotlin.toJsonPrimitive
+import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.int
@@ -125,7 +125,7 @@ class RecordsServiceFileTests {
 
         val response = client.httpClient.get(client.files.getFileURL(record, record.file))
         assertEquals(200, response.status.value)
-        assertContains(response.bodyAsText(), "PNG")
+        assertContains(response.body<String>(), "PNG")
     }
 
 }
@@ -162,6 +162,6 @@ class RecordsServiceProtectedFileTests {
 
         val response = client.httpClient.get(client.files.getFileURL(record, record.file, token = client.files.generateProtectedFileToken()))
         assertEquals(200, response.status.value)
-        assertContains(response.bodyAsText(), "PNG")
+        assertContains(response.body<String>(), "PNG")
     }
 }

@@ -21,7 +21,7 @@ import kotlin.test.*
 class RecordServiceAuthTests {
 
     @Serializable
-    data class TestAuthRecord(val name: String, val age: Int, val married: Boolean, @Transient val _email: String? = null, @Transient val _emailVisibility: Boolean? = null, @Transient val _verified: Boolean? = null, val password: String? = null, val passwordConfirm: String? = null) : AuthRecord(_email!!, _emailVisibility!!, _verified!!) {
+    data class TestAuthRecord(val name: String, val age: Int, val married: Boolean, @Transient val _email: String? = null, @Transient val _emailVisibility: Boolean? = null, @Transient val _verified: Boolean? = null, val password: String? = null, val passwordConfirm: String? = null, val _authRecordId: String? = null) : AuthRecord(_email!!, _emailVisibility!!, _verified!!, _authRecordId) {
         companion object {
             fun generateRandomRecord(emailVisible: Boolean = true): TestAuthRecord {
                 val chars = ('A'..'Z') + ('a'..'z') // Uppercase and lowercase letters
@@ -69,7 +69,7 @@ class RecordServiceAuthTests {
     fun update(): Unit = coroutine {
         val record = createTestAuthRecord()
 
-        val updatedTestRecord = TestAuthRecord(record.name, record.age, !record.married, record.email, record.emailVisibility, record.verified)
+        val updatedTestRecord = TestAuthRecord(record.name, record.age, !record.married, record.email, record.emailVisibility, record.verified, _authRecordId = record.id!!)
         client.records.update<TestAuthRecord>("test", record.id!!, Json.encodeToString(updatedTestRecord))
 
         assertEquals(record.name, updatedTestRecord.name)
