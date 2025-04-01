@@ -265,5 +265,5 @@ val pets: List<PetRecord>? = records.items.first().expand?.get("pets")
 
 ## Testing
 
-For instructions on how to run the integration tests to see if a certain pocketbase version is computable
+For instructions on how to run the integration tests to see if a pocketbase version is compatible
 see [testing.md](testing.md)
