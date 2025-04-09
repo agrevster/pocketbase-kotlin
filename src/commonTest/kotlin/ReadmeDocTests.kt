@@ -9,8 +9,10 @@ import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.toJsonPrimitive
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
+import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonObject
 import kotlin.test.Ignore
 import kotlin.test.Test
 
@@ -151,5 +153,47 @@ class CaveatsDocTests {
 //This returns the expanded record with the field name of owner
         val pets: List<PetRecord>? = records.items.first().expand?.get("pets")
 
+    }
+
+    @Test
+    fun batchRequest(): Unit = coroutine {
+        val client = PocketbaseClient({
+                                          protocol = URLProtocol.HTTP
+                                          host = "localhost"
+                                          port = 8090
+                                      })
+
+        client.login {
+            token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
+        }
+
+        // What if we want to create a lot of people and don't want to send lots of requests?
+        //The personRecordId field is needed so that we can set the ID of the record for upsert operations
+        @Serializable
+        data class PersonRecord(val name: String, val age: Int, @Transient val personRecordId: String? = null) : Record(personRecordId)
+
+        //They should be at least 18... we don't want example minors in our database without their parent's consent!
+        val people = listOf(PersonRecord("Tim", 18), PersonRecord("Tom", 22), PersonRecord("Jane", 83), PersonRecord("John", 34))
+
+        //Creates and sends a batch request with the batch service
+        val createdRecords = client.batch.send {
+            people.forEach { person ->
+                //Adds a create request to the batch for every person in the people list.
+                create(collectionId = "COLLECTION_ID", Json.encodeToJsonElement<PersonRecord>(person).jsonObject)
+            }
+
+            //We can also upload files with the files parameter
+            create(collectionId = "COLLECTION_ID", Json.encodeToJsonElement<PersonRecord>(PersonRecord("Que", 49)).jsonObject, files = listOf(FileUpload("headshot", byteArrayOf(), "que_headshot.png")))
+
+            //Nancy got older...
+            update("COLLECTION_ID", "ALEX_RECORD_ID", Json.encodeToJsonElement<PersonRecord>(PersonRecord("Nancy", 19)).jsonObject)
+
+            //We can also delete records
+            delete("COLLECTION_ID", "RECORD_ID_TO_DELETE")
+
+            //And upsert (update or insert)
+            //just make sure the object has a record ID parameter that is set
+            upsert("COLLECTION_ID", Json.encodeToJsonElement(PersonRecord("Tim", 18, "TIM_ID")).jsonObject)
+        }
     }
 }
