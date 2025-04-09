@@ -94,8 +94,6 @@ tasks.register('publishMac') {
     dependsOn 'publishMacosX64PublicationToMavenRepository'
     dependsOn 'publishMacosArm64PublicationToMavenRepository'
 
-    dependsOn 'publishJvmPublicationToMavenRepository'
-    dependsOn 'publishKotlinMultiplatformPublicationToMavenRepository'
 }
 
 tasks.register('publishWindows') {
@@ -104,4 +102,11 @@ tasks.register('publishWindows') {
 
 tasks.register('publishLinux') {
     dependsOn 'publishLinuxX64PublicationToMavenRepository'
+}
+
+//THIS MUST BE DONE LOCALLY YOU NEED TO SIGN IN TO DOWNLOAD AN ANDROID SDK SO WE CANNOT DO THIS WITH GITHUB ACTIONS
+tasks.register('publishCommon') {
+    dependsOn 'publishAndroidReleasePublicationToMavenRepository'
+    dependsOn 'publishJvmPublicationToMavenRepository'
+    dependsOn 'publishKotlinMultiplatformPublicationToMavenRepository'
 }
