@@ -93,7 +93,7 @@ class BatchServiceTests {
         val records = (0..4).map { createTestRecord() }
         client.batch.send {
             records.forEach { record ->
-                val changedRecord = TestRecord(record.name, record.age, !record.married)
+                val changedRecord = TestRecord(record.name, record.age, !record.married, record.id!!)
                 update(collectionId!!, record.id!!, Json.encodeToJsonElement(changedRecord).jsonObject)
             }
         }.forEachIndexed { index, recordResponse ->
@@ -160,7 +160,7 @@ class BatchServiceTests {
                     }
 
                     BatchRequest.BatchRequestMethod.PATCH -> {
-                        val newRecord = TestRecord(record.name, record.age, !record.married)
+                        val newRecord = TestRecord(record.name, record.age, !record.married, record.id!!)
                         update(collectionId!!, record.id!!, Json.encodeToJsonElement(newRecord).jsonObject)
                     }
 
