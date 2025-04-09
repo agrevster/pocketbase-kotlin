@@ -7,3 +7,9 @@
    object [here](https://github.com/agrevster/pocketbase-kotlin/blob/158eb3134df624299601bdf41de8a4268dbd73bc/src/commonTest/kotlin/TestUtils.kt#L25)
    if you want to change the pocketbase URL or the creds.
 3. Now run the gradle task for your desired tests! Example `./gradlew jvmTest`
+
+## Special instructions
+
+- Check the instructions inside
+  the [Backup Service](https://github.com/agrevster/pocketbase-kotlin/blob/master/src/commonTest/kotlin/servicies/BackupServiceTests.kt)
+  for special instructions on testing backups.
