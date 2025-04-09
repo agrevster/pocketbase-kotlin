@@ -1,5 +1,6 @@
 package servicies
 
+import NameAndID
 import TestRecord
 import client
 import coroutine
@@ -9,12 +10,9 @@ import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 import io.github.agrevster.pocketbaseKotlin.dsl.query.Filter
 import io.github.agrevster.pocketbaseKotlin.dsl.query.ShowFields
 import io.github.agrevster.pocketbaseKotlin.models.Collection
-import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import io.github.agrevster.pocketbaseKotlin.toJsonPrimitive
 import kotlinx.coroutines.delay
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import loginBefore
 import logoutAfter
@@ -35,8 +33,6 @@ class CollectionServiceTests {
 
     @AfterTest
     fun after(): Unit = coroutine {
-        @Serializable
-        data class NameAndID(val name: String) : BaseModel()
         client.collections.getList<NameAndID>(1, 10, showFields = ShowFields("id", "name"), filterBy = Filter("name ~ 'test'")).items.forEach { collection ->
             client.collections.delete(collection.id!!)
         }

@@ -5,6 +5,7 @@ import io.github.agrevster.pocketbaseKotlin.dsl.logout
 import io.github.agrevster.pocketbaseKotlin.models.AuthRecord
 import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.Record
+import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import io.ktor.http.*
 import io.ktor.utils.io.core.*
@@ -33,6 +34,9 @@ val client = PocketbaseClient({
                               })
 
 data class Superuser(val email: String, val password: String)
+
+@Serializable
+data class NameAndID(val name: String) : BaseModel()
 
 suspend fun loginBefore(collection: String = "_superusers", email: String = ADMIN_CREDS.email, password: String = ADMIN_CREDS.password) {
     val token = client.records.authWithPassword<AuthRecord>(collection, email, password).token

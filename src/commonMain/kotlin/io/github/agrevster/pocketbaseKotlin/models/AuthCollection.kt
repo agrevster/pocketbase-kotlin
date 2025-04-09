@@ -54,6 +54,7 @@ public open class AuthCollection(
     public val resetPasswordTemplate: EmailTemplate? = null,
     public val confirmEmailChangeTemplate: EmailTemplate? = null,
 
+
     ) : Collection() {
     @Serializable
     /**
@@ -80,9 +81,7 @@ public open class AuthCollection(
      * @param mappedFields A mapping of fields between the oauth2 provider and
      *    Pocketbase.
      */
-    public data class OAuth2Options(
-        val enabled: Boolean? = null, val providers: List<JsonElement>, val mappedFields: List<JsonElement>
-    )
+    public data class OAuth2Options(val enabled: Boolean? = null, val providers: List<JsonElement>, val mappedFields: List<JsonElement>)
 
     @Serializable
     /**
@@ -99,9 +98,7 @@ public open class AuthCollection(
      * @param duration
      * @param rule The rule which determines who is required ot use MFA.
      */
-    public data class MFAOptions(
-        val enabled: Boolean? = null, val duration: DurationPocketbase? = null, val rule: String? = null
-    )
+    public data class MFAOptions(val enabled: Boolean? = null, val duration: DurationPocketbase? = null, val rule: String? = null)
 
     @Serializable
     /**
@@ -110,11 +107,6 @@ public open class AuthCollection(
      * @param length The length of the OTP code.
      * @param emailTemplate The email template used to send the OTP code.
      */
-    public data class OTPOptions(
-        val enabled: Boolean? = null,
-        val duration: DurationPocketbase? = null,
-        val length: Int? = null,
-        val emailTemplate: EmailTemplate? = null
-    )
+    public data class OTPOptions(val enabled: Boolean? = null, val duration: DurationPocketbase? = null, val length: Int? = null, val emailTemplate: EmailTemplate? = null)
 
 }
