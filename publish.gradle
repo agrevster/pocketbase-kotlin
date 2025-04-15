@@ -107,6 +107,7 @@ tasks.register('publishLinux') {
 //THIS MUST BE DONE LOCALLY YOU NEED TO SIGN IN TO DOWNLOAD AN ANDROID SDK SO WE CANNOT DO THIS WITH GITHUB ACTIONS
 tasks.register('publishCommon') {
     dependsOn 'publishAndroidReleasePublicationToMavenRepository'
+    dependsOn 'publishAndroidDebugPublicationToMavenRepository'
     dependsOn 'publishJvmPublicationToMavenRepository'
     dependsOn 'publishKotlinMultiplatformPublicationToMavenRepository'
 }
