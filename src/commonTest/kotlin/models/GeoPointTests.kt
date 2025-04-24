@@ -9,6 +9,7 @@ import io.github.agrevster.pocketbaseKotlin.models.GeoPoint
 import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
 import loginBefore
 import logoutAfter
@@ -21,7 +22,7 @@ import kotlin.test.assertEquals
 class GeoPointTests {
 
     @Serializable
-    data class GeoPointTestRecord(val name: String, val age: Int, val married: Boolean, val location: GeoPoint) : BaseModel()
+    data class GeoPointTestRecord(val name: String, val age: Int, val married: Boolean, val location: GeoPoint, @Transient val _id: String? = null) : BaseModel(_id)
 
     @BeforeTest
     fun before(): Unit = coroutine {
@@ -59,7 +60,7 @@ class GeoPointTests {
         }
         val createdRecord = client.records.create<GeoPointTestRecord>("test", Json.encodeToString(record))
 
-        val updatedRecord = GeoPointTestRecord(createdRecord.name, createdRecord.age, createdRecord.married, GeoPoint(.52f, -53f))
+        val updatedRecord = GeoPointTestRecord(createdRecord.name, createdRecord.age, createdRecord.married, GeoPoint(.52f, -53f), createdRecord.id!!)
         client.records.update<GeoPointTestRecord>("test", createdRecord.id!!, Json.encodeToString(updatedRecord))
 
         assertEquals(record.name, updatedRecord.name)
