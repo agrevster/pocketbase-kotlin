@@ -1,6 +1,5 @@
 package io.github.agrevster.pocketbaseKotlin.models.utils
 
-import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField.SchemaFieldType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonPrimitive
@@ -15,14 +14,13 @@ import kotlinx.serialization.json.JsonPrimitive
  *
  * @param name the name given to the schema by the creator
  * @param type the [SchemaFieldType] assigned to the schema on creation
- * @param required weather or not the schema is required to have a value.
- *    If this is false the [Serializable] class should have an optional(?)
+ * @param required weather or not, the schema is required to have a value.
+ *    If this is false, the [Serializable] class should have an optional(?)
  *    type
- * @param system whether or not the schema is part of the pocketbase system
- * @param hidden whether or not the field is hidden from JSON API and
- *    filters
- * @param presentable whether or not the field should be prioritized in
- *    superuser relations
+ * @param system whether the schema is part of the pocketbase system
+ * @param hidden whether the field is hidden from JSON API and filters
+ * @param presentable whether the field should be prioritized in superuser
+ *    relations
  * @param id the unique ID of the schema
  */
 public class SchemaField(
@@ -135,7 +133,10 @@ public class SchemaField(
         AUTO_DATE,
 
         @SerialName("password")
-        PASSWORD
+        PASSWORD,
+
+        @SerialName("geoPoint")
+        GEO_POINT
     }
 
     override fun toString(): String {

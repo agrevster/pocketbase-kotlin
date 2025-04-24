@@ -185,6 +185,7 @@ class CollectionServiceTests {
             SchemaField("file", SchemaField.SchemaFieldType.FILE, mimeTypes = listOf("text/plain"), protected = true, maxSize = 5000, thumbs = listOf("50x50")),
             SchemaField("relation", SchemaField.SchemaFieldType.RELATION, collectionId = "_pb_users_auth_", cascadeDelete = false, presentable = true, maxSelect = 2, minSelect = 1),
             SchemaField("json", SchemaField.SchemaFieldType.JSON, maxSize = 50),
+            SchemaField("location", SchemaField.SchemaFieldType.GEO_POINT, required = true),
         )
         // @formatter:on Alright... go back to doing your job!
 
