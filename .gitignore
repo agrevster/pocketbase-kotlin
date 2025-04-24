@@ -49,3 +49,4 @@ bin/
 .DS_Store
 android-sdk/*
 local.properties
+.publish.bash

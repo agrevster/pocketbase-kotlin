@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.agrevster:pocketbase-kotlin:2.7.0")
+    implementation("io.github.agrevster:pocketbase-kotlin:2.7.1")
 }
 ```
 
