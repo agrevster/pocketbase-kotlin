@@ -4,14 +4,28 @@ import io.github.agrevster.pocketbaseKotlin.PocketbaseClient
 import io.github.agrevster.pocketbaseKotlin.PocketbaseException
 import io.github.agrevster.pocketbaseKotlin.services.utils.BaseService
 import io.github.agrevster.pocketbaseKotlin.toJsonPrimitive
-import io.ktor.client.plugins.sse.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import kotlinx.coroutines.*
+import io.ktor.client.plugins.sse.sse
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.http.path
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.decodeFromJsonElement
 
 public class RealtimeService(client: PocketbaseClient) : BaseService(client) {
 
@@ -86,8 +100,8 @@ public class RealtimeService(client: PocketbaseClient) : BaseService(client) {
      *
      * @sample runBlocking { launch{ realtime.connect() } }
      */
-    public fun connect() {
-        runBlocking {
+    public suspend fun connect() {
+        coroutineScope {
             val job = launch {
                 if (connected) throw PocketbaseException("You are already connected to the realtime service!")
                 connected = true

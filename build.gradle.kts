@@ -1,3 +1,6 @@
+@file:OptIn(ExperimentalWasmDsl::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
@@ -50,6 +53,10 @@ kotlin {
     androidNativeX64()
     androidNativeX86()
 
+    wasmJs {
+        browser()
+        nodejs()
+    }
 
     sourceSets {
         commonMain {
@@ -106,6 +113,20 @@ kotlin {
             }
         }
 
+        val jsMain by creating {
+            dependsOn(commonMain.get())
+            dependencies {
+                api(libs.ktor.client.js)
+                api(libs.kotlin.coroutines)
+            }
+        }
+        val jsTest by creating {
+            dependsOn(commonTest.get())
+            dependencies {
+                implementation(libs.ktor.client.js)
+                api(libs.kotlin.coroutines)
+            }
+        }
 
         fun KotlinSourceSet.configureDependencies(
             test: Boolean = false,
@@ -163,6 +184,9 @@ kotlin {
 
         getByName("androidNativeX86Main").configureDependencies()
         getByName("androidNativeX86Test").configureDependencies(test = true)
+
+        getByName("wasmJsMain").dependsOn(jsMain)
+        getByName("wasmJsTest").dependsOn(jsTest)
     }
 }
 
