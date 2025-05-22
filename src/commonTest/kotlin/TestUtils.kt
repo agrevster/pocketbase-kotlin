@@ -7,15 +7,15 @@ import io.github.agrevster.pocketbaseKotlin.models.Collection
 import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.models.utils.BaseModel
 import io.github.agrevster.pocketbaseKotlin.models.utils.SchemaField
-import io.ktor.http.*
-import io.ktor.utils.io.core.*
+import io.ktor.http.URLProtocol
+import io.ktor.utils.io.core.toByteArray
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 import kotlin.io.encoding.Base64
@@ -102,8 +102,9 @@ data class TestRecord(val name: String, val age: Int, val married: Boolean, @Tra
 }
 
 
-fun coroutine(block: suspend CoroutineScope.() -> Unit): Unit {
-    runBlocking {
+val backgroundScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+fun coroutine(block: suspend CoroutineScope.() -> Unit) {
+    backgroundScope.launch {
         block()
     }
 }
