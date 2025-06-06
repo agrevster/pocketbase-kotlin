@@ -1,3 +1,4 @@
+import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
@@ -5,8 +6,7 @@ plugins {
     alias(libs.plugins.serialization)
     alias(libs.plugins.dokka)
     alias(libs.plugins.androidLibrary)
-    id("maven-publish")
-    id("signing")
+    alias(libs.plugins.mavenPublish)
 }
 
 repositories {
@@ -16,7 +16,8 @@ repositories {
 }
 
 enum class HttpClientType {
-    WIN_HTTP, CIO;
+    WIN_HTTP,
+    CIO;
 }
 
 kotlin {
@@ -146,7 +147,7 @@ kotlin {
         getByName("macosArm64Test").configureDependencies(test = true)
 
         getByName("mingwX64Main").configureDependencies(httpClientType = HttpClientType.WIN_HTTP)
-        getByName("mingwX64Test").configureDependencies(test=true, httpClientType = HttpClientType.WIN_HTTP)
+        getByName("mingwX64Test").configureDependencies(test = true, httpClientType = HttpClientType.WIN_HTTP)
 
 
         getByName("androidMain").configureDependencies()
@@ -178,4 +179,36 @@ android {
     }
 }
 
-apply(from = "publish.gradle")
+/// MAVEN PUBLISHING
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+}
+
+tasks.register("publishMac") {
+    group = "publishing"
+    dependsOn(tasks.named("publishIosArm64PublicationToMavenCentralRepository"))
+    dependsOn(tasks.named("publishIosSimulatorArm64PublicationToMavenCentralRepository"))
+    dependsOn(tasks.named("publishIosX64PublicationToMavenCentralRepository"))
+    dependsOn(tasks.named("publishMacosX64PublicationToMavenCentralRepository"))
+    dependsOn(tasks.named("publishMacosArm64PublicationToMavenCentralRepository"))
+}
+
+tasks.register("publishWindows") {
+    group = "publishing"
+    dependsOn(tasks.named("publishMingwX64PublicationToMavenCentralRepository"))
+}
+
+tasks.register("publishLinux") {
+    group = "publishing"
+    dependsOn(tasks.named("publishLinuxX64PublicationToMavenCentralRepository"))
+}
+
+//THIS MUST BE DONE LOCALLY YOU NEED TO SIGN IN TO DOWNLOAD AN ANDROID SDK SO WE CANNOT DO THIS WITH GITHUB ACTIONS
+tasks.register("publishCommon") {
+    group = "publishing"
+    dependsOn(tasks.named("publishAndroidReleasePublicationToMavenCentralRepository"))
+    dependsOn(tasks.named("publishJvmPublicationToMavenCentralRepository"))
+    dependsOn(tasks.named("publishKotlinMultiplatformPublicationToMavenCentralRepository"))
+}
