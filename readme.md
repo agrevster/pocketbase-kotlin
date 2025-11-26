@@ -21,7 +21,10 @@ Currently, the following platforms are supported,
 | IOS (arm x64) (x64) (sim arm x64) |
 | Android                           |
 
-*Want a platform supported? Open an [issue](https://github.com/agrevster/pocketbase-kotlin/issues)*
+> [!Warning]
+> I will not be adding new features to this project, as I no longer use Kotlin.
+> Going forward, I will only provide dependency updates and minor maintenance to ensure the API is still compatible with
+> Pocketbase.
 
 ## Installation
 
@@ -36,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.agrevster:pocketbase-kotlin:2.7.1")
+    implementation("io.github.agrevster:pocketbase-kotlin:2.7.2")
 }
 ```
 
@@ -50,10 +53,10 @@ The `PocketbaseClient` is the class used to access the Pocketbase API.
 //Creates a new pocketbase client with the given url 
 // The client is used to access everything in the Pocketbase API 
 val client = PocketbaseClient({
-                                  protocol = URLProtocol.HTTP
-                                  host = "localhost"
-                                  port = 8090
-                              })
+    protocol = URLProtocol.HTTP
+    host = "localhost"
+    port = 8090
+})
 ```
 
 ### Logging in
@@ -65,11 +68,11 @@ If you want to log the client out simply use `client.logout()`
 
 ```kotlin
  val client = PocketbaseClient({
-                                   protocol = URLProtocol.HTTP
-                                   host = "localhost"
-                                   port = 8090
+    protocol = URLProtocol.HTTP
+    host = "localhost"
+    port = 8090
 
-                               })
+})
 var loginToken: String
 
 //Logs in as an admin/superuser
@@ -78,7 +81,8 @@ loginToken = client.records.authWithPassword<AuthRecord>("_superusers", email = 
 // This authenticates a user rather than an admin
 loginToken = client.records.authWithPassword<AuthRecord>("collectionName", "email", "password").token
 //You can also use oauth2
-loginToken = client.records.authWithOauth2<AuthRecord>("collectionName", "provider", "code", "codeVerifier", "redirectUrl").token
+loginToken =
+    client.records.authWithOauth2<AuthRecord>("collectionName", "provider", "code", "codeVerifier", "redirectUrl").token
 
 client.login { token = loginToken }
 ```
@@ -87,10 +91,10 @@ client.login { token = loginToken }
 
 ```kotlin
  val client = PocketbaseClient({
-                                   protocol = URLProtocol.HTTP
-                                   host = "localhost"
-                                   port = 8090
-                               })
+    protocol = URLProtocol.HTTP
+    host = "localhost"
+    port = 8090
+})
 
 client.login { token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token }
 
@@ -140,24 +144,41 @@ Pocketbase Kotlin.
 
 ```kotlin
 val client = PocketbaseClient({
-                                  protocol = URLProtocol.HTTP
-                                  host = "localhost"
-                                  port = 8090
-                              })
+    protocol = URLProtocol.HTTP
+    host = "localhost"
+    port = 8090
+})
 
 client.login {
     token = client.admins.authWithPassword("email", "password").token
 }
 
 //Simply use the collection object and fill out the fields as needed
-val collection = Collection(name = "people", type = Collection.CollectionType.BASE, schema = listOf(SchemaField(
-    name = "name",
-    type = SchemaField.SchemaFieldType.TEXT,
-    required = true,
-), SchemaField(name = "age", type = SchemaField.SchemaFieldType.NUMBER, required = true, options = SchemaField.SchemaOptions(
-    //Some options such as min and max can different types
-    //to fix this issue we serialise them as JsonPrimitives
-    min = 0.toJsonPrimitive(), max = 150.toJsonPrimitive())), SchemaField(name = "pet", type = SchemaField.SchemaFieldType.SELECT, required = false, options = SchemaField.SchemaOptions(values = listOf("Dog", "Cat", "Bird")))))
+val collection = Collection(
+    name = "people", type = Collection.CollectionType.BASE, schema = listOf(
+        SchemaField(
+            name = "name",
+            type = SchemaField.SchemaFieldType.TEXT,
+            required = true,
+        ),
+        SchemaField(
+            name = "age",
+            type = SchemaField.SchemaFieldType.NUMBER,
+            required = true,
+            options = SchemaField.SchemaOptions(
+                //Some options such as min and max can different types
+                //to fix this issue we serialise them as JsonPrimitives
+                min = 0.toJsonPrimitive(), max = 150.toJsonPrimitive()
+            )
+        ),
+        SchemaField(
+            name = "pet",
+            type = SchemaField.SchemaFieldType.SELECT,
+            required = false,
+            options = SchemaField.SchemaOptions(values = listOf("Dog", "Cat", "Bird"))
+        )
+    )
+)
 //The generic '<Collection>' encodes our collection to JSON based on the Collection class
 client.collections.create<Collection>(Json.encodeToString(collection))
 ```
@@ -175,10 +196,10 @@ serialised records. Meaning that we must use a key value map of Json elements.
 
 ```kotlin
 val client = PocketbaseClient({
-                                  protocol = URLProtocol.HTTP
-                                  host = "localhost"
-                                  port = 8090
-                              })
+    protocol = URLProtocol.HTTP
+    host = "localhost"
+    port = 8090
+})
 
 client.login {
     token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
@@ -189,22 +210,24 @@ client.login {
 @Serializable
 data class FileUploadRecord(val imageFile: String, val imageDescription: String) : Record()
 
-client.records.create<FileUploadRecord>("fileUploadCollection",
+client.records.create<FileUploadRecord>(
+    "fileUploadCollection",
     //A workaround to the limitations on JSON with multipart form data
-                                        mapOf("imageDescription" to "A house".toJsonPrimitive()),
+    mapOf("imageDescription" to "A house".toJsonPrimitive()),
     //Here is where the files are uploaded from
     //Swap ByteArray(0) with the file's content as a ByteArray
-                                        listOf(FileUpload("imageFile", ByteArray(0), "house.png")))
+    listOf(FileUpload("imageFile", ByteArray(0), "house.png"))
+)
 ```
 
 #### Expanding related fields
 
 ```kotlin
 val client = PocketbaseClient({
-                                  protocol = URLProtocol.HTTP
-                                  host = "localhost"
-                                  port = 8090
-                              })
+    protocol = URLProtocol.HTTP
+    host = "localhost"
+    port = 8090
+})
 
 client.login {
     token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
@@ -220,9 +243,11 @@ data class PersonRecord(val name: String) : Record()
 data class PetRecord(val owner: String, val name: String) : ExpandRecord<PersonRecord>()
 //This example gets a list of pets, selects the first one and gets its owner
 
-val records = client.records.getList<PetRecord>("pets_collection", 1, 3,
+val records = client.records.getList<PetRecord>(
+    "pets_collection", 1, 3,
 //This tells Pocketbase to expand the relation field of owner
-                                                expandRelations = ExpandRelations("owner"))
+    expandRelations = ExpandRelations("owner")
+)
 
 //This returns the expanded record with the field name of owner
 val owner: PersonRecord? = records.items[0].expand?.get("owner")
@@ -234,10 +259,10 @@ val owner: PersonRecord? = records.items[0].expand?.get("owner")
 
 ```kotlin
 val client = PocketbaseClient({
-                                  protocol = URLProtocol.HTTP
-                                  host = "localhost"
-                                  port = 8090
-                              })
+    protocol = URLProtocol.HTTP
+    host = "localhost"
+    port = 8090
+})
 
 client.login {
     token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
@@ -255,7 +280,8 @@ data class PersonRecord(val name: String, val pets: List<String>) : ExpandRecord
 //
 val records = client.records.getList<PersonRecord>(
     //This tells Pocketbase to expand the relation field of pets
-    "people_collection", 1, 5, expandRelations = ExpandRelations("pets"))
+    "people_collection", 1, 5, expandRelations = ExpandRelations("pets")
+)
 
 //This returns the expanded record with the field name of owner
 val pets: List<PetRecord>? = records.items.first().expand?.get("pets")
@@ -268,10 +294,10 @@ val pets: List<PetRecord>? = records.items.first().expand?.get("pets")
 
 ```kotlin
     val client = PocketbaseClient({
-                                      protocol = URLProtocol.HTTP
-                                      host = "localhost"
-                                      port = 8090
-                                  })
+    protocol = URLProtocol.HTTP
+    host = "localhost"
+    port = 8090
+})
 
 client.login {
     token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
@@ -280,10 +306,12 @@ client.login {
 // What if we want to create a lot of people and don't want to send lots of requests?
 //The personRecordId field is needed so that we can set the ID of the record for upsert operations
 @Serializable
-data class PersonRecord(val name: String, val age: Int, @Transient val personRecordId: String? = null) : Record(personRecordId)
+data class PersonRecord(val name: String, val age: Int, @Transient val personRecordId: String? = null) :
+    Record(personRecordId)
 
 //They should be at least 18... we don't want example minors in our database without their parent's consent!
-val people = listOf(PersonRecord("Tim", 18), PersonRecord("Tom", 22), PersonRecord("Jane", 83), PersonRecord("John", 34))
+val people =
+    listOf(PersonRecord("Tim", 18), PersonRecord("Tom", 22), PersonRecord("Jane", 83), PersonRecord("John", 34))
 
 //Creates and sends a batch request with the batch service
 val createdRecords = client.batch.send {
@@ -293,10 +321,18 @@ val createdRecords = client.batch.send {
     }
 
     //We can also upload files with the files parameter
-    create(collectionId = "COLLECTION_ID", Json.encodeToJsonElement<PersonRecord>(PersonRecord("Que", 49)).jsonObject, files = listOf(FileUpload("headshot", byteArrayOf(), "que_headshot.png")))
+    create(
+        collectionId = "COLLECTION_ID",
+        Json.encodeToJsonElement<PersonRecord>(PersonRecord("Que", 49)).jsonObject,
+        files = listOf(FileUpload("headshot", byteArrayOf(), "que_headshot.png"))
+    )
 
     //Nancy got older...
-    update("COLLECTION_ID", "ALEX_RECORD_ID", Json.encodeToJsonElement<PersonRecord>(PersonRecord("Nancy", 19)).jsonObject)
+    update(
+        "COLLECTION_ID",
+        "ALEX_RECORD_ID",
+        Json.encodeToJsonElement<PersonRecord>(PersonRecord("Nancy", 19)).jsonObject
+    )
 
     //We can also delete records
     delete("COLLECTION_ID", "RECORD_ID_TO_DELETE")
