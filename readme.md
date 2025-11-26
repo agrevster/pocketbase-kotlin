@@ -343,6 +343,32 @@ val createdRecords = client.batch.send {
 }
 ```
 
+#### Realtime Service
+```kotlin
+// In this example we want to know whenever someone does something with our to-do list.
+@Serializable
+data class ToDoItem(val text: String) : Record()
+
+// We need to connect to the realtime service. This should be done asynchronously, so that this connection does not block the main thread.
+runBlocking { launch { client.realtime.connect() } }
+
+
+//Now we need to tell Pocketbase that we want to be notified whenever a to-do list item updates.
+//Our collection is called todo
+client.realtime.subscribe("todo")
+
+
+client.realtime.listen {
+    //This filters out connection events
+    if (action.isBodyEvent()) {
+        //This parses the JSON from the realtime event, allowing us to use it
+        val todoItem = parseRecord<ToDoItem>()
+        println("TO-DO Item: ${todoItem.text} : ${action.name}")
+    }
+}
+```
+
+
 ---
 
 ## Testing

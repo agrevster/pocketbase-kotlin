@@ -8,6 +8,8 @@ import io.github.agrevster.pocketbaseKotlin.models.AuthRecord
 import io.github.agrevster.pocketbaseKotlin.models.Record
 import io.github.agrevster.pocketbaseKotlin.toJsonPrimitive
 import io.ktor.http.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
@@ -26,19 +28,26 @@ class UsageDocTests {
     @Test
     fun loggingIn() = coroutine {
         val client = PocketbaseClient({
-                                          protocol = URLProtocol.HTTP
-                                          host = "localhost"
-                                          port = 8090
+            protocol = URLProtocol.HTTP
+            host = "localhost"
+            port = 8090
 
-                                      })
+        })
         var loginToken: String
 //logging in as an admin
-        loginToken = client.records.authWithPassword<AuthRecord>("_superusers", email = "email", password = "password").token
+        loginToken =
+            client.records.authWithPassword<AuthRecord>("_superusers", email = "email", password = "password").token
 
 // This authenticates a user rather than an admin
         loginToken = client.records.authWithPassword<AuthRecord>("collectionName", "email", "password").token
 //You can also use oauth2
-        loginToken = client.records.authWithOauth2<AuthRecord>("collectionName", "provider", "code", "codeVerifier", "redirectUrl").token
+        loginToken = client.records.authWithOauth2<AuthRecord>(
+            "collectionName",
+            "provider",
+            "code",
+            "codeVerifier",
+            "redirectUrl"
+        ).token
 
         client.login { token = loginToken }
     }
@@ -46,10 +55,10 @@ class UsageDocTests {
     @Test
     fun callingThePocketbaseAPI(): Unit = coroutine {
         val client = PocketbaseClient({
-                                          protocol = URLProtocol.HTTP
-                                          host = "localhost"
-                                          port = 8090
-                                      })
+            protocol = URLProtocol.HTTP
+            host = "localhost"
+            port = 8090
+        })
 
         client.login { token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token }
 
@@ -73,10 +82,10 @@ class UsageDocTests {
 class CaveatsDocTests {
     fun fileUploads(): Unit = coroutine {
         val client = PocketbaseClient({
-                                          protocol = URLProtocol.HTTP
-                                          host = "localhost"
-                                          port = 8090
-                                      })
+            protocol = URLProtocol.HTTP
+            host = "localhost"
+            port = 8090
+        })
 
         client.login {
             token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
@@ -87,20 +96,22 @@ class CaveatsDocTests {
         @Serializable
         data class FileUploadRecord(val imageFile: String, val imageDescription: String) : Record()
 
-        client.records.create<FileUploadRecord>("fileUploadCollection",
+        client.records.create<FileUploadRecord>(
+            "fileUploadCollection",
             //A workaround to the limitations on JSON with multipart form data
-                                                mapOf("imageDescription" to "A house".toJsonPrimitive()),
+            mapOf("imageDescription" to "A house".toJsonPrimitive()),
             //Here is where the files are uploaded from
             //Swap ByteArray(0) with the file's content as a ByteArray
-                                                listOf(FileUpload("imageFile", ByteArray(0), "house.png")))
+            listOf(FileUpload("imageFile", ByteArray(0), "house.png"))
+        )
     }
 
     fun expandingRelatedFields(): Unit = coroutine {
         val client = PocketbaseClient({
-                                          protocol = URLProtocol.HTTP
-                                          host = "localhost"
-                                          port = 8090
-                                      })
+            protocol = URLProtocol.HTTP
+            host = "localhost"
+            port = 8090
+        })
         client.login {
             token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
         }
@@ -115,9 +126,11 @@ class CaveatsDocTests {
         data class PetRecord(val owner: String, val name: String) : ExpandRecord<PersonRecord>()
 //This example gets a list of pets, selects the first one and gets its owner
 
-        val records = client.records.getList<PetRecord>("pets_collection", 1, 3,
+        val records = client.records.getList<PetRecord>(
+            "pets_collection", 1, 3,
 //This tells Pocketbase to expand the relation field of owner
-                                                        expandRelations = ExpandRelations("owner"))
+            expandRelations = ExpandRelations("owner")
+        )
 
 //This returns the expanded record with the field name of owner
         val owner: PersonRecord? = records.items[0].expand?.get("owner")
@@ -127,10 +140,10 @@ class CaveatsDocTests {
     fun expandingMultipleRelatedFields(): Unit = coroutine {
 
         val client = PocketbaseClient({
-                                          protocol = URLProtocol.HTTP
-                                          host = "localhost"
-                                          port = 8090
-                                      })
+            protocol = URLProtocol.HTTP
+            host = "localhost"
+            port = 8090
+        })
 
         client.login {
             token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
@@ -148,7 +161,8 @@ class CaveatsDocTests {
 //
         val records = client.records.getList<PersonRecord>(
             //This tells Pocketbase to expand the relation field of pets
-            "people_collection", 1, 5, expandRelations = ExpandRelations("pets"))
+            "people_collection", 1, 5, expandRelations = ExpandRelations("pets")
+        )
 
 //This returns the expanded record with the field name of owner
         val pets: List<PetRecord>? = records.items.first().expand?.get("pets")
@@ -158,10 +172,10 @@ class CaveatsDocTests {
     @Test
     fun batchRequest(): Unit = coroutine {
         val client = PocketbaseClient({
-                                          protocol = URLProtocol.HTTP
-                                          host = "localhost"
-                                          port = 8090
-                                      })
+            protocol = URLProtocol.HTTP
+            host = "localhost"
+            port = 8090
+        })
 
         client.login {
             token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
@@ -170,10 +184,12 @@ class CaveatsDocTests {
         // What if we want to create a lot of people and don't want to send lots of requests?
         //The personRecordId field is needed so that we can set the ID of the record for upsert operations
         @Serializable
-        data class PersonRecord(val name: String, val age: Int, @Transient val personRecordId: String? = null) : Record(personRecordId)
+        data class PersonRecord(val name: String, val age: Int, @Transient val personRecordId: String? = null) :
+            Record(personRecordId)
 
         //They should be at least 18... we don't want example minors in our database without their parent's consent!
-        val people = listOf(PersonRecord("Tim", 18), PersonRecord("Tom", 22), PersonRecord("Jane", 83), PersonRecord("John", 34))
+        val people =
+            listOf(PersonRecord("Tim", 18), PersonRecord("Tom", 22), PersonRecord("Jane", 83), PersonRecord("John", 34))
 
         //Creates and sends a batch request with the batch service
         val createdRecords = client.batch.send {
@@ -183,10 +199,18 @@ class CaveatsDocTests {
             }
 
             //We can also upload files with the files parameter
-            create(collectionId = "COLLECTION_ID", Json.encodeToJsonElement<PersonRecord>(PersonRecord("Que", 49)).jsonObject, files = listOf(FileUpload("headshot", byteArrayOf(), "que_headshot.png")))
+            create(
+                collectionId = "COLLECTION_ID",
+                Json.encodeToJsonElement<PersonRecord>(PersonRecord("Que", 49)).jsonObject,
+                files = listOf(FileUpload("headshot", byteArrayOf(), "que_headshot.png"))
+            )
 
             //Nancy got older...
-            update("COLLECTION_ID", "ALEX_RECORD_ID", Json.encodeToJsonElement<PersonRecord>(PersonRecord("Nancy", 19)).jsonObject)
+            update(
+                "COLLECTION_ID",
+                "ALEX_RECORD_ID",
+                Json.encodeToJsonElement<PersonRecord>(PersonRecord("Nancy", 19)).jsonObject
+            )
 
             //We can also delete records
             delete("COLLECTION_ID", "RECORD_ID_TO_DELETE")
@@ -195,5 +219,41 @@ class CaveatsDocTests {
             //just make sure the object has a record ID parameter that is set
             upsert("COLLECTION_ID", Json.encodeToJsonElement(PersonRecord("Tim", 18, "TIM_ID")).jsonObject)
         }
+    }
+
+    @Test
+    fun realtime(): Unit = coroutine {
+        val client = PocketbaseClient({
+            protocol = URLProtocol.HTTP
+            host = "localhost"
+            port = 8090
+        })
+
+        client.login {
+            token = client.records.authWithPassword<AuthRecord>("users", "email", "password").token
+        }
+
+        // In this example we want to know whenever someone does something with our to-do list.
+        @Serializable
+        data class ToDoItem(val text: String) : Record()
+
+        // We need to connect to the realtime service. This should be done asynchronously, so that this connection does not block the main thread.
+        runBlocking { launch { client.realtime.connect() } }
+
+
+        //Now we need to tell Pocketbase that we want to be notified whenever a to-do list item updates.
+        //Our collection is called todo
+        client.realtime.subscribe("todo")
+
+
+        client.realtime.listen {
+            //This filters out connection events
+            if (action.isBodyEvent()) {
+                //This parses the JSON from the realtime event, allowing us to use it
+                val todoItem = parseRecord<ToDoItem>()
+                println("TO-DO Item: ${todoItem.text} : ${action.name}")
+            }
+        }
+
     }
 }
