@@ -1,4 +1,3 @@
-import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
@@ -24,7 +23,7 @@ kotlin {
     explicitApi()
 
     androidTarget {
-        publishAllLibraryVariants()
+        publishLibraryVariants("debug","release")
     }
 
     jvmToolchain(17)
@@ -51,6 +50,9 @@ kotlin {
     androidNativeX64()
     androidNativeX86()
 
+    compilerOptions {
+        optIn.add("kotlin.time.ExperimentalTime")
+    }
 
     sourceSets {
         commonMain {
@@ -182,7 +184,7 @@ android {
 /// MAVEN PUBLISHING
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral()
     signAllPublications()
 }
 
@@ -211,4 +213,7 @@ tasks.register("publishCommon") {
     dependsOn(tasks.named("publishAndroidReleasePublicationToMavenCentralRepository"))
     dependsOn(tasks.named("publishJvmPublicationToMavenCentralRepository"))
     dependsOn(tasks.named("publishKotlinMultiplatformPublicationToMavenCentralRepository"))
+}
+dokka {
+    moduleName.set("Pocketbase Kotlin")
 }
