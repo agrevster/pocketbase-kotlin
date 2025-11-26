@@ -2,6 +2,7 @@ package io.github.agrevster.pocketbaseKotlin.models.utils
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlin.time.ExperimentalTime
 
 @Serializable
 /**
