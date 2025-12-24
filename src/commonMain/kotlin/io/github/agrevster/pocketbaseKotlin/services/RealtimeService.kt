@@ -58,7 +58,8 @@ public class RealtimeService(client: PocketbaseClient) : BaseService(client) {
 
     }
 
-    private var clientId: String? = null
+    public var clientId: String? = null
+    	private set
     private var connected: Boolean = false
     private var connection = MutableSharedFlow<MessageData>()
     private val subscriptions: MutableSet<String> = mutableSetOf()
