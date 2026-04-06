@@ -16,7 +16,8 @@ repositories {
 
 enum class HttpClientType {
     WIN_HTTP,
-    CIO;
+    CIO,
+    DARWIN;
 }
 
 kotlin {
@@ -109,18 +110,30 @@ kotlin {
             }
         }
 
+        val darwinMain by creating {
+            dependsOn(commonMain.get())
+            dependencies {
+                api(libs.ktor.client.darwin)
+            }
+        }
+
+        val darwinTest by creating {
+            dependsOn(commonTest.get())
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+            }
+        }
+
 
         fun KotlinSourceSet.configureDependencies(
             test: Boolean = false,
             httpClientType: HttpClientType = HttpClientType.CIO,
         ) {
-            if (httpClientType == HttpClientType.WIN_HTTP) {
-                if (test) {
-                    this.dependsOn(winHTTPTest)
-                } else this.dependsOn(winHTTPMain)
-            } else if (test) {
-                this.dependsOn(cioTest)
-            } else this.dependsOn(cioMain)
+            when (httpClientType) {
+                HttpClientType.WIN_HTTP -> if (test) dependsOn(winHTTPTest) else dependsOn(winHTTPMain)
+                HttpClientType.DARWIN -> if (test) dependsOn(darwinTest) else dependsOn(darwinMain)
+                HttpClientType.CIO -> if (test) dependsOn(cioTest) else dependsOn(cioMain)
+            }
         }
 
 
@@ -130,23 +143,20 @@ kotlin {
         getByName("linuxX64Main").configureDependencies()
         getByName("linuxX64Test").configureDependencies(test = true)
 
-        getByName("macosX64Main").configureDependencies()
-        getByName("macosX64Test").configureDependencies(test = true)
+        getByName("macosX64Main").configureDependencies(httpClientType = HttpClientType.DARWIN)
+        getByName("macosX64Test").configureDependencies(test = true, httpClientType = HttpClientType.DARWIN)
 
-        getByName("macosArm64Main").configureDependencies()
-        getByName("macosArm64Test").configureDependencies(test = true)
+        getByName("macosArm64Main").configureDependencies(httpClientType = HttpClientType.DARWIN)
+        getByName("macosArm64Test").configureDependencies(test = true, httpClientType = HttpClientType.DARWIN)
 
-        getByName("iosArm64Main").configureDependencies()
-        getByName("iosArm64Test").configureDependencies(test = true)
+        getByName("iosArm64Main").configureDependencies(httpClientType = HttpClientType.DARWIN)
+        getByName("iosArm64Test").configureDependencies(test = true, httpClientType = HttpClientType.DARWIN)
 
-        getByName("iosSimulatorArm64Main").configureDependencies()
-        getByName("iosSimulatorArm64Test").configureDependencies(test = true)
+        getByName("iosSimulatorArm64Main").configureDependencies(httpClientType = HttpClientType.DARWIN)
+        getByName("iosSimulatorArm64Test").configureDependencies(test = true, httpClientType = HttpClientType.DARWIN)
 
-        getByName("iosX64Main").configureDependencies()
-        getByName("iosX64Test").configureDependencies(test = true)
-
-        getByName("macosArm64Main").configureDependencies()
-        getByName("macosArm64Test").configureDependencies(test = true)
+        getByName("iosX64Main").configureDependencies(httpClientType = HttpClientType.DARWIN)
+        getByName("iosX64Test").configureDependencies(test = true, httpClientType = HttpClientType.DARWIN)
 
         getByName("mingwX64Main").configureDependencies(httpClientType = HttpClientType.WIN_HTTP)
         getByName("mingwX64Test").configureDependencies(test = true, httpClientType = HttpClientType.WIN_HTTP)
