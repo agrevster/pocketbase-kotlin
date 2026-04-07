@@ -33,12 +33,10 @@ kotlin {
     linuxX64()
 
     // MacOS
-    macosX64()
     macosArm64()
 
     // iOS
     iosArm64()
-    iosX64()
     iosSimulatorArm64()
 
     // Windows
@@ -130,9 +128,6 @@ kotlin {
         getByName("linuxX64Main").configureDependencies()
         getByName("linuxX64Test").configureDependencies(test = true)
 
-        getByName("macosX64Main").configureDependencies()
-        getByName("macosX64Test").configureDependencies(test = true)
-
         getByName("macosArm64Main").configureDependencies()
         getByName("macosArm64Test").configureDependencies(test = true)
 
@@ -141,9 +136,6 @@ kotlin {
 
         getByName("iosSimulatorArm64Main").configureDependencies()
         getByName("iosSimulatorArm64Test").configureDependencies(test = true)
-
-        getByName("iosX64Main").configureDependencies()
-        getByName("iosX64Test").configureDependencies(test = true)
 
         getByName("macosArm64Main").configureDependencies()
         getByName("macosArm64Test").configureDependencies(test = true)
@@ -193,7 +185,6 @@ tasks.register("publishMac") {
     dependsOn(tasks.named("publishIosArm64PublicationToMavenCentralRepository"))
     dependsOn(tasks.named("publishIosSimulatorArm64PublicationToMavenCentralRepository"))
     dependsOn(tasks.named("publishIosX64PublicationToMavenCentralRepository"))
-    dependsOn(tasks.named("publishMacosX64PublicationToMavenCentralRepository"))
     dependsOn(tasks.named("publishMacosArm64PublicationToMavenCentralRepository"))
 }
 
@@ -214,6 +205,13 @@ tasks.register("publishCommon") {
     dependsOn(tasks.named("publishJvmPublicationToMavenCentralRepository"))
     dependsOn(tasks.named("publishKotlinMultiplatformPublicationToMavenCentralRepository"))
 }
+
+tasks.register("appleTests") {
+    group = "verification"
+    dependsOn(tasks.named("macosArm64Test"))
+    dependsOn(tasks.named("iosSimulatorArm64Test"))
+}
+
 dokka {
     moduleName.set("Pocketbase Kotlin")
 }
