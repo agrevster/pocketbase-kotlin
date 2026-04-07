@@ -34,12 +34,10 @@ kotlin {
     linuxX64()
 
     // MacOS
-    macosX64()
     macosArm64()
 
     // iOS
     iosArm64()
-    iosX64()
     iosSimulatorArm64()
 
     // Windows
@@ -143,8 +141,6 @@ kotlin {
         getByName("linuxX64Main").configureDependencies()
         getByName("linuxX64Test").configureDependencies(test = true)
 
-        getByName("macosX64Main").configureDependencies(httpClientType = HttpClientType.DARWIN)
-        getByName("macosX64Test").configureDependencies(test = true, httpClientType = HttpClientType.DARWIN)
 
         getByName("macosArm64Main").configureDependencies(httpClientType = HttpClientType.DARWIN)
         getByName("macosArm64Test").configureDependencies(test = true, httpClientType = HttpClientType.DARWIN)
@@ -154,10 +150,7 @@ kotlin {
 
         getByName("iosSimulatorArm64Main").configureDependencies(httpClientType = HttpClientType.DARWIN)
         getByName("iosSimulatorArm64Test").configureDependencies(test = true, httpClientType = HttpClientType.DARWIN)
-
-        getByName("iosX64Main").configureDependencies(httpClientType = HttpClientType.DARWIN)
-        getByName("iosX64Test").configureDependencies(test = true, httpClientType = HttpClientType.DARWIN)
-
+        
         getByName("mingwX64Main").configureDependencies(httpClientType = HttpClientType.WIN_HTTP)
         getByName("mingwX64Test").configureDependencies(test = true, httpClientType = HttpClientType.WIN_HTTP)
 
@@ -202,8 +195,6 @@ tasks.register("publishMac") {
     group = "publishing"
     dependsOn(tasks.named("publishIosArm64PublicationToMavenCentralRepository"))
     dependsOn(tasks.named("publishIosSimulatorArm64PublicationToMavenCentralRepository"))
-    dependsOn(tasks.named("publishIosX64PublicationToMavenCentralRepository"))
-    dependsOn(tasks.named("publishMacosX64PublicationToMavenCentralRepository"))
     dependsOn(tasks.named("publishMacosArm64PublicationToMavenCentralRepository"))
 }
 
@@ -224,6 +215,13 @@ tasks.register("publishCommon") {
     dependsOn(tasks.named("publishJvmPublicationToMavenCentralRepository"))
     dependsOn(tasks.named("publishKotlinMultiplatformPublicationToMavenCentralRepository"))
 }
+
+tasks.register("appleTests") {
+    group = "verification"
+    dependsOn(tasks.named("macosArm64Test"))
+    dependsOn(tasks.named("iosSimulatorArm64Test"))
+}
+
 dokka {
     moduleName.set("Pocketbase Kotlin")
 }
