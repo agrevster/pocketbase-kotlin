@@ -70,7 +70,7 @@ class RecordServiceAuthTests {
         val record = createTestAuthRecord()
 
         val updatedTestRecord = TestAuthRecord(record.name, record.age, !record.married, record.email, record.emailVisibility, record.verified, _authRecordId = record.id!!)
-        client.records.update<TestAuthRecord>("test", record.id!!, Json.encodeToString(updatedTestRecord))
+        client.records.update<TestAuthRecord>("test", record.id, Json.encodeToString(updatedTestRecord))
 
         assertEquals(record.name, updatedTestRecord.name)
         assertEquals(record.age, updatedTestRecord.age)
@@ -88,7 +88,7 @@ class RecordServiceAuthTests {
         var found = true
 
         try {
-            client.records.getOne<TestAuthRecord>("test", record.id!!)
+            client.records.getOne<TestAuthRecord>("test", record.id)
         } catch (e: PocketbaseException) {
             if (e.reason.contains("404")) found = false
         }

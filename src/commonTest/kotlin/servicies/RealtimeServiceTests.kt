@@ -88,7 +88,9 @@ class RealtimeServiceTests {
         namedCoroutine("updater") {
             delay(4000)
             records.forEach { record ->
-                client.records.update<TestRecord>("test", record.id!!, Json.encodeToString(TestRecord(record.name, record.age, !record.married, record.id!!)))
+                client.records.update<TestRecord>("test", record.id!!, Json.encodeToString(TestRecord(record.name, record.age, !record.married,
+                    record.id
+                )))
             }
 
         }

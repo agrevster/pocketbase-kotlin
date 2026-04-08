@@ -61,7 +61,7 @@ class GeoPointTests {
         val createdRecord = client.records.create<GeoPointTestRecord>("test", Json.encodeToString(record))
 
         val updatedRecord = GeoPointTestRecord(createdRecord.name, createdRecord.age, createdRecord.married, GeoPoint(.52f, -53f), createdRecord.id!!)
-        client.records.update<GeoPointTestRecord>("test", createdRecord.id!!, Json.encodeToString(updatedRecord))
+        client.records.update<GeoPointTestRecord>("test", createdRecord.id, Json.encodeToString(updatedRecord))
 
         assertEquals(record.name, updatedRecord.name)
         assertEquals(record.age, updatedRecord.age)

@@ -43,7 +43,7 @@ class RecordsServiceTests {
         val testRecord = createTestRecord()
 
         val updatedTestRecord = TestRecord(testRecord.name, testRecord.age, !testRecord.married, testRecordId = testRecord.id!!)
-        client.records.update<TestRecord>("test", testRecord.id!!, Json.encodeToString(updatedTestRecord))
+        client.records.update<TestRecord>("test", testRecord.id, Json.encodeToString(updatedTestRecord))
 
         assertEquals(testRecord.name, updatedTestRecord.name)
         assertEquals(testRecord.age, updatedTestRecord.age)
@@ -60,7 +60,7 @@ class RecordsServiceTests {
         var found = true
 
         try {
-            client.records.getOne<TestRecord>("test", testRecord.id!!)
+            client.records.getOne<TestRecord>("test", testRecord.id)
         } catch (e: PocketbaseException) {
             if (e.reason.contains("404")) found = false
         }

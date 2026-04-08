@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 import kotlin.io.encoding.Base64
@@ -62,7 +61,7 @@ suspend fun createTestCollection(collectionName: String = "test", additionalFiel
 
     val createdCollection = client.collections.create<Collection>(Json.encodeToString(collection))
 
-    val fieldsMatch = (collection.fields?.first { it.name == "name" }?.type == SchemaField.SchemaFieldType.TEXT && collection.fields?.first { it.name == "age" }?.type == SchemaField.SchemaFieldType.NUMBER && collection.fields?.first { it.name == "married" }?.type == SchemaField.SchemaFieldType.BOOL)
+    val fieldsMatch = (collection.fields?.first { it.name == "name" }?.type == SchemaField.SchemaFieldType.TEXT && collection.fields.first { it.name == "age" }.type == SchemaField.SchemaFieldType.NUMBER && collection.fields.first { it.name == "married" }.type == SchemaField.SchemaFieldType.BOOL)
 
     if (!fieldsMatch || (checkAdditionalFields != null && !checkAdditionalFields(collection))) error("Error creating test collection: Fields do not match!")
     if (createdCollection.indexes!![0] != collection.indexes!![0]) error("Error creating test collection: Indexes do not match!")

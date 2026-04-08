@@ -128,7 +128,7 @@ class MultiExpandTests {
     fun expandOne() = coroutine {
         val expandedChildren = client.records.getList<ExpandedChildTestRecord>("testChildren", 1, 1, expandRelations = ExpandRelations("parent")).items[0]
         assertEquals(2, expandedChildren.expand!!["parent"]!!.size)
-        expandedChildren.expand!!["parent"]!!.forEach { parentRecord ->
+        expandedChildren.expand["parent"]!!.forEach { parentRecord ->
             assertEquals(parentMap!![parentRecord.name], parentRecord.id)
         }
     }
@@ -137,7 +137,7 @@ class MultiExpandTests {
     fun expandAll() = coroutine {
         client.records.getList<ExpandedChildTestRecord>("testChildren", 1, 10, expandRelations = ExpandRelations("parent")).items.forEach { expandedChildren ->
             assertEquals(2, expandedChildren.expand!!["parent"]!!.size)
-            expandedChildren.expand!!["parent"]!!.forEach { parentRecord ->
+            expandedChildren.expand["parent"]!!.forEach { parentRecord ->
                 assertEquals(parentMap!![parentRecord.name], parentRecord.id)
             }
         }
