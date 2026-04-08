@@ -12,14 +12,14 @@ Support for new Pocketbase releases will be added as soon as possible.
 
 Currently, the following platforms are supported,
 
-| Supported Platforms               |       
-|-----------------------------------|       
-| JVM                               |       
-| Linux (x64)                       |       
-| Windows (x64)                     |       
-| Mac OS (x64) (arm x64)            |       
-| IOS (arm x64) (x64) (sim arm x64) |
-| Android                           |
+| Supported Platforms      |       
+|--------------------------|       
+| JVM                      |       
+| Linux (x64)              |       
+| Windows (x64)            |       
+| Mac OS (arm64)           |       
+| IOS (arm64) (sim arm 64) |
+| Android                  |
 
 > [!Warning]
 > I will not be adding new features to this project, as I no longer use Kotlin.
